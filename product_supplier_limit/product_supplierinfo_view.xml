@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record model="ir.ui.view"
+			id="product_supplierinfo_principal_supplier_form_view">
+			<field name="name">product.supplierinfo.form</field>
+			<field name="model">product.supplierinfo</field>
+			<field name="type">form</field>
+			<field name="inherit_id" ref="product.product_supplierinfo_form_view" />
+			<field name="arch" type="xml">
+				<field name="company_id" position="after">
+					<field name="principal_supplier" />
+				</field>
+			</field>
+		</record>
+
+		<record model="ir.ui.view"
+			id="product_supplierinfo_principal_supplier_tree_view">
+			<field name="name">product.supplierinfo.tree</field>
+			<field name="model">product.supplierinfo</field>
+			<field name="type">tree</field>
+			<field name="inherit_id" ref="product.product_supplierinfo_tree_view" />
+			<field name="arch" type="xml">
+				<field name="company_id" position="after">
+					<field name="principal_supplier" />
+				</field>
+			</field>
+		</record>
+
+	</data>
+</openerp>
+		 

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record id="cancel_intervention_request_wizard_view" model="ir.ui.view">
+			<field name="name">cancel.intervention.request.wizard.form</field>
+			<field name="model">cancel.intervention.request.wizard</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Cancelar solicitud">
+					<field name="intervention_request_id" string="solicitud a cancelar "
+						readonly="1" />
+					<newline />
+					<field name="motivo" string="motivo de cancelacion" />
+					<newline />
+					<group>
+						<button name="close_confirm" type="object" string="Cancelar solicitud" />
+					</group>
+				</form>
+			</field>
+		</record>
+	</data>
+</openerp>

@@ -1,0 +1,1 @@
+import stock_multicompany_wizard

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+    <record model="ir.ui.view" id="generate_product_name_form_view">
+			<field name="name">generate_product_name.form</field>
+			<field name="model">product.product</field>
+			<field name="type">form</field>
+			<field name="inherit_id" ref="product.product_normal_form_view" />
+			<field name="arch" type="xml">
+				<field name="name" position="after">
+					<button name="generate_name" type="object" string="generar nombre" />
+				</field>
+			</field>
+		</record>
+    </data>
+</openerp>

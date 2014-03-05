@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_history_product_code_employee,historial.product.code employee,model_historial_product_code,base.group_user,1,0,0,0
+access_history_product_code_sale_manager,historial.product.code salemanager,model_historial_product_code,base.group_sale_manager,1,1,1,1
