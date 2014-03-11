@@ -21,24 +21,37 @@ from osv import fields, osv
 import openerp.addons.decimal_precision as dp
 
 class Last_purchase_price(osv.osv):
+
     def _ultimo_precio(self, cr, uid, ids, name, arg, context=None):
-        #import pdb;pdb.set_trace()
         if not context:
             context = {}
         res = {}
-        for prod_id in ids:
-            res[prod_id] = 0
-            line_id = self.pool.get('purchase.order.line').search(cr, uid, [('product_id','=',prod_id)], offset=0, limit=1, order='date_planned DESC', context=context, count=False)
-            if line_id:               
-                line = self.pool.get('purchase.order.line').browse(cr, uid, line_id[0], context)
-                for invoice_line in line.invoice_lines:
-                    uom = invoice_line.uos_id
-                    res[prod_id]=(invoice_line.price_unit*uom.factor)*(1-(invoice_line.discount/100))
-                        
-                        
-                    
+        purchase_line_obj = self.pool.get('purchase.order.line')
+        for prod_id in self.browse(cr, uid, ids, context=context):
+            line_id = purchase_line_obj.search(cr, uid,
+                                               [('product_id','=',prod_id.id),
+                                                ('state', 'in', ['done',
+                                                                 'confirmed']),
+                                                ('invoice_lines', '!=', False)
+                                               ],
+                                               limit=1,
+                                               order='date_planned desc, id desc',
+                                               context=context)
+            price_unit = 0.0
+            if line_id:
+                line = purchase_line_obj.browse(cr, uid, line_id[0], context)
+                uom = line.invoice_lines[0].uos_id
+                price_unit = line.invoice_lines[0].price_unit * \
+                             (1-(line.invoice_lines[0].discount/100))
+                if uom.id != prod_id.uom_id.id:
+                    price_unit = (price_unit * uom.factor) / \
+                                 prod_id.uom_id.factor
+
+            res[prod_id.id] = price_unit
+
         return res
+
     _inherit = 'product.product'
     _columns = {
-            'last_purchase_price': fields.function(_ultimo_precio, method=True, type='float',digits_compute= dp.get_precision('Product Price'), string='Ultimo precio de compra', store=False), 
+            'last_purchase_price': fields.function(_ultimo_precio, method=True, type='float',digits_compute= dp.get_precision('Product Price'), string='Ultimo precio de compra', store=False),
                     }

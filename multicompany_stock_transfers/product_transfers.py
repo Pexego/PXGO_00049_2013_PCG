@@ -32,7 +32,7 @@ class stock_invoice_onshipping(osv.osv_memory):
             context = {}
 
         model = context.get('active_model')
-        if not model or model != 'stock.picking':
+        if not model or 'stock.picking' not in model:
             return []
 
         model_pool = self.pool.get(model)
@@ -111,7 +111,7 @@ class wzd_transfer_product_rel(osv.osv):
 
         uom2 = False
         if uom:
-           
+
             uom2 = product_uom_obj.browse(cr, uid, uom)
             if product_obj.uom_id.category_id.id != uom2.category_id.id:
                 uom = False
@@ -209,12 +209,12 @@ class product_transfer(osv.osv):
         wf_service = netsvc.LocalService("workflow")
         proc_obj = self.pool.get('procurement.order')
         picking_ids = []
-               
+
         for line in self.browse(cr, uid, ids, context=context):
             for product in line.product_ids:
-                
+
                 first = 0
-                
+
                 if not line.dest_location_id.company_id:
                     raise osv.except_osv(_('Error !'),_("Company not defined in Dest. location !") )
                 if not line.orig_location_id.company_id.name:
@@ -306,14 +306,14 @@ class product_transfer(osv.osv):
                         'address_id': False,
                         'location_id': location_orig,
                         'location_dest_id': location_dest,
-                            
+
                         'tracking_id': False,
                         'cancel_cascade': False,
                         'state': 'confirmed',
                         'note': notem,
                         'prodlot_id' : product_lot_id
                     })
-                       
+
 
                     proc_id = proc_obj.create(cr, uid, {
                         'name': line.name,
@@ -335,9 +335,9 @@ class product_transfer(osv.osv):
 
                     wf_service = netsvc.LocalService("workflow")
                     wf_service.trg_validate(uid, 'stock.picking', picking_id, 'button_confirm', cr)
-                   
+
                     wf_service.trg_validate(uid, 'procurement.order', proc_id, 'button_confirm', cr)
-                      
+
                     proc_obj.write(cr, uid, [proc_id], {'state':'running', 'message':_('Pulled from another location via procurement %d')%proc_id})
 
                     # trigger direct processing (the new procurement shares the same planned date as the original one, which is already being processed)
@@ -346,7 +346,7 @@ class product_transfer(osv.osv):
                     if line.automatic_execution:
                         picking_obj.force_assign(cr, uid, [picking_id])
                         wf_service.trg_validate(uid, 'stock.picking', picking_id, 'button_done', cr)
-                    
+
         self.write(cr, uid, ids, {'state': 'transferred'})
 
         return picking_ids
