@@ -27,7 +27,7 @@
     This module provide :
     """,
     "init_xml": [],
-    'update_xml': ["purchase_oferts_view.xml","wizard/generate_purchases_wizard_view.xml"],
+    'update_xml': ["wizard/generate_purchases_wizard_view.xml","purchase_oferts_view.xml"],
     'demo_xml': [],
     'installable': True,
     'active': False,
