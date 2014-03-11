@@ -18,12 +18,13 @@
 #
 ##############################################################################
 from osv import fields, osv
+import tools
 
 class Generate_product_name(osv.osv):
     _inherit = 'product.product'
 
     def generate_name(self, cr, uid, ids, context=None):
-        nombre = ""
+        nombre = u""
         if not context:
             context = {}
         products = self.pool.get('product.product').browse(cr, uid, ids, context)
@@ -38,7 +39,7 @@ class Generate_product_name(osv.osv):
                         nombres_atributos.append(atributo.name)
             for atributo in nombres_atributos:
                 if product[atributo]:
-                    nombre += str(product[atributo])+" "
+                    nombre += (isinstance(product[atributo],type(product)) and product[atributo].name or tools.ustr(product[atributo])) + u" "
             if not nombre:
                 nombre = product.name
             self.pool.get('product.product').write(cr, uid, ids, {'name':nombre},context)
