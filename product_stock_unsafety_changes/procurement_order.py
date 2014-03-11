@@ -44,8 +44,8 @@ class procurement_order(osv.osv):
             ids = product.search(cr, uid, [], offset=offset, limit=100)
             for prod in product.browse(cr, uid, ids, context=context):
                 orderpoint_ids = orderpoint_obj.search(cr, uid, [('product_id', '=', prod.id),
-                                                                 ('from_date', '<', date.today()),
-                                                                 ('to_date', '>', date.today()), ], offset=0, limit=None)
+                                                                 ('from_date', '<=', date.today()),
+                                                                 ('to_date', '>=', date.today()), ], offset=0, limit=None)
                 if not orderpoint_ids:
                     orderpoint_ids = orderpoint_obj.search(cr, uid, [('product_id', '=', prod.id),
                                                                      ('from_date', '=', False),
@@ -57,7 +57,7 @@ class procurement_order(osv.osv):
                     days_sale = prod.remaining_days_sale
                     if (orderpoint.min_days_id and days_sale < orderpoint.min_days_id.days_sale
                          or virtual_stock < orderpoint.product_min_qty) and prod.active:
-                        
+
                         if prod.seller_ids:
                             seller = prod.seller_ids[0].name.id
                             state = 'in_progress'

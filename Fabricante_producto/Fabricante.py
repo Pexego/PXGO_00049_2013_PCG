@@ -56,8 +56,8 @@ Fabricante()
 class Producto(osv.osv):
     _inherit = 'product.product'
     _columns = {
-            'fabricante_id':fields.many2one('fabricante_producto', 'Fabricante', required=False), 
+            'fabricante_id':fields.many2one('fabricante_producto', 'Fabricante', required=False),
             }
     _sql_constraints = [('codigo_unico', 'unique (default_code)', 'El codigo de producto debe ser unico!'), ]
-                    
+
 Producto()
