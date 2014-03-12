@@ -7,9 +7,9 @@
             <field name="type">form</field>
             <field name="inherit_id" ref="product.product_normal_form_view" />
             <field name="arch" type="xml">
-                <field name="default_code" position="after">
+                <xpath expr="//notebook/page[1]/group/group[2]/field[@name='default_code']" position="after">
                     <field name="history_code_ids" readonly="True"/>
-                </field>
+                </xpath>
             </field>
         </record>
     </data>
