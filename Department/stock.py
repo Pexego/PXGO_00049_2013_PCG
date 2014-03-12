@@ -19,29 +19,16 @@
 ##############################################################################
 from openerp.osv import osv, fields
 
-class Stock_out(osv.osv):
-    _inherit = 'stock.picking.out'
-    def _prepare_invoice_group(self, cr, uid, picking, partner, invoice, context=None):
-        if not context:
-            context = {}
-        res = super(Stock_out, self)._prepare_invoice_group(self, cr, uid, picking, partner, invoice, context=context)
-        if picking.sale_id.department_id:
-            res['department_id'] = picking.sale_id.department_id
-        return res
+class stock(osv.osv):
+    _inherit = "stock.picking"
     
-Stock_out()
-
-class Stock_in(osv.osv):
-    _inherit = 'stock.picking.in'
-    def _prepare_invoice_group(self, cr, uid, picking, partner, invoice, context=None):
-        if not context:
-            context = {}
-        res = super(Stock_in, self)._prepare_invoice_group(self, cr, uid, picking, partner, invoice, context=context)
+    def _invoice_hook(self, cr, uid, picking, invoice_id):
         if picking.purchase_id.department_id:
-            res['department_id'] = picking.purchase_id.department_id
-        return res
+            self.pool.get('account.invoice').write(cr, uid, invoice_id,\
+            {'department_id': picking.purchase_id.department_id.id})
+        return super(stock, self)._invoice_hook(cr, uid, picking, invoice_id)
+
     
-Stock_in()
 
 class account(osv.osv):
     _inherit = 'account.move.line'

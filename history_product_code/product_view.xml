@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="history_product_code_form_view">
+            <field name="name">last_purchase_price.form</field>
+	    <field name="model">product.product</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="product.product_normal_form_view" />
+            <field name="arch" type="xml">
+                <field name="default_code" position="after">
+                    <field name="history_code_ids" readonly="True"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>
