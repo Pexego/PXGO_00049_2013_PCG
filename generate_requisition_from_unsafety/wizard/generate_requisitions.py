@@ -22,35 +22,30 @@ from osv import fields, osv
 class generate_requisitions_wizard(osv.osv_memory):
     _name = 'generate.requisitions.wizard'
     
-    def _get_uom_id(self, cr, uid, context=None):
-        try:
-            proxy = self.pool.get('ir.model.data')
-            result = proxy.get_object_reference(cr, uid, 'product', 'product_uom_unit')
-            return result[1]
-        except Exception, ex:
-            return False
-    
     def generar(self, cr, uid, ids, context=None):
         if not context:
             context = {}
         wiz = self.pool.get('generate.requisitions.wizard').browse(cr, uid, ids, context)
         if wiz:
             for unsafety in wiz[0].unsafety_ids:
-                qty = unsafety.min_fixed - (unsafety.virtual_stock + unsafety.incoming_qty) 
-                args_line = {
-                        'product_id':unsafety.product_id.id,
-                        'product_qty':qty,
-                        'product_uom_id':self._get_uom_id(cr, uid, context),
-                        'requisition_id':None,
-                        }
-                args_requisition = {
-                                    'origin':unsafety.name,
-                                    'date_start':unsafety.date,
-                                    'purchase_ids': None,
-                                    'line_ids':[(0, 0, args_line)],
-                                    }
-                self.pool.get('purchase.requisition').create(cr, uid, args_requisition, context)
-                self.pool.get('product.stock.unsafety').write(cr, uid, unsafety.id, {'state':'finalized'}, context)
+                qty = unsafety.min_fixed - (unsafety.real_stock + unsafety.incoming_qty)
+                if qty>0:
+                    args_line = {
+                            'product_id':unsafety.product_id.id,
+                            'product_qty':qty,
+                            'product_uom_id':unsafety.product_id.uom_id.id,
+                            'requisition_id':None,
+                            }
+                    args_requisition = {
+                                        'origin':unsafety.name,
+                                        'date_start':unsafety.date,
+                                        'purchase_ids': None,
+                                        'line_ids':[(0, 0, args_line)],
+                                        }
+                    self.pool.get('purchase.requisition').create(cr, uid, args_requisition, context)
+                    self.pool.get('product.stock.unsafety').write(cr, uid, unsafety.id, {'state':'finalized'}, context)
+                else:
+                    self.pool.get('product.stock.unsafety').write(cr, uid, unsafety.id, {'state':'cancelled'}, context)
         return
 
 
