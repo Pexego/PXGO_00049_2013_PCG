@@ -20,16 +20,19 @@
 from osv import fields, osv
 class history_product_code(osv.osv):
     _inherit = 'product.product'
+    _columns = {
+        'history_code_ids': fields.one2many('historial.product.code','product_id','Historial de codigos')
+    }
     
-    def onchange_default_code(self, cr, uid, ids, default_code, context=None):
+    def write(self, cr, uid, ids, vals, context=None):
         if context is None:
             context = {}
-        if not ids:
-            return {'value':{'default_code':default_code}}
-        producto = self.pool.get("product.product").browse(cr, uid, ids[0], context)
-        if producto.default_code:
-            self.pool.get("historial.product.code").create(cr, uid, {'product_id':producto.id, 'code':producto.default_code}, context)
-        return {'value':{'default_code':default_code}}
+        if vals['default_code']:
+            for id in ids:
+                product = self.pool.get("product.product").browse(cr, uid, id, context)
+                if product.default_code:
+                    self.pool.get("historial.product.code").create(cr, uid, {'product_id':product.id, 'code':product.default_code}, context)
+        return super(history_product_code,self).write(cr, uid, ids, vals, context)
     
     def name_search(self, cr, user, name='', args=None, operator='ilike', context=None, limit=100):
         if not args:

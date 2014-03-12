@@ -28,8 +28,7 @@
     -histórico de códigos de producto
     """,
     "init_xml": [],
-    'update_xml': ["history_product_code.xml",
-        'security/ir.model.access.csv', ],
+    'update_xml': ['product_view.xml','security/ir.model.access.csv', ],
     'demo_xml': [],
     'installable': True,
     'active': False,
