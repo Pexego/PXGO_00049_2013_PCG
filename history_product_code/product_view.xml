@@ -2,7 +2,7 @@
 <openerp>
     <data>
         <record model="ir.ui.view" id="history_product_code_form_view">
-            <field name="name">last_purchase_price.form</field>
+            <field name="name">history.product.code.form</field>
 	    <field name="model">product.product</field>
             <field name="type">form</field>
             <field name="inherit_id" ref="product.product_normal_form_view" />
