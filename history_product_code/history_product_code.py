@@ -27,7 +27,7 @@ class history_product_code(osv.osv):
     def write(self, cr, uid, ids, vals, context=None):
         if context is None:
             context = {}
-        if vals['default_code']:
+        if 'default_code' in vals:
             for id in ids:
                 product = self.pool.get("product.product").browse(cr, uid, id, context)
                 if product.default_code:
