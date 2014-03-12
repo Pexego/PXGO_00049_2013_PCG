@@ -38,9 +38,8 @@ class purchase_order_line(osv.osv):
             'department_id': fields.related('order_id', 'department_id', type='many2one', relation='hr.department', string='departamento'),
             'date_order': fields.related('order_id', 'date_order', type='date', string='fecha de presupuesto'),
             'notes': fields.related('order_id', 'notes', type='text', string='Observaciones'),
-            'fabricante_producto_id': fields.related('product_id', 'fabricante_id', type='many2one', relation='fabricante_producto', string='Fabricante_producto'),
-            'fabricante_id': fields.related('fabricante_producto_id', 'fabricante_id', type='many2one', relation='fabricante', string='Fabricante'),
-            'fab_ref': fields.related('fabricante_producto_id', 'ref', type='char', size=64, string='ref. de fabricante'),
+            'fabricante_id': fields.related('product_id', 'manufacturer', type='many2one', relation='res.partner', string='Fabricante'),
+            'fab_ref': fields.related('product_id', 'manufacturer_pref', type='char', size=64, string='ref. de fabricante'),
             'price_subtotal': fields.function(_amount_line, string='Subtotal', digits_compute=dp.get_precision('Account'), group_operator="sum",
                                             store={
                 'purchase.order.line': (_amount_line, ['product_qty','price_unit','taxes_id'], 10),

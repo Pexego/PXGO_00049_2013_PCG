@@ -303,5 +303,3 @@ class work_order(osv.osv):
             'context': ctx,
         }
 work_order()
-
-
