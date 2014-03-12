@@ -33,7 +33,7 @@ class work_order_other_services(osv.osv):
                     }
 work_order_other_services()
 class work_order_time_report(osv.osv):
-    
+
     def _get_total(self, cr , uid, ids, field_name, args=None, context=None):
         result = {}
         work_order_times = self.pool.get('work.order.time.report').browse(cr, uid, ids, context)
@@ -45,7 +45,7 @@ class work_order_time_report(osv.osv):
             total += work_order_time.horas_festivas * (work_order_time.employee_id.producto_hora_festiva_id.standard_price or precio_por_defecto)
             result[work_order_time.id] = total
         return result
-    
+
     _name = "work.order.time.report"
     _columns = {
             'date': fields.date('Fecha'),
@@ -56,21 +56,21 @@ class work_order_time_report(osv.osv):
             'work_order_id':fields.many2one('work.order', 'orden de trabajo', required=False),
             'total': fields.function(_get_total, method=True, type='float', string='Total', store=False),
                     }
-    
+
     _defaults = {
         'date': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S')
     }
 work_order_time_report()
 
 class work_order(osv.osv):
-    
+
     def _get_planta(self, cr , uid, ids, field_name, args=None, context=None):
         result = {}
         work_orders = self.pool.get('work.order').browse(cr, uid, ids, context)
         for work_order in work_orders:
             result[work_order.id] = work_order.element_ids[0].planta
         return result
-            
+
     def _get_contrata(self, cr , uid, ids, field_name, args=None, context=None):
         result = {}
         work_orders = self.pool.get('work.order').browse(cr, uid, ids, context)
@@ -80,7 +80,7 @@ class work_order(osv.osv):
                 result[work_order.id] += purchase.partner_id.display_name + ", "
             result[work_order.id]=result[work_order.id][:-2]
         return result
-            
+
     def _get_grupo(self, cr, uid, ids, field_name, args=None, context=None):
         result = {}
         usuario = self.pool.get('res.users').browse(cr, uid, uid, context)
@@ -92,7 +92,7 @@ class work_order(osv.osv):
             if usuario in group.users:
                 result[work_id] = True
         return result
-    
+
     def _get_element_list(self, cr, uid, ids, field_name, args=None, context=None):
         result = {}
         work_orders = self.pool.get('work.order').browse(cr, uid, ids, context)
@@ -101,7 +101,7 @@ class work_order(osv.osv):
             for element in work_order.element_ids:
                 result[work_order.id]+=element.nombre_sin_planta + "\n"
         return result
-    
+
     def _get_total_other_service(self, cr, uid, ids, field_name, args=None, context=None):
         result = {}
         work_orders = self.pool.get('work.order').browse(cr, uid, ids, context)
@@ -110,8 +110,8 @@ class work_order(osv.osv):
             for service in work_order.other_service_ids:
                 result[work_order.id]+=service.quantity*service.product_id.standard_price
         return result
-    
-    
+
+
     def _get_total_servicios(self, cr, uid, ids, field_name, args=None, context=None):
         result = {}
         tipo = field_name=="total_servicios_externos"
@@ -121,12 +121,12 @@ class work_order(osv.osv):
             for service in work_order.other_service_ids:
                 if service.employee_id.externo == tipo:
                     result[work_order.id]+=service.quantity*service.product_id.standard_price
-                    
+
             for hora in work_order.horas_ids:
                 if hora.employee_id.externo == tipo:
                     result[work_order.id]+=hora.total
         return result
-    
+
     _name = 'work.order'
     _inherit = ['mail.thread']
     _columns = {
@@ -164,7 +164,7 @@ class work_order(osv.osv):
                  ], 'Descargo', readonly=False),
             'initial_date': fields.date('Fecha inicial'),
             'final_date': fields.date('Fecha final'),
-            
+
             'responsable_id':fields.many2one('res.users', 'Responsable', required=False),
             'note': fields.text('informe'),
             'padre_id':fields.many2one('work.order', 'orden padre', required=False),
@@ -182,69 +182,69 @@ class work_order(osv.osv):
             'total_servicios_internos':fields.function(_get_total_servicios, method=True, type='float', string='total servicios internos', store=False),
             'total_servicios_externos':fields.function(_get_total_servicios, method=True, type='float', string='total servicios externos', store=False),
                     }
-    _defaults = {  
+    _defaults = {
         'state':'draft',
         'name': lambda obj, cr, uid, context: obj.pool.get('ir.sequence').get(cr, uid, 'work.order'),
         'fecha': date.today().strftime('%Y-%m-%d'),
         'company_id': lambda self, cr, uid, c: self.pool.get('res.company')._company_default_get(cr, uid, 'work.order', context=c),
         }
-    
-    
-    
-    
+
+
+
+
     def request_validation(self, cr, uid, ids, context=None):
         self.pool.get('work.order').write(cr, uid, ids, {'state':'pending'}, context)
         return True
-        
+
     def work_order_cancel(self, cr, uid, ids, context=None):
         self.pool.get('work.order').write(cr, uid, ids, {'state':'cancelled'}, context)
         return True
-    
+
     def work_order_open(self, cr , uid, ids, context=None):
         self.pool.get('work.order').write(cr, uid, ids, {'state':'open','fecha_inicio':datetime.now()}, context)
         return True
-    
+
     def work_order_done(self, cr, uid, ids, context=None):
         data_obj = self.pool.get('ir.model.data')
         analytic_line_obj = self.pool.get('account.analytic.line')
         order_obj = self.pool.get('work.order')
         picking_out_obj = self.pool.get('stock.picking.out')
         ordenes = order_obj.browse(cr, uid, ids, context)
-        
+
         hours_journal_id = data_obj.get_object_reference(cr, uid, 'hr_timesheet', "analytic_journal")[1]
         services_journal_id = data_obj.get_object_reference(cr, uid, 'maintenance', "maintenance_service_journal")[1]
         materials_journal_id = data_obj.get_object_reference(cr, uid, 'maintenance', "maintenance_materials_journal")[1]
         journals = [hours_journal_id, services_journal_id, materials_journal_id]
-        
+
         for orden in ordenes:
-            
-            
+
+
             # calculo de total de costes para horas, servicios y materiales
             coste_total = [0, 0, 0]
             for hora in orden.horas_ids:
                 coste_total[0] += hora.total
-                
-            
-            coste_total[1]+= orden.total_other_service  
-                
+
+
+            coste_total[1]+= orden.total_other_service
+
             for compra in orden.purchase_ids:
-                if compra.state not in ['done', 'cancel']:
+                if compra.state not in ['done', 'approved', 'cancel']:
                     raise osv.except_osv('Compras sin finalizar', 'Compras sin finalizar asociadas a la orden')
-                coste_total[1] += compra.amount_total    
-            
+                coste_total[1] += compra.amount_total
+
             for movimiento in orden.stock_moves_ids:
                     if movimiento.state not in ['done', 'cancel']:
                         raise osv.except_osv('movimientos sin finalizar', 'Hay movimientos sin finalizar asociados a la orden')
                     coste_total[2] += movimiento.product_qty * movimiento.product_id.list_price
-            
-            
-                
+
+
+
             # calculo de coste proporcional por equipo
             coste_por_equipo = []
             for coste in coste_total:
                 coste_por_equipo.append(coste / len(orden.element_ids))
             aux = 0
-            
+
             # creacion de apuntes analiticos para cada equipo
             for equipo in orden.element_ids:
                 for journal in journals:
@@ -257,9 +257,9 @@ class work_order(osv.osv):
                                           'name':equipo.name,
                                           'date':date.today().strftime('%Y-%m-%d'),
                                           }
-                    analytic_line_obj.create(cr, uid, args_analytic_line, context)                
+                    analytic_line_obj.create(cr, uid, args_analytic_line, context)
                     aux += 1
-            
+
             # creacion del albaran para los movimientos
             args_picking_out = {
                              'work_order_id':orden.id,
@@ -269,11 +269,11 @@ class work_order(osv.osv):
                              'state':'done',
                                      }
             picking_id = picking_out_obj.create(cr, uid, args_picking_out, context)
-            
+
             order_obj.write(cr, uid, orden.id, {'state':'done'}, context)
         return True
-    
-    
+
+
     def send_email(self, cr, uid, ids, context=None):
         ir_model_data = self.pool.get('ir.model.data')
         try:
@@ -283,7 +283,7 @@ class work_order(osv.osv):
         try:
             compose_form_id = ir_model_data.get_object_reference(cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
         except ValueError:
-            compose_form_id = False 
+            compose_form_id = False
         ctx = dict(context)
         ctx.update({
             'default_model': 'work.order',
@@ -303,5 +303,5 @@ class work_order(osv.osv):
             'context': ctx,
         }
 work_order()
-    
+
 

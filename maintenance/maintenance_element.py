@@ -21,7 +21,7 @@ from osv import osv, fields
 from collections import deque
 
 class maintenance_element(osv.osv):
-    
+
     def _get_planta(self,cr ,uid, ids, field_name, args=None, context=None):
         result = {}
         elements = self.pool.get('maintenance.element').browse(cr, uid, ids, context)
@@ -32,7 +32,7 @@ class maintenance_element(osv.osv):
                 result[element.id] = elemento_aux.padre_id.name
                 elemento_aux = elemento_aux.padre_id
         return result
-    
+
     def _nombre_sin_planta(self, cr, uid, ids, name, args=None, context=None):
         result = {}
         elements = self.pool.get('maintenance.element').browse(cr, uid, ids, context)
@@ -45,12 +45,12 @@ class maintenance_element(osv.osv):
                     arbol.appendleft(element_aux)
                     element_aux = element_aux.padre_id
                 for elemento in arbol:
-                    result[element.id] += elemento.name + "/"
+                    result[element.id] += elemento.name + u"/"
                 result[element.id]=result[element.id][:-1]
             else:
                 result[element.id] = element.name
         return result
-    
+
     def _complete_name(self, cr, uid, ids, name, args=None, context=None):
         res = {}
         for m in self.browse(cr, uid, ids, context=context):
@@ -59,10 +59,10 @@ class maintenance_element(osv.osv):
             while parent:
                 names.append(parent.name)
                 parent = parent.padre_id
-            res[m.id] = ' / '.join(reversed(names))
+            res[m.id] = u' / '.join(reversed(names))
         return res
-    
-    _name = 'maintenance.element' 
+
+    _name = 'maintenance.element'
     _columns = {
             'name':fields.char('Nombre', size=60, required=True, readonly=False),
             'description': fields.text('Descripcion'),
@@ -76,7 +76,7 @@ class maintenance_element(osv.osv):
             'padre_id':fields.many2one('maintenance.element', 'Padre', required=False),
             'hijo_ids':fields.one2many('maintenance.element', 'padre_id', 'Hijos', required=False),
             'complete_name': fields.function(_complete_name, type='char', size=256, string="Nombre completo",
-                            store={'maintenance.element': (_complete_name, ['name', 'padre_id'], 10)}),
+                            store={'maintenance.element': (lambda self, cr, uid, ids, c={}: ids, ['name', 'padre_id'], 10)}),
             'product_id':fields.many2one('product.product', 'Producto asociado', required=False),
             'asset_id':fields.many2one('account.asset.asset', 'Activo', required=False),
             'analytic_account_id':fields.many2one('account.analytic.account', 'Cuenta analitica', required=True),
@@ -85,9 +85,9 @@ class maintenance_element(osv.osv):
             'planta':fields.function(_get_planta, method=True, type='char', string='Planta', store=False),
             'nombre_sin_planta':fields.function(_nombre_sin_planta, method=True, type='char', string='Nombre sin planta',
                                                   store = {
-                                               'maintenance.element': (_nombre_sin_planta, ['name','padre_id'], 10),
+                                               'maintenance.element': (lambda self, cr, uid, ids, c={}: ids, ['name','padre_id'], 10),
                                                }),
             'order_ids':fields.many2many('maintenance.element', 'maintenanceelement_workorder_rel', 'element_id', 'order_id', 'Ordenes de trabajo', required=False),
-              
+
                     }
 maintenance_element()
