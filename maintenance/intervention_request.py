@@ -25,24 +25,24 @@ class intervention_request(osv.osv):
     _inherit = ['mail.thread']
     _columns = {
             'company_id': fields.many2one('res.company','Company',required=True,select=1, states={'confirmed':[('readonly',True)], 'approved':[('readonly',True)]}),
-            'maintenance_type_id':fields.many2one('maintenance.type', 'tipo de mantenimiento', required=False),
+            'maintenance_type_id':fields.many2one('maintenance.type', 'maintenance type', required=False),
             'name':fields.char('Nombre', size=64, required=True, readonly=False),
-            'solicitante_id':fields.many2one('res.users', 'Persona solicitante', required=True),
-            'element_ids':fields.many2many('maintenance.element', 'maintenanceelement_interventionrequest_rel', 'intervention_id', 'element_id', 'elementos de mantenimiento'),
-            'department_id':fields.many2one('hr.department', 'departamento', required=False),
-            'fecha_estimada': fields.date('Fecha estimada'),
-            'motivo_cancelacion' : fields.text('Motivo de cancelacion'),
-            'fecha_solicitud': fields.date('Fecha de solicitud', required=True),
-            'instrucciones': fields.text('Instrucciones'),
+            'solicitante_id':fields.many2one('res.users', 'Applicant ', required=True),
+            'element_ids':fields.many2many('maintenance.element', 'maintenanceelement_interventionrequest_rel', 'intervention_id', 'element_id', 'Maintenance elements'),
+            'department_id':fields.many2one('hr.department', 'Department', required=False),
+            'fecha_estimada': fields.date('Estimated date'),
+            'motivo_cancelacion' : fields.text('Reason for cancellation'),
+            'fecha_solicitud': fields.date('Request date', required=True),
+            'instrucciones': fields.text('Instructions'),
             'state':fields.selection([
-                ('draft', 'Borrador'),
-                ('confirmed', 'Confirmado'),
-                ('cancelled', 'Cancelado'),
+                ('draft', 'Draft'),
+                ('confirmed', 'Confirmed'),
+                ('cancelled', 'Cancelled'),
                  ], 'State', select=True, readonly=False),
-            'note': fields.text('Notas'),
-            'deteccion':fields.text('Deteccion'),
-            'sintoma':fields.text('sintoma'),
-            'efecto':fields.text('efecto')
+            'note': fields.text('Notes'),
+            'deteccion':fields.text('Detection'),
+            'sintoma':fields.text('Sign'),
+            'efecto':fields.text('effect')
                     }
     _defaults = {
         'state': 'draft',

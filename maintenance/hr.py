@@ -32,9 +32,9 @@ class hr_employee(osv.osv):
     
     _inherit = 'hr.employee'
     _columns = {
-            'producto_hora_nocturna_id':fields.many2one('product.product', 'producto hora nocturna', required=False),
-            'producto_hora_festiva_id':fields.many2one('product.product', 'producto hora festiva', required=False), 
-            'externo':fields.boolean('Empleado externo', required=False), 
-            'categories':fields.function(_get_categories, method=True, type='char', string='categorias', store=False),
+            'producto_hora_nocturna_id':fields.many2one('product.product', 'product night hour', required=False),
+            'producto_hora_festiva_id':fields.many2one('product.product', 'product festive hour', required=False), 
+            'externo':fields.boolean('External employee', required=False), 
+            'categories':fields.function(_get_categories, method=True, type='char', string='Categories', store=False),
                     }
 hr_employee()

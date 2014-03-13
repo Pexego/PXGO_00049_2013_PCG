@@ -42,4 +42,3 @@ class purchase_requisition(osv.osv):
                     count_purchases_maked += 1
                     cursor_supplierinfos += 1
         return id_created
-purchase_requisition()

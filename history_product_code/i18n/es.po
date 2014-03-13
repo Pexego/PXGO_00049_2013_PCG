@@ -1,0 +1,41 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* history_product_code
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-03-13 13:12+0000\n"
+"PO-Revision-Date: 2014-03-13 13:12+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: history_product_code
+#: field:historial.product.code,product_id:0
+#: model:ir.model,name:history_product_code.model_product_product
+#: model:ir.model.fields,field_description:history_product_code.field_historial_product_code_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: history_product_code
+#: field:historial.product.code,code:0
+#: model:ir.model.fields,field_description:history_product_code.field_historial_product_code_code
+msgid "Codigo"
+msgstr "Codigo"
+
+#. module: history_product_code
+#: model:ir.model,name:history_product_code.model_historial_product_code
+msgid "historial.product.code"
+msgstr "historial.product.code"
+
+#. module: history_product_code
+#: model:ir.model.fields,field_description:history_product_code.field_product_product_history_code_ids
+#: field:product.product,history_code_ids:0
+msgid "Code history"
+msgstr "Historial de códigos"
+

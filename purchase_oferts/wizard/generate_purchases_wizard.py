@@ -76,7 +76,7 @@ class generate_purchases_wizard(osv.osv_memory):
         return context['active_ids']
     
     _columns = {
-            'lineas_ids':fields.many2many('purchase.order.line', 'purchase_order_generate_purchases_rel', 'line_id', 'wizard_id', 'Lineas'),
+            'lineas_ids':fields.many2many('purchase.order.line', 'purchase_order_generate_purchases_rel', 'line_id', 'wizard_id', 'Lines'),
                     }
     
     _defaults = {

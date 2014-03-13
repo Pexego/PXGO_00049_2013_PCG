@@ -6,7 +6,7 @@
 			<field name="model">maintenance.type</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree string="Tipos de mantenimiento">
+				<tree string="Maintenance type">
 					<field name="name" />
 					<field name="type" />
 					<field name="planificado" />
@@ -21,7 +21,7 @@
 			<field name="model">maintenance.type</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-				<form string="Tipo de mantenimiento" version="7.0">
+				<form string="Maintenance type" version="7.0">
 					<sheet>
 						<group>
 							<group>
@@ -72,7 +72,7 @@
 
 
 		<record id="action_maintenance_type_tree" model="ir.actions.act_window">
-			<field name="name">Tipos de mantenimiento</field>
+			<field name="name">Maintenance type</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">maintenance.type</field>
 			<field name="view_type">form</field>

@@ -22,8 +22,8 @@ from osv import fields, osv
 class cancel_intervention_request_wizard(osv.osv_memory):
     _name = "cancel.intervention.request.wizard"
     _columns = {
-            'motivo': fields.text('Motivo de cancelacion', required=True),
-            'intervention_request_id':fields.many2one('intervention.request', 'solicitud', required=True),
+            'motivo': fields.text('reason for cancellation', required=True),
+            'intervention_request_id':fields.many2one('intervention.request', 'request', required=True),
                     }
     
     def close_confirm(self, cr, uid, ids, context=None):

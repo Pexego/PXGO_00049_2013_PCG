@@ -3,7 +3,7 @@
     <data>
 
         <report auto="True" id="report_work_order" model="work.order" name="work.order"
-                rml="maintenance/report/work_order.jrxml" string="Orden de trabajo"
+                rml="maintenance/report/work_order.jrxml" string="Work order"
                 usage="default"/>
 
     </data>

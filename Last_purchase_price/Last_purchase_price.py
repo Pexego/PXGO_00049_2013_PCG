@@ -53,5 +53,5 @@ class Last_purchase_price(osv.osv):
 
     _inherit = 'product.product'
     _columns = {
-            'last_purchase_price': fields.function(_ultimo_precio, method=True, type='float',digits_compute= dp.get_precision('Product Price'), string='Ultimo precio de compra', store=False),
+            'last_purchase_price': fields.function(_ultimo_precio, method=True, type='float',digits_compute= dp.get_precision('Product Price'), string='Last purchase price', store=False),
                     }

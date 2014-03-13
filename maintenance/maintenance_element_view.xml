@@ -2,10 +2,10 @@
 <openerp>
 	<data>
 
-		<menuitem name="Mantenimiento" id="menu_mantenimiento_root"
+		<menuitem name="Maintenance" id="menu_mantenimiento_root"
 			sequence="70" groups="group_maintenance_manager,group_maintenance_user"/>
 
-		<menuitem id="menu_maintenance" name="Mantenimiento"
+		<menuitem id="menu_maintenance" name="Maintenance"
 			parent="menu_mantenimiento_root" sequence="1"/>
 
 		<record model="ir.ui.view" id="maintenance_element_tree_view">
@@ -13,7 +13,7 @@
 			<field name="model">maintenance.element</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree string="Elementos de mantenimiento">
+				<tree string="Maintenance element">
 					<field name="name" />
 					<field name="complete_name" />
 					<field name="type" />
@@ -27,7 +27,7 @@
 			<field name="model">maintenance.element</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-				<form string="Elemento de mantenimientos" version="7.0">
+				<form string="Maintenance element" version="7.0">
 					<sheet>
 						<label for="name" class="oe_edit_only" />
 						<h1>
@@ -76,7 +76,7 @@
 
 
 		<record id="action_maintenance_element_tree" model="ir.actions.act_window">
-			<field name="name">Elementos de mantenimiento</field>
+			<field name="name">Maintenance element</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">maintenance.element</field>
 			<field name="view_type">form</field>

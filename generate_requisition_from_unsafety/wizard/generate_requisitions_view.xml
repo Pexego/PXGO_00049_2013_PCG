@@ -6,8 +6,8 @@
 			<field name="model">generate.requisitions.wizard</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-				<form string="Solicitudes">
-					<button name="generar" type="object" string="Generar" />
+				<form string="requisitions">
+					<button name="generar" type="object" string="Generate" />
 				</form>
 			</field>
 		</record>

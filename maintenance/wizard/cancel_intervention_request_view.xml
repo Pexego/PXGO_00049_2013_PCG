@@ -6,14 +6,14 @@
 			<field name="model">cancel.intervention.request.wizard</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-				<form string="Cancelar solicitud">
+				<form string="cancell request">
 					<field name="intervention_request_id" string="solicitud a cancelar "
 						readonly="1" />
 					<newline />
-					<field name="motivo" string="motivo de cancelacion"/>
+					<field name="motivo" string="reason for cancellation"/>
 					<newline />
 					<group>
-						<button name="close_confirm" type="object" string="Cancelar solicitud" />
+						<button name="close_confirm" type="object" string="cancell request" />
 					</group>
 				</form>
 			</field>

@@ -32,7 +32,7 @@ stock_multicompany_wizard()
 class stock_multicompany_wizard_lineas(osv.osv_memory):
     _name = 'stock.multicompany.wizard.lineas'
     _columns = {
-            'cantidad': fields.integer('Cantidad'),
+            'cantidad': fields.integer('Quantity'),
             'wizard_id':fields.many2one('stock.multicompany.wizard', 'wizard', required=False),
             'company_id':fields.many2one('res.company', 'Company', required=False), 
                 }

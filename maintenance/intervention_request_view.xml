@@ -6,7 +6,7 @@
 			<field name="model">intervention.request</field>
 			<field name="priority" eval="2" />
 			<field name="arch" type="xml">
-				<calendar string="Solicitud de intervencion" date_start="fecha_solicitud"
+				<calendar string="Intervention request" date_start="fecha_solicitud"
 					color="department_id">
 					<field name="name" />
 				</calendar>
@@ -18,7 +18,7 @@
 			<field name="model">intervention.request</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree string="Solicitudes de intervencion"
+				<tree string="Intervention request"
 					colors="grey:state in ('cancelled','confirmed');blue:state == 'draft'">
 					<field name="name" />
 					<field name="solicitante_id" />
@@ -36,13 +36,13 @@
 			<field name="model">intervention.request</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-				<form string="Solicitud de intervencion" version="7.0">
+				<form string="Intervention request" version="7.0">
 					<header>
-						<button name="send_email" type="object" string="Enviar correo"
+						<button name="send_email" type="object" string="Send email"
 							states="draft,confirmed,cancelled" />
 						<button name="create_work_order" type="object"
-							string="crear orden de trabajo" states="draft" />
-						<button name="cancel" type="object" string="Cancelar"
+							string="Create work order" states="draft" />
+						<button name="cancel" type="object" string="Cancel"
 							states="draft" />
 						<field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
 					</header>
@@ -71,7 +71,7 @@
 							</group>
 						</group>
 						<div class="oe_clear"/>
-						<field name="note" class="oe_inline" placeholder="Notas"/>
+						<field name="note" class="oe_inline" placeholder="Notes"/>
 					</sheet>
 					<div class="oe_chatter">
 						<field name="message_follower_ids" widget="mail_followers" />
@@ -91,10 +91,10 @@
 					<field name="name" />
 					<field name="maintenance_type_id" />
 					<group expand="0" string="Group By...">
-						<filter string="estado" domain="[]" context="{'group_by':'state'}" />
-						<filter string="tipo de mantenimiento" domain="[]"
+						<filter string="State" domain="[]" context="{'group_by':'state'}" />
+						<filter string="Maintenance type" domain="[]"
 							context="{'group_by':'maintenance_type_id'}" />
-						<filter string="departamento" domain="[]"
+						<filter string="Department" domain="[]"
 							context="{'group_by':'department_id'}" />
 					</group>
 				</search>
@@ -103,7 +103,7 @@
 
 
 		<record id="action_intervention_request_tree" model="ir.actions.act_window">
-			<field name="name">Solicitudes de intervención</field>
+			<field name="name">Intervention request</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">intervention.request</field>
 			<field name="view_type">form</field>

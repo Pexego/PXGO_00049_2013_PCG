@@ -18,7 +18,7 @@
 #
 ##############################################################################
 {
-    "name": "proveedores principalesS",
+    "name": "proveedores principales",
     "version": "1.0",
     "depends": ["product","purchase","purchase_requisition"],
     "author": "Pexego",

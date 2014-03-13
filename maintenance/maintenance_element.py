@@ -64,30 +64,30 @@ class maintenance_element(osv.osv):
 
     _name = 'maintenance.element'
     _columns = {
-            'name':fields.char('Nombre', size=60, required=True, readonly=False),
-            'description': fields.text('Descripcion'),
+            'name':fields.char('Name', size=60, required=True, readonly=False),
+            'description': fields.text('Description'),
             'type':fields.selection([
-                ('estacion', 'Estacion'),
-                ('subestacion', 'Subestacion'),
-                ('bloque', 'bloque'),
-                ('sistema', 'sistema'),
+                ('estacion', 'Station'),
+                ('subestacion', 'Substation'),
+                ('bloque', 'Block'),
+                ('sistema', 'System'),
                 ('equipos', 'equipos'),
-                 ], 'Tipo', select=True),
-            'padre_id':fields.many2one('maintenance.element', 'Padre', required=False),
+                 ], 'Type', select=True),
+            'padre_id':fields.many2one('maintenance.element', 'Father', required=False),
             'hijo_ids':fields.one2many('maintenance.element', 'padre_id', 'Hijos', required=False),
-            'complete_name': fields.function(_complete_name, type='char', size=256, string="Nombre completo",
+            'complete_name': fields.function(_complete_name, type='char', size=256, string="Complete name",
                             store={'maintenance.element': (lambda self, cr, uid, ids, c={}: ids, ['name', 'padre_id'], 10)}),
-            'product_id':fields.many2one('product.product', 'Producto asociado', required=False),
-            'asset_id':fields.many2one('account.asset.asset', 'Activo', required=False),
-            'analytic_account_id':fields.many2one('account.analytic.account', 'Cuenta analitica', required=True),
-            'codigo':fields.char('codigo', size=64, required=False, readonly=False),
-            'maintenance_type_ids':fields.many2many('maintenance.type', 'maintenanceelement_maintenancetype_rel', 'element_id', 'type_id', 'Tipos de mantenimiento'),
-            'planta':fields.function(_get_planta, method=True, type='char', string='Planta', store=False),
-            'nombre_sin_planta':fields.function(_nombre_sin_planta, method=True, type='char', string='Nombre sin planta',
+            'product_id':fields.many2one('product.product', 'product associated', required=False),
+            'asset_id':fields.many2one('account.asset.asset', 'Active', required=False),
+            'analytic_account_id':fields.many2one('account.analytic.account', 'Analytic account', required=True),
+            'codigo':fields.char('Code', size=64, required=False, readonly=False),
+            'maintenance_type_ids':fields.many2many('maintenance.type', 'maintenanceelement_maintenancetype_rel', 'element_id', 'type_id', 'Maintenance type'),
+            'planta':fields.function(_get_planta, method=True, type='char', string='Floor', store=False),
+            'nombre_sin_planta':fields.function(_nombre_sin_planta, method=True, type='char', string='Name without floor',
                                                   store = {
                                                'maintenance.element': (lambda self, cr, uid, ids, c={}: ids, ['name','padre_id'], 10),
                                                }),
-            'order_ids':fields.many2many('maintenance.element', 'maintenanceelement_workorder_rel', 'element_id', 'order_id', 'Ordenes de trabajo', required=False),
+            'order_ids':fields.many2many('maintenance.element', 'maintenanceelement_workorder_rel', 'element_id', 'order_id', 'Work order', required=False),
 
                     }
 maintenance_element()

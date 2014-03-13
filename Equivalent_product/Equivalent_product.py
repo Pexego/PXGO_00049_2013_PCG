@@ -81,10 +81,10 @@ class Producto(osv.osv):
     _columns = {
             'equivalent_product_ids':fields.many2many('product.product', \
                                     'equivalent_products', 'product_id', \
-                                    'equivalent_id', 'Productos equivalentes'),
+                                    'equivalent_id', 'Equivalent products'),
             'equivalent_product_function': fields.function(_get_equivalent_products,\
                                       type='many2many',relation='product.product'\
-                                      , string='Productos equivalentes',\
+                                      , string='Equivalent products',\
                                       fnct_inv=_save_equivalent_product),
             }         
 Producto()

@@ -23,8 +23,8 @@ from openerp.osv import osv, fields
 class stock_warehouse_orderpoint(osv.osv):
     _inherit = 'stock.warehouse.orderpoint'
     _columns = {
-        'from_date': fields.date('Desde'), 
-        'to_date': fields.date('Hasta'), 
+        'from_date': fields.date('From'), 
+        'to_date': fields.date('To'), 
         'min_days_id': fields.many2one('minimum.day', 'Stock Mínimum Days', required=False),
     }
 stock_warehouse_orderpoint()

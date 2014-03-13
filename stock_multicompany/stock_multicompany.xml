@@ -9,7 +9,7 @@
 			<field name="arch" type="xml">
 				<field name="virtual_stock_conservative" position="after">
 					<button name="stock_multicompany" type="object"
-						string="ver Stock multicompañía" />
+						string="See multicompany stock" />
 				</field>
 			</field>
 		</record>

@@ -26,12 +26,12 @@ class work_order_other_services(osv.osv):
     _name = 'work.order.other.services'
     _columns = {
             'code':fields.char('Codigo', size=64, required=False, readonly=False),
-            'quantity': fields.float('Cantidad'),
-            'product_id':fields.many2one('product.product', 'producto '
+            'quantity': fields.float('Quantity'),
+            'product_id':fields.many2one('product.product', 'Product'
                                          , required=True),
-            'work_order_id':fields.many2one('work.order', 'orden de trabajo'
+            'work_order_id':fields.many2one('work.order', 'Work order'
                                             , required=False),
-            'employee_id': fields.many2one('hr.employee', 'Empleado'
+            'employee_id': fields.many2one('hr.employee', 'Employee'
                                            , required=True, select="1"),
                     }
     
@@ -55,12 +55,12 @@ class work_order_time_report(osv.osv):
     _name = "work.order.time.report"
     _columns = {
             'date': fields.date('Fecha'),
-            'horas_normal': fields.float('Horas normales'),
-            'horas_nocturnas': fields.float('Horas nocturnas'),
-            'horas_festivas': fields.float('Horas festivas'),
-            'employee_id': fields.many2one('hr.employee', 'Empleado'
+            'horas_normal': fields.float('Normal hours'),
+            'horas_nocturnas': fields.float('Nightly hours'),
+            'horas_festivas': fields.float('Festive hours'),
+            'employee_id': fields.many2one('hr.employee', 'Employee'
                                            , required=True, select="1"),
-            'work_order_id':fields.many2one('work.order', 'orden de trabajo'
+            'work_order_id':fields.many2one('work.order', 'Work order'
                                             , required=False),
             'total': fields.function(_get_total, method=True, type='float'
                                      , string='Total', store=False),
@@ -142,91 +142,91 @@ class work_order(osv.osv):
                                           required=True, select=1,
                                           states={'confirmed':[('readonly', True)],
                                             'approved':[('readonly', True)]}),
-            'name':fields.char('Nombre', size=64, required=True),
+            'name':fields.char('Name', size=64, required=True),
             'request_id':fields.many2one('intervention.request'
-                                         , 'Solicitud origen', required=False),
+                                         , 'Origin request', required=False),
             'element_ids':fields.many2many('maintenance.element'
                                            , 'maintenanceelement_workorder_rel'
-                                           , 'order_id', 'element_id', 'Equipos'
+                                           , 'order_id', 'element_id', 'Maintenance elements'
                                            , required=True),
-            'descripcion': fields.text('Descripción'),
-            'fecha': fields.date('Fecha de solicitud'),
-            'fecha_inicio': fields.datetime('fecha de inicio'),
+            'descripcion': fields.text('Description'),
+            'fecha': fields.date('Request date'),
+            'fecha_inicio': fields.datetime('Initial date'),
             'assigned_department_id':fields.many2one('hr.department',
-                                                     'Departamento asignado'
+                                                     'Assigned department'
                                                      , required=False),
             'origin_department_id':fields.many2one('hr.department',
-                                                   'Departamento origen'
+                                                   'Origin department'
                                                    , required=False),
             'stock_moves_ids':fields.one2many('stock.move', 'work_order_id'
-                                              , 'movimientos asociados'
+                                              , 'Associated movement'
                                               , required=False),
             'horas_ids':fields.one2many('work.order.time.report'
-                                        , 'work_order_id', 'Reporte de horas'
+                                        , 'work_order_id', 'Timesheet'
                                         , required=False),
             'other_service_ids':fields.one2many('work.order.other.services'
-                                                , 'work_order_id', 'Otros conceptos'
+                                                , 'work_order_id', 'Other concepts'
                                                 , required=False),
             'purchase_ids':fields.one2many('purchase.order', 'work_order_id'
-                                           , 'Compras asociadas', required=False),
+                                           , 'Asociated purchases', required=False),
             'tipo_parada':fields.selection([
-                ('marcha', 'Marcha'),
-                ('parada', 'Parada'),
-                 ], 'Condicion operación', select=True),
+                ('marcha', 'Up'),
+                ('parada', 'Stop'),
+                 ], 'Operation condition', select=True),
             'state':fields.selection([
-                ('draft', 'Borrador'),
-                ('open', 'Abierto'),
-                ('pending', 'Pendiente de aprobación'),
-                ('done', 'Finalizado'),
-                ('cancelled', 'Cancelado'),
+                ('draft', 'Draft'),
+                ('open', 'Open'),
+                ('pending', 'Pending approval'),
+                ('done', 'Done'),
+                ('cancelled', 'Cancelled'),
                  ], 'State', readonly=True),
-            'instrucciones': fields.text('Instrucciones'),
+            'instrucciones': fields.text('Instructions'),
             'maintenance_type_id':fields.many2one('maintenance.type'
-                                                  , 'tipo de mantenimiento'
+                                                  , 'Maintenance type'
                                                   , required=False),
-            'survey_id':fields.many2one('survey', 'Encuesta asociada'
+            'survey_id':fields.many2one('survey', 'Associated survey'
                                         , required=False),
             'descargo':fields.selection([
-                ('bloqueo', 'Bloqueo'),
-                ('no_descargo', 'No descargo'),
-                ('aviso', 'Aviso'),
-                 ], 'Descargo', readonly=False),
-            'initial_date': fields.date('Fecha inicial'),
-            'final_date': fields.date('Fecha final'),
+                ('bloqueo', 'block'),
+                ('no_descargo', 'not discharge'),
+                ('aviso', 'Warning'),
+                 ], 'Discharge', readonly=False),
+            'initial_date': fields.date('Initial date'),
+            'final_date': fields.date('Final date'),
 
-            'responsable_id':fields.many2one('res.users', 'Responsable'
+            'responsable_id':fields.many2one('res.users', 'Responsible'
                                              , required=False),
-            'note': fields.text('informe'),
-            'padre_id':fields.many2one('work.order', 'orden padre', required=False),
+            'note': fields.text('Report'),
+            'padre_id':fields.many2one('work.order', 'Father order', required=False),
             'hijas_ids':fields.one2many('work.order', 'padre_id', 'Ordenes hijas'
                                         , required=False),
             'grupo': fields.function(_get_grupo, method=True, type='boolean'
-                                     , string='grupo', store=False),
-            'deteccion':fields.text('Detección'),
-            'sintoma':fields.text('síntoma'),
-            'efecto':fields.text('efecto'),
+                                     , string='Group', store=False),
+            'deteccion':fields.text('Detection'),
+            'sintoma':fields.text('Sign'),
+            'efecto':fields.text('effect'),
             'planta':fields.function(_get_planta, method=True, type='char'
-                                     , string='Planta', store={
+                                     , string='Floor', store={
                                                'work.order':
                                                 (_get_planta, ['element_ids'], 10),
                                                }),
             'contrata':fields.function(_get_contrata, method=True, type='char'
-                                       , string='Contrata', store=False),
+                                       , string='Contractual', store=False),
             'elements_list':fields.function(_get_element_list, method=True, type='char'
-                                            , string='string de equipos', store=False),
+                                            , string='Elements string', store=False),
             'total_other_service':fields.function(_get_total_other_service
                                                   , method=True, type='float'
-                                                  , string='total oros conceptos'
+                                                  , string='Other concepts total'
                                                   , store=False),
             'total_servicios_internos':fields.function(_get_total_servicios
                                                        , method=True, type='float'
-                                                       , string='total servicios\
-                                                                internos'
+                                                       , string='Total internal\
+                                                                services'
                                                        , store=False),
             'total_servicios_externos':fields.function(_get_total_servicios
                                                        , method=True, type='float'
-                                                       , string='total servicios\
-                                                                externos'
+                                                       , string='Total external\
+                                                                services'
                                                        , store=False),
                     }
     _defaults = {

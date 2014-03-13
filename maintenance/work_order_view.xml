@@ -5,8 +5,8 @@
 
 		<!--Email template -->
 		<record id="email_template_work_order" model="email.template">
-			<field name="name">Orden de trabajo - Send by Email</field>
-			<field name="subject">Orden de trabajo</field>
+			<field name="name">Work order - Send by Email</field>
+			<field name="subject">Work order</field>
 			<field name="model_id" ref="maintenance.model_work_order" />
 			<field name="auto_delete" eval="True" />
 			<field name="report_template" ref="report_work_order" />
@@ -20,7 +20,7 @@
 			<field name="model">work.order.other.services</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree string="Otros conceptos">
+				<tree string="Other concepts">
 					<field name="code" />
 					<field name="quantity" />
 					<field name="employee_id" />
@@ -33,7 +33,7 @@
 			<field name="model">work.order.other.services</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-				<form string="reporte de horas">
+				<form string="Timesheet">
 					<group>
 						<field name="code" />
 						<field name="quantity" />
@@ -49,7 +49,7 @@
 			<field name="model">work.order.time.report</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree string="reportes de horas">
+				<tree string="Timesheet">
 					<field name="date" />
 					<field name="horas_normal" widget="float_time" />
 					<field name="horas_nocturnas" widget="float_time" />
@@ -64,7 +64,7 @@
 			<field name="model">work.order.time.report</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-				<form string="reporte de horas">
+				<form string="Timesheet">
 					<group>
 						<group>
 							<field name="date" />
@@ -88,7 +88,7 @@
 			<field name="model">work.order</field>
 			<field name="priority" eval="2" />
 			<field name="arch" type="xml">
-				<calendar string="Ordenes de trabajo" date_start="initial_date"
+				<calendar string="Work orders" date_start="initial_date"
 					date_stop="final_date" color="assigned_department_id">
 					<field name="name" />
 				</calendar>
@@ -101,7 +101,7 @@
 			<field name="model">work.order</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree string="Ordenes de trabajo"
+				<tree string="Work orders"
 					colors="grey:state in ('cancelled','done');blue:state in ('open','pending')">
 					<field name="name" />
 					<field name="fecha" />
@@ -122,20 +122,20 @@
 			<field name="model">work.order</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-				<form string="Orden de trabajo" version="7.0">
+				<form string="Work order" version="7.0">
 					<header>
 						<button name="send_email" type="object" string="Enviar correo"
 							states="draft,open,pending,done" />
 
 						<button name="work_order_open" type="object"
-							string="Abrir orden de trabajo" states="draft" class="oe_highlight" />
-						<button name="work_order_done" type="object" string="Validar trabajo"
+							string="Open work order" states="draft" class="oe_highlight" />
+						<button name="work_order_done" type="object" string="Validate job"
 							attrs="{'invisible':['|',('grupo','=',False),('state','not in',['open','pending'])]}"
 							class="oe_highlight" />
-						<button name="request_validation" type="object" string="finalizar orden"
+						<button name="request_validation" type="object" string="Done order"
 							attrs="{'invisible':['|',('grupo','=',True),('state','!=','open')]}"
 							class="oe_highlight" />
-						<button name="work_order_cancel" type="object" string="Cancelar"
+						<button name="work_order_cancel" type="object" string="Cancel order"
 							states="draft,open,pending" />
 
 						<field name="state" widget="statusbar" statusbar_visible="draft,open,done" />
@@ -167,7 +167,7 @@
 							</group>
 						</group>
 						<notebook>
-							<page string="Información">
+							<page string="Information">
 								<group>
 
 									<group>
@@ -184,20 +184,20 @@
 								</group>
 								<field name="note" />
 							</page>
-							<page string="movimientos relacionados">
+							<page string="Related movements">
 								<group>
 									<field name="purchase_ids" string="Compras" />
 									<field name="stock_moves_ids" string="movimientos de stock" />
 								</group>
 							</page>
-							<page string="horas">
+							<page string="Timesheet">
 								<group>
 									<field name="horas_ids" string="Reporte de horas" />
 									<field name="other_service_ids" string="Otros conceptos" />
 								</group>
 							</page>
-							<page string="ordenes auxiliares">
-								<field name="hijas_ids" string="ordenes auxiliares" domain="[('id', '!=', id)]"/>
+							<page string="Auxiliary orders">
+								<field name="hijas_ids" string="Auxiliary orders" domain="[('id', '!=', id)]"/>
 							</page>
 						</notebook>
 					</sheet>
@@ -221,14 +221,14 @@
 					<field name="maintenance_type_id" />
 					<field name="responsable_id" />
 					<group expand="0" string="Group By...">
-						<filter string="departamento asignado" domain="[]"
+						<filter string="Assigned department" domain="[]"
 							context="{'group_by':'assigned_department_id'}" />
-						<filter string="tipo de mantenimiento" domain="[]"
+						<filter string="Maintenance type" domain="[]"
 							context="{'group_by':'maintenance_type_id'}" />
-						<filter string="responsable" domain="[]"
+						<filter string="Responsible" domain="[]"
 							context="{'group_by':'responsable_id'}" />
-						<filter string="descargo" domain="[]" context="{'group_by':'descargo'}" />
-						<filter string="estado" domain="[]" context="{'group_by':'state'}" />
+						<filter string="discharge" domain="[]" context="{'group_by':'descargo'}" />
+						<filter string="State" domain="[]" context="{'group_by':'state'}" />
 					</group>
 				</search>
 			</field>
@@ -236,7 +236,7 @@
 
 
 		<record id="action_work_order_tree" model="ir.actions.act_window">
-			<field name="name">Ordenes de trabajo</field>
+			<field name="name">Work orders</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">work.order</field>
 			<field name="view_type">form</field>

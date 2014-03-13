@@ -33,9 +33,9 @@ class stock(osv.osv):
     
     _inherit = 'stock.move' 
     _columns = {
-            'element_id':fields.many2one('maintenance.element', 'Equipo', required=False),
-            'work_order_id':fields.many2one('work.order', 'orden de trabajo', required=False),
-            'work_done': fields.function(_work_done, method=True, type='boolean', string='orden finalizada', store=False),
+            'element_id':fields.many2one('maintenance.element', 'Element', required=False),
+            'work_order_id':fields.many2one('work.order', 'Work order', required=False),
+            'work_done': fields.function(_work_done, method=True, type='boolean', string='Order completed', store=False),
                     }
 stock()
 
@@ -54,8 +54,8 @@ class stock_picking(osv.osv):
     
     _inherit = 'stock.picking'
     _columns = {
-            'work_order_id':fields.many2one('work.order', 'orden de trabajo', required=False),
-            'work_done': fields.function(_work_done, method=True, type='boolean', string='orden finalizada', store=False),
+            'work_order_id':fields.many2one('work.order', 'Work order', required=False),
+            'work_done': fields.function(_work_done, method=True, type='boolean', string='Order completed', store=False),
                     }
 stock_picking()
 
@@ -74,8 +74,8 @@ class stock_picking_out(osv.osv):
     
     _inherit = 'stock.picking.out'
     _columns = {
-            'work_order_id':fields.many2one('work.order', 'orden de trabajo', required=True),
-            'work_done': fields.function(_work_done, method=True, type='boolean', string='orden finalizada', store=False),
+            'work_order_id':fields.many2one('work.order', 'Work order', required=True),
+            'work_done': fields.function(_work_done, method=True, type='boolean', string='Order completed', store=False),
                     }
 stock_picking_out()
     

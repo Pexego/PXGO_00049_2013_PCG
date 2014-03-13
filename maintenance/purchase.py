@@ -33,8 +33,8 @@ class purchase(osv.osv):
         return res
     _inherit = 'purchase.order' 
     _columns = {
-            'work_order_id':fields.many2one('work.order', 'orden de trabajo', required=False),
-            'work_done': fields.function(_work_done, method=True, type='boolean', string='orden finalizada', store=False),
+            'work_order_id':fields.many2one('work.order', 'Work order', required=False),
+            'work_done': fields.function(_work_done, method=True, type='boolean', string='order completed', store=False),
                     }
         
 purchase()
@@ -42,6 +42,6 @@ purchase()
 class purchase_order_line(osv.osv):
     _inherit = 'purchase.order.line'
     _columns = {
-            'element_id': fields.many2one('maintenance.element', 'Equipo', required=False),
+            'element_id': fields.many2one('maintenance.element', 'Element', required=False),
                 }
 purchase_order_line()

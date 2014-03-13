@@ -21,7 +21,7 @@ from osv import fields, osv
 class history_product_code(osv.osv):
     _inherit = 'product.product'
     _columns = {
-        'history_code_ids': fields.one2many('historial.product.code','product_id','Historial de codigos')
+        'history_code_ids': fields.one2many('historial.product.code','product_id','Code history')
     }
     
     def write(self, cr, uid, ids, vals, context=None):
@@ -62,6 +62,6 @@ class historial_product_code(osv.osv):
     _name = 'historial.product.code'
     _columns = {
             'code':fields.char('Codigo', size=64, required=True, readonly=True),
-            'product_id':fields.many2one('product.product', 'Producto', required=False),
+            'product_id':fields.many2one('product.product', 'Product', required=False),
                     }
 historial_product_code()
