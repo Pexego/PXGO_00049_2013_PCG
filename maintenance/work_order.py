@@ -85,7 +85,7 @@ class work_order(osv.osv):
         for work_order in work_orders:
             result[work_order.id] = ""
             for purchase in work_order.purchase_ids:
-                result[work_order.id] += purchase.partner_id.display_name + ", "
+                result[work_order.id] += purchase.partner_id.display_name + u", "
             result[work_order.id]=result[work_order.id][:-2]
         return result
 
@@ -107,7 +107,7 @@ class work_order(osv.osv):
         for work_order in work_orders:
             result[work_order.id] = ""
             for element in work_order.element_ids:
-                result[work_order.id]+=element.nombre_sin_planta + "\n"
+                result[work_order.id]+=element.nombre_sin_planta + u"\n"
         return result
 
     def _get_total_other_service(self, cr, uid, ids, field_name, args=None, context=None):
