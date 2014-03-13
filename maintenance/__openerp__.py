@@ -21,7 +21,7 @@
     "name": "Mantenimiento",
     "version": "1.0",
     "depends": ["Department", "product", "analytic", "stock", "purchase",
-                "l10n_es_account_asset", "survey", "hr_timesheet"],
+                "l10n_es_account_asset", "survey", "hr_timesheet","jasper_reports"],
     "author": "Pexego",
     "category": "category",
     "description": """
