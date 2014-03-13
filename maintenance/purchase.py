@@ -25,11 +25,11 @@ class purchase(osv.osv):
         res = {}
         for purchase_order_id in ids:
             purchase_order = self.pool.get('purchase.order').browse(cr, uid, purchase_order_id, context)
+            res[purchase_order_id] = False
             if purchase_order.work_order_id:
                 work_order_state = purchase_order.work_order_id.state
                 if work_order_state == 'done':
                     res[purchase_order_id] = True
-            res[purchase_order_id] = False
         return res
     _inherit = 'purchase.order' 
     _columns = {

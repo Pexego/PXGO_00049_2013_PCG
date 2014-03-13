@@ -24,11 +24,11 @@ class stock(osv.osv):
         res = {}
         for stock_move_id in ids:
             stock_move = self.pool.get('stock.move').browse(cr, uid, stock_move_id, context)
+            res[stock_move_id] = False
             if stock_move.work_order_id:
                 work_order_state = stock_move.work_order_id.state
                 if work_order_state == 'done':
                     res[stock_move_id] = True
-            res[stock_move_id] = False
         return res    
     
     _inherit = 'stock.move' 
@@ -39,25 +39,38 @@ class stock(osv.osv):
                     }
 stock()
 
-class stock_picking(osv.osv):   
+class stock_picking(osv.osv):
+    
+    def _work_done(self, cr, uid, ids, name, arg=None, context=None):
+        res = {}
+        for stock_picking_id in ids:
+            stock_picking = self.pool.get('stock.picking').browse(cr, uid, stock_picking_id, context)
+            res[stock_picking_id] = False
+            if stock_picking.work_order_id:
+                work_order_state = stock_picking.work_order_id.state
+                if work_order_state == 'done':
+                    res[stock_picking_id] = True
+        return res    
     
     _inherit = 'stock.picking'
     _columns = {
             'work_order_id':fields.many2one('work.order', 'orden de trabajo', required=False),
+            'work_done': fields.function(_work_done, method=True, type='boolean', string='orden finalizada', store=False),
                     }
 stock_picking()
 
 class stock_picking_out(osv.osv):
+    
     def _work_done(self, cr, uid, ids, name, arg=None, context=None):
         res = {}
         for stock_picking_out_id in ids:
             stock_picking_out = self.pool.get('stock.picking.out').browse(cr, uid, stock_picking_out_id, context)
+            res[stock_picking_out_id] = False
             if stock_picking_out.work_order_id:
                 work_order_state = stock_picking_out.work_order_id.state
                 if work_order_state == 'done':
                     res[stock_picking_out_id] = True
-            res[stock_picking_out_id] = False
-        return res    
+        return res   
     
     _inherit = 'stock.picking.out'
     _columns = {
