@@ -26,13 +26,13 @@ class intervention_request(osv.osv):
     _columns = {
             'company_id': fields.many2one('res.company','Company',required=True,select=1, states={'confirmed':[('readonly',True)], 'approved':[('readonly',True)]}),
             'maintenance_type_id':fields.many2one('maintenance.type', 'tipo de mantenimiento', required=False),
-            'name':fields.char('Nombre', size=64, required=False, readonly=False),
-            'solicitante_id':fields.many2one('res.users', 'Persona solicitante', required=False),
+            'name':fields.char('Nombre', size=64, required=True, readonly=False),
+            'solicitante_id':fields.many2one('res.users', 'Persona solicitante', required=True),
             'element_ids':fields.many2many('maintenance.element', 'maintenanceelement_interventionrequest_rel', 'intervention_id', 'element_id', 'elementos de mantenimiento'),
             'department_id':fields.many2one('hr.department', 'departamento', required=False),
             'fecha_estimada': fields.date('Fecha estimada'),
             'motivo_cancelacion' : fields.text('Motivo de cancelacion'),
-            'fecha_solicitud': fields.date('Fecha de solicitud'),
+            'fecha_solicitud': fields.date('Fecha de solicitud', required=True),
             'instrucciones': fields.text('Instrucciones'),
             'state':fields.selection([
                 ('draft', 'Borrador'),
@@ -49,6 +49,7 @@ class intervention_request(osv.osv):
         'name': lambda obj, cr, uid, context: obj.pool.get('ir.sequence').get(cr, uid, 'intervention.request'),
         'fecha_solicitud':fields.date.context_today,
         'company_id': lambda self,cr,uid,c: self.pool.get('res.company')._company_default_get(cr, uid, 'intervention.request', context=c),
+        'solicitante_id': lambda obj, cr, uid, context: uid,
         }
     _order = "fecha_solicitud asc"
     def cancel(self, cr, uid, ids, context=None):

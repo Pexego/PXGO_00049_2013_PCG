@@ -10,7 +10,7 @@
 					<field name="intervention_request_id" string="solicitud a cancelar "
 						readonly="1" />
 					<newline />
-					<field name="motivo" string="motivo de cancelacion" />
+					<field name="motivo" string="motivo de cancelacion"/>
 					<newline />
 					<group>
 						<button name="close_confirm" type="object" string="Cancelar solicitud" />
