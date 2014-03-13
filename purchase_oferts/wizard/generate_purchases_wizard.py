@@ -19,12 +19,15 @@
 ##############################################################################
 
 from osv import fields, osv
+from openerp import netsvc
 class generate_purchases_wizard(osv.osv_memory):
     _name = 'generate.purchases.wizard'
     
     def generar(self, cr, uid, ids, context=None):
+        wf_service = netsvc.LocalService("workflow")
         purchase_line_obj = self.pool.get('purchase.order.line')
         purchase_order_obj = self.pool.get('purchase.order')
+        requisition_obj = self.pool.get('purchase.requisition')
         if not context:
             context = {}
         if not ids:
@@ -55,13 +58,16 @@ class generate_purchases_wizard(osv.osv_memory):
             compra_antigua = lineas_proveedor[0].order_id
             nueva_compra_id= purchase_order_obj.copy(cr, uid, compra_antigua.id ,{'order_line':None}, context)
             purchase_line_obj.write(cr, uid, lineas_proveedor_id, {'order_id':nueva_compra_id}, context)
-            purchase_order_obj.wkf_confirm_order(cr, uid, [nueva_compra_id], context)
-        purchase_order_obj.action_cancel(cr, uid, compras_a_borrar, context)
+            wf_service.trg_validate(uid, 'purchase.order', nueva_compra_id, 'purchase_confirm', cr)
+        for compra in compras_a_borrar:
+            wf_service.trg_validate(uid, 'purchase.order', nueva_compra_id, 'act_cancel', cr)
         purchase_order_obj.unlink(cr, uid, compras_a_borrar, context)
         compras_a_cancelar = purchase_order_obj.search(cr, uid, [('requisition_id', 'in', requisition_ids), ('state', '=', 'draft')], offset=0, limit=None, order=None, context=context, count=False)
         lineas_a_cancelar = purchase_line_obj.search(cr, uid, [('order_id','in',compras_a_cancelar)], offset=0, limit=None, order=None, context=context, count=False)
-        purchase_line_obj.write(cr, uid, lineas_a_cancelar, {'state':'cancel'}, context)
-        purchase_order_obj.action_cancel(cr, uid, compras_a_cancelar, context)
+        purchase_line_obj.write(cr, uid, lineas_a_cancelar,{'state':'cancel'}, context)
+        requisition_obj.tender_done(cr, uid, requisition_ids, context)
+        for compra in compras_a_cancelar:
+            wf_service.trg_validate(uid, 'purchase.order', compra, 'purchase_cancel', cr)
         return True
     
     def _get_lineas(self, cr , uid , context=None):
