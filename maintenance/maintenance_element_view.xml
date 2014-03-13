@@ -45,7 +45,7 @@
 								<field name="analytic_account_id" />
 								<field name="product_id" />
 								<field name="asset_id" />
-								<field name="padre_id" string="Equipo padre" />
+								<field name="padre_id" string="Equipo padre" domain="[('id', '!=', id)]"/>
 							</group>
 							<group>
 								<field name="maintenance_type_ids" />

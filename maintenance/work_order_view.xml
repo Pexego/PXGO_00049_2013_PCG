@@ -179,7 +179,7 @@
 									<group>
 										<field name="responsable_id" />
 										<field name="tipo_parada" />
-										<field name="padre_id" />
+										<field name="padre_id" domain="[('id', '!=', id)]"/>
 									</group>
 								</group>
 								<field name="note" />
@@ -197,7 +197,7 @@
 								</group>
 							</page>
 							<page string="ordenes auxiliares">
-								<field name="hijas_ids" string="ordenes auxiliares" />
+								<field name="hijas_ids" string="ordenes auxiliares" domain="[('id', '!=', id)]"/>
 							</page>
 						</notebook>
 					</sheet>

@@ -27,16 +27,22 @@ class work_order_other_services(osv.osv):
     _columns = {
             'code':fields.char('Codigo', size=64, required=False, readonly=False),
             'quantity': fields.float('Cantidad'),
-            'product_id':fields.many2one('product.product', 'producto ', required=True),
-            'work_order_id':fields.many2one('work.order', 'orden de trabajo', required=False),
-            'employee_id': fields.many2one('hr.employee', 'Empleado', required=True, select="1"),
+            'product_id':fields.many2one('product.product', 'producto '
+                                         , required=True),
+            'work_order_id':fields.many2one('work.order', 'orden de trabajo'
+                                            , required=False),
+            'employee_id': fields.many2one('hr.employee', 'Empleado'
+                                           , required=True, select="1"),
                     }
-work_order_other_services()
+    
 class work_order_time_report(osv.osv):
 
     def _get_total(self, cr , uid, ids, field_name, args=None, context=None):
         result = {}
-        work_order_times = self.pool.get('work.order.time.report').browse(cr, uid, ids, context)
+        work_order_times = self.pool.get('work.order.time.report').browse(cr,
+                                                                          uid,
+                                                                          ids,
+                                                                          context)
         for work_order_time in work_order_times:
             total = 0.0
             precio_por_defecto = work_order_time.employee_id.product_id.standard_price
@@ -52,15 +58,17 @@ class work_order_time_report(osv.osv):
             'horas_normal': fields.float('Horas normales'),
             'horas_nocturnas': fields.float('Horas nocturnas'),
             'horas_festivas': fields.float('Horas festivas'),
-            'employee_id': fields.many2one('hr.employee', 'Empleado', required=True, select="1"),
-            'work_order_id':fields.many2one('work.order', 'orden de trabajo', required=False),
-            'total': fields.function(_get_total, method=True, type='float', string='Total', store=False),
+            'employee_id': fields.many2one('hr.employee', 'Empleado'
+                                           , required=True, select="1"),
+            'work_order_id':fields.many2one('work.order', 'orden de trabajo'
+                                            , required=False),
+            'total': fields.function(_get_total, method=True, type='float'
+                                     , string='Total', store=False),
                     }
 
     _defaults = {
         'date': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S')
     }
-work_order_time_report()
 
 class work_order(osv.osv):
 
@@ -130,19 +138,37 @@ class work_order(osv.osv):
     _name = 'work.order'
     _inherit = ['mail.thread']
     _columns = {
-            'company_id': fields.many2one('res.company', 'Company', required=True, select=1, states={'confirmed':[('readonly', True)], 'approved':[('readonly', True)]}),
+            'company_id': fields.many2one('res.company', 'Company',
+                                          required=True, select=1,
+                                          states={'confirmed':[('readonly', True)],
+                                            'approved':[('readonly', True)]}),
             'name':fields.char('Nombre', size=64, required=True),
-            'request_id':fields.many2one('intervention.request', 'Solicitud origen', required=False),
-            'element_ids':fields.many2many('maintenance.element', 'maintenanceelement_workorder_rel', 'order_id', 'element_id', 'Equipos', required=True),
+            'request_id':fields.many2one('intervention.request'
+                                         , 'Solicitud origen', required=False),
+            'element_ids':fields.many2many('maintenance.element'
+                                           , 'maintenanceelement_workorder_rel'
+                                           , 'order_id', 'element_id', 'Equipos'
+                                           , required=True),
             'descripcion': fields.text('Descripción'),
             'fecha': fields.date('Fecha de solicitud'),
             'fecha_inicio': fields.datetime('fecha de inicio'),
-            'assigned_department_id':fields.many2one('hr.department', 'Departamento asignado', required=False),
-            'origin_department_id':fields.many2one('hr.department', 'Departamento origen', required=False),
-            'stock_moves_ids':fields.one2many('stock.move', 'work_order_id', 'movimientos asociados', required=False),
-            'horas_ids':fields.one2many('work.order.time.report', 'work_order_id', 'Reporte de horas', required=False),
-            'other_service_ids':fields.one2many('work.order.other.services', 'work_order_id', 'Otros conceptos', required=False),
-            'purchase_ids':fields.one2many('purchase.order', 'work_order_id', 'Compras asociadas', required=False),
+            'assigned_department_id':fields.many2one('hr.department',
+                                                     'Departamento asignado'
+                                                     , required=False),
+            'origin_department_id':fields.many2one('hr.department',
+                                                   'Departamento origen'
+                                                   , required=False),
+            'stock_moves_ids':fields.one2many('stock.move', 'work_order_id'
+                                              , 'movimientos asociados'
+                                              , required=False),
+            'horas_ids':fields.one2many('work.order.time.report'
+                                        , 'work_order_id', 'Reporte de horas'
+                                        , required=False),
+            'other_service_ids':fields.one2many('work.order.other.services'
+                                                , 'work_order_id', 'Otros conceptos'
+                                                , required=False),
+            'purchase_ids':fields.one2many('purchase.order', 'work_order_id'
+                                           , 'Compras asociadas', required=False),
             'tipo_parada':fields.selection([
                 ('marcha', 'Marcha'),
                 ('parada', 'Parada'),
@@ -155,8 +181,11 @@ class work_order(osv.osv):
                 ('cancelled', 'Cancelado'),
                  ], 'State', readonly=True),
             'instrucciones': fields.text('Instrucciones'),
-            'maintenance_type_id':fields.many2one('maintenance.type', 'tipo de mantenimiento', required=False),
-            'survey_id':fields.many2one('survey', 'Encuesta asociada', required=False),
+            'maintenance_type_id':fields.many2one('maintenance.type'
+                                                  , 'tipo de mantenimiento'
+                                                  , required=False),
+            'survey_id':fields.many2one('survey', 'Encuesta asociada'
+                                        , required=False),
             'descargo':fields.selection([
                 ('bloqueo', 'Bloqueo'),
                 ('no_descargo', 'No descargo'),
@@ -165,22 +194,40 @@ class work_order(osv.osv):
             'initial_date': fields.date('Fecha inicial'),
             'final_date': fields.date('Fecha final'),
 
-            'responsable_id':fields.many2one('res.users', 'Responsable', required=False),
+            'responsable_id':fields.many2one('res.users', 'Responsable'
+                                             , required=False),
             'note': fields.text('informe'),
             'padre_id':fields.many2one('work.order', 'orden padre', required=False),
-            'hijas_ids':fields.one2many('work.order', 'padre_id', 'Ordenes hijas', required=False),
-            'grupo': fields.function(_get_grupo, method=True, type='boolean', string='grupo', store=False),
+            'hijas_ids':fields.one2many('work.order', 'padre_id', 'Ordenes hijas'
+                                        , required=False),
+            'grupo': fields.function(_get_grupo, method=True, type='boolean'
+                                     , string='grupo', store=False),
             'deteccion':fields.text('Detección'),
             'sintoma':fields.text('síntoma'),
             'efecto':fields.text('efecto'),
-            'planta':fields.function(_get_planta, method=True, type='char', string='Planta', store={
-                                               'work.order': (_get_planta, ['element_ids'], 10),
+            'planta':fields.function(_get_planta, method=True, type='char'
+                                     , string='Planta', store={
+                                               'work.order':
+                                                (_get_planta, ['element_ids'], 10),
                                                }),
-            'contrata':fields.function(_get_contrata, method=True, type='char', string='Contrata', store=False),
-            'elements_list':fields.function(_get_element_list, method=True, type='char', string='string de equipos', store=False),
-            'total_other_service':fields.function(_get_total_other_service, method=True, type='float', string='total oros conceptos', store=False),
-            'total_servicios_internos':fields.function(_get_total_servicios, method=True, type='float', string='total servicios internos', store=False),
-            'total_servicios_externos':fields.function(_get_total_servicios, method=True, type='float', string='total servicios externos', store=False),
+            'contrata':fields.function(_get_contrata, method=True, type='char'
+                                       , string='Contrata', store=False),
+            'elements_list':fields.function(_get_element_list, method=True, type='char'
+                                            , string='string de equipos', store=False),
+            'total_other_service':fields.function(_get_total_other_service
+                                                  , method=True, type='float'
+                                                  , string='total oros conceptos'
+                                                  , store=False),
+            'total_servicios_internos':fields.function(_get_total_servicios
+                                                       , method=True, type='float'
+                                                       , string='total servicios\
+                                                                internos'
+                                                       , store=False),
+            'total_servicios_externos':fields.function(_get_total_servicios
+                                                       , method=True, type='float'
+                                                       , string='total servicios\
+                                                                externos'
+                                                       , store=False),
                     }
     _defaults = {
         'state':'draft',
@@ -205,15 +252,25 @@ class work_order(osv.osv):
 
 
     def request_validation(self, cr, uid, ids, context=None):
-        self.pool.get('work.order').write(cr, uid, ids, {'state':'pending'}, context)
+        self.pool.get('work.order').write(cr, uid, ids, {'state':'pending'}
+                                          , context)
         return True
 
     def work_order_cancel(self, cr, uid, ids, context=None):
-        self.pool.get('work.order').write(cr, uid, ids, {'state':'cancelled'}, context)
+        self.pool.get('work.order').write(cr, uid, ids, {'state':'cancelled'}
+                                          , context)
         return True
 
     def work_order_open(self, cr , uid, ids, context=None):
-        self.pool.get('work.order').write(cr, uid, ids, {'state':'open','fecha_inicio':datetime.now()}, context)
+        orders = self.pool.get('work.order').browse(cr, uid, ids, context)
+        for order in orders:
+            if order.initial_date:
+                initial_date = order.initial_date
+            else:
+                initial_date = date.today()
+            self.pool.get('work.order').write(cr, uid, order.id
+                                              , {'state':'open'
+                                                 ,'initial_date':initial_date}, context)
         return True
 
     def work_order_done(self, cr, uid, ids, context=None):
@@ -223,9 +280,12 @@ class work_order(osv.osv):
         picking_out_obj = self.pool.get('stock.picking.out')
         ordenes = order_obj.browse(cr, uid, ids, context)
 
-        hours_journal_id = data_obj.get_object_reference(cr, uid, 'hr_timesheet', "analytic_journal")[1]
-        services_journal_id = data_obj.get_object_reference(cr, uid, 'maintenance', "maintenance_service_journal")[1]
-        materials_journal_id = data_obj.get_object_reference(cr, uid, 'maintenance', "maintenance_materials_journal")[1]
+        hours_journal_id = data_obj.get_object_reference(cr, uid, 'hr_timesheet'
+                                                         , "analytic_journal")[1]
+        services_journal_id = data_obj.get_object_reference(cr, uid, 'maintenance'
+                                                            , "maintenance_service_journal")[1]
+        materials_journal_id = data_obj.get_object_reference(cr, uid, 'maintenance'
+                                                             , "maintenance_materials_journal")[1]
         journals = [hours_journal_id, services_journal_id, materials_journal_id]
 
         for orden in ordenes:
@@ -241,12 +301,15 @@ class work_order(osv.osv):
 
             for compra in orden.purchase_ids:
                 if compra.state not in ['done', 'approved', 'cancel']:
-                    raise osv.except_osv('Compras sin finalizar', 'Compras sin finalizar asociadas a la orden')
+                    raise osv.except_osv('Compras sin finalizar', 'Compras sin \
+                                         finalizar asociadas a la orden')
                 coste_total[1] += compra.amount_total
 
             for movimiento in orden.stock_moves_ids:
                     if movimiento.state not in ['done', 'cancel']:
-                        raise osv.except_osv('movimientos sin finalizar', 'Hay movimientos sin finalizar asociados a la orden')
+                        raise osv.except_osv('movimientos sin finalizar',
+                                             'Hay movimientos sin finalizar\
+                                             asociados a la orden')
                     coste_total[2] += movimiento.product_qty * movimiento.product_id.list_price
 
 
@@ -281,19 +344,28 @@ class work_order(osv.osv):
                              'state':'done',
                                      }
             picking_id = picking_out_obj.create(cr, uid, args_picking_out, context)
-
-            order_obj.write(cr, uid, orden.id, {'state':'done'}, context)
+            if orden.final_date:
+                final_date = orden.final_date
+            else:
+                final_date = date.today()
+            order_obj.write(cr, uid, orden.id, {'state': 'done',
+                                                'final_date':final_date }
+                            , context)
         return True
 
 
     def send_email(self, cr, uid, ids, context=None):
         ir_model_data = self.pool.get('ir.model.data')
         try:
-            template_id = ir_model_data.get_object_reference(cr, uid, 'maintenance', 'email_template_work_order')[1]
+            template_id = ir_model_data.get_object_reference(cr, uid
+                                                             , 'maintenance'
+                                                             , 'email_template_work_order')[1]
         except ValueError:
             template_id = False
         try:
-            compose_form_id = ir_model_data.get_object_reference(cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
+            compose_form_id = ir_model_data.get_object_reference(cr, uid
+                                                                 , 'mail'
+                                                                 , 'email_compose_message_wizard_form')[1]
         except ValueError:
             compose_form_id = False
         ctx = dict(context)
@@ -314,4 +386,3 @@ class work_order(osv.osv):
             'target': 'new',
             'context': ctx,
         }
-work_order()

@@ -8,7 +8,7 @@
 			<field name="inherit_id" ref="product.product_normal_form_view" />
 			<field name="arch" type="xml">
 				<field name="list_price" position="after">
-					<field name="equivalent_product_function" widget="many2many_list">
+					<field name="equivalent_product_function" widget="many2many_list" domain="[('id', '!=', id)]">
 						<tree>
 							<field name="default_code" />
 							<field name="name" />
