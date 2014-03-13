@@ -68,8 +68,8 @@ class maintenance_type(osv.osv):
                     }
         for type_obj in type_objs:
             if type_obj.planificado:
-                ultima_ej = datetime.strptime(type_obj.ultima_ejecucion or type_obj.inicio, "%Y-%m-%d") + relativedelta(days=+1)
-                fin = datetime.now() + relativedelta(months=+1)
+                ultima_ej = datetime.strptime(type_obj.ultima_ejecucion or type_obj.inicio, "%Y-%m-%d") 
+                fin = (datetime.now() + relativedelta(months=+1)) - relativedelta(days=-1)
                 fechas_excluidas = []
                 for dia in dias.keys():
                     if type_obj[dia] :
