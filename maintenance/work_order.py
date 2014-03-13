@@ -188,7 +188,19 @@ class work_order(osv.osv):
         'fecha': date.today().strftime('%Y-%m-%d'),
         'company_id': lambda self, cr, uid, c: self.pool.get('res.company')._company_default_get(cr, uid, 'work.order', context=c),
         }
-
+    
+    def copy(self, cr, uid, id, default=None, context=None):
+        if not default:
+            default = {}
+        default.update({
+            'name': self.pool.get('ir.sequence').get(cr, uid, 'work.order'),
+            'other_service_ids': None,
+            'stock_moves_ids': None,
+            'horas_ids': None,
+            'purchase_ids':None,
+            'hijas_ids': None
+        })
+        return super(work_order, self).copy(cr, uid, id, default, context)
 
 
 

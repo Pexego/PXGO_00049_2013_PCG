@@ -52,6 +52,15 @@ class intervention_request(osv.osv):
         'solicitante_id': lambda obj, cr, uid, context: uid,
         }
     _order = "fecha_solicitud asc"
+    
+    def copy(self, cr, uid, id, default=None, context=None):
+        if not default:
+            default = {}
+        default.update({
+            'name': self.pool.get('ir.sequence').get(cr, uid, 'intervention.request'),
+        })
+        return super(intervention_request, self).copy(cr, uid, id, default, context)
+    
     def cancel(self, cr, uid, ids, context=None):
         if not context:
             context = {}
