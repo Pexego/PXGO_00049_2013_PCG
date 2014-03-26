@@ -20,7 +20,7 @@
 {
     "name": "Ofertas de proveedores",
     "version": "1.0",
-    "depends": ["purchase"],
+    "depends": ["purchase", "hr", "purchase_requisition"],
     "author": "Pexego",
     "category": "purchase",
     "description": """

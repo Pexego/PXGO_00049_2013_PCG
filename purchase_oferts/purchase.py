@@ -17,13 +17,19 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+
 from osv import fields, osv
 import datetime
 import openerp.addons.decimal_precision as dp
+
 class purchase_order_line(osv.osv):
+
+
     def _amount_line(self, cr, uid, ids, prop, arg=None, context=None):
         return super(purchase_order_line, self)._amount_line(cr, uid, ids, prop, arg, context)
+
     _inherit = 'purchase.order.line'
+
     def _calculate_delivery_time(self, cr, uid, ids, prop, arg=None, context=None):
         res = {}
         for line in self.browse(cr, uid, ids, context=context):
@@ -32,6 +38,7 @@ class purchase_order_line(osv.osv):
             dif = date_planned - date_order
             res[line.id] = dif.days
         return res
+
     _columns = {
             'requisition_id': fields.related('order_id', 'requisition_id', type='many2one', relation='purchase.requisition', string='solicitud de presupuesto', store=True),
             'date_requisition': fields.related('requisition_id', 'date_start', type='date', string='fecha de solicitud'),
@@ -40,16 +47,16 @@ class purchase_order_line(osv.osv):
             'notes': fields.related('order_id', 'notes', type='text', string='Observaciones'),
             'fabricante_id': fields.related('product_id', 'manufacturer', type='many2one', relation='res.partner', string='Fabricante'),
             'fab_ref': fields.related('product_id', 'manufacturer_pref', type='char', size=64, string='ref. de fabricante'),
-            'price_subtotal': fields.function(_amount_line, string='Subtotal', digits_compute=dp.get_precision('Account'), group_operator="sum",
+            'price_subtotal': fields.function(_amount_line, string='Subtotal', digits_compute=dp.get_precision('Account'), group_operator="sum", type="float",
                                             store={
-                'purchase.order.line': (_amount_line, ['product_qty','price_unit','taxes_id'], 10),
+                'purchase.order.line': (lambda self, cr, uid, ids, c={}: ids, ['product_qty','price_unit','taxes_id'], 10),
             }),
-            'plazo' : fields.function(_calculate_delivery_time, string='Plazo de entrega',  group_operator="avg",
+            'plazo' : fields.function(_calculate_delivery_time, string='Plazo de entrega',  group_operator="avg", type="float", digits=(16,2),
                                       store = {
-                                               'purchase.order.line': (_calculate_delivery_time, ['date_planned','date_order'], 10),
+                                               'purchase.order.line': (lambda self, cr, uid, ids, c={}: ids, ['date_planned','date_order'], 10),
                                                }),
-            
+
             }
-    
-    
+
+
 purchase_order_line()

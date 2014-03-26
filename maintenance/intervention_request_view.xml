@@ -1,124 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-	<data>
-		<record model="ir.ui.view" id="intervention_request_calendar_view">
-			<field name="name">intervention.request.Calendar</field>
-			<field name="model">intervention.request</field>
-			<field name="priority" eval="2" />
-			<field name="arch" type="xml">
-				<calendar string="Intervention request" date_start="fecha_solicitud"
-					color="department_id">
-					<field name="name" />
-				</calendar>
-			</field>
-		</record>
+    <data>
+        <record model="ir.ui.view" id="intervention_request_calendar_view">
+            <field name="name">intervention.request.Calendar</field>
+            <field name="model">intervention.request</field>
+            <field name="priority" eval="2" />
+            <field name="arch" type="xml">
+                <calendar string="Intervention request" date_start="fecha_solicitud"
+                    color="department_id">
+                    <field name="name" />
+                </calendar>
+            </field>
+        </record>
 
-		<record model="ir.ui.view" id="intervention_request_tree_view">
-			<field name="name">intervention.request.tree</field>
-			<field name="model">intervention.request</field>
-			<field name="type">tree</field>
-			<field name="arch" type="xml">
-				<tree string="Intervention request"
-					colors="grey:state in ('cancelled','confirmed');blue:state == 'draft'">
-					<field name="name" />
-					<field name="solicitante_id" />
-					<field name="department_id" />
-					<field name="fecha_estimada" />
-					<field name="fecha_solicitud" />
-					<field name="maintenance_type_id" />
-					<field name="state" />
-				</tree>
-			</field>
-		</record>
+        <record model="ir.ui.view" id="intervention_request_tree_view">
+            <field name="name">intervention.request.tree</field>
+            <field name="model">intervention.request</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Intervention request"
+                    colors="grey:state in ('cancelled','confirmed');blue:state == 'draft'">
+                    <field name="name" />
+                    <field name="solicitante_id" />
+                    <field name="department_id" />
+                    <field name="fecha_estimada" />
+                    <field name="fecha_solicitud" />
+                    <field name="maintenance_type_id" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
 
-		<record model="ir.ui.view" id="intervention_request_form_view">
-			<field name="name">intervention.request.form</field>
-			<field name="model">intervention.request</field>
-			<field name="type">form</field>
-			<field name="arch" type="xml">
-				<form string="Intervention request" version="7.0">
-					<header>
-						<button name="send_email" type="object" string="Send email"
-							states="draft,confirmed,cancelled" />
-						<button name="create_work_order" type="object"
-							string="Create work order" states="draft" />
-						<button name="cancel" type="object" string="Cancel"
-							states="draft" />
-						<field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
-					</header>
-					<sheet>
-						<label for="name" class="oe_edit_only" />
-						<h1>
-							<field name="name" />
-						</h1>
-						<group attrs="{'invisible':[('state','!=','cancelled')]}">
-							<field name="motivo_cancelacion" />
-						</group>
-						<group>
-							<group>
-								<field name="solicitante_id" />
-								<field name="element_ids" />
-								<field name="department_id" />
-							</group>
-							<group>
-								<field name="fecha_estimada" />
-								<field name="fecha_solicitud" />
-								<field name="instrucciones" />
-								<field name="maintenance_type_id" />
-								<field name="deteccion" widget="char"/>
-								<field name="sintoma" widget="char"/>
-								<field name="efecto" widget="char"/>
-							</group>
-						</group>
-						<div class="oe_clear"/>
-						<field name="note" class="oe_inline" placeholder="Notes"/>
-					</sheet>
-					<div class="oe_chatter">
-						<field name="message_follower_ids" widget="mail_followers" />
-						<field name="message_ids" widget="mail_thread" />
-					</div>
-				</form>
-			</field>
-		</record>
-
-
-
-		<record id="view_intervention_request_filter" model="ir.ui.view">
-			<field name="name">intervention.request.filter</field>
-			<field name="model">intervention.request</field>
-			<field name="arch" type="xml">
-				<search>
-					<field name="name" />
-					<field name="maintenance_type_id" />
-					<group expand="0" string="Group By...">
-						<filter string="State" domain="[]" context="{'group_by':'state'}" />
-						<filter string="Maintenance type" domain="[]"
-							context="{'group_by':'maintenance_type_id'}" />
-						<filter string="Department" domain="[]"
-							context="{'group_by':'department_id'}" />
-					</group>
-				</search>
-			</field>
-		</record>
+        <record model="ir.ui.view" id="intervention_request_form_view">
+            <field name="name">intervention.request.form</field>
+            <field name="model">intervention.request</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Intervention request" version="7.0">
+                    <header>
+                        <button name="send_email" type="object" string="Send email"
+                            states="draft,confirmed,cancelled" />
+                        <button name="create_work_order" type="object"
+                            string="Create work order" states="draft" />
+                        <button name="%(cancel_intervetion_request_type_tree)d" type="action" string="Cancel"
+                            states="draft" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
+                    </header>
+                    <sheet>
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                        <group attrs="{'invisible':[('state','!=','cancelled')]}">
+                            <field name="motivo_cancelacion" />
+                        </group>
+                        <group>
+                            <group>
+                                <field name="solicitante_id" />
+                                <field name="element_ids" />
+                                <field name="department_id" />
+                            </group>
+                            <group>
+                                <field name="fecha_estimada" />
+                                <field name="fecha_solicitud" />
+                                <field name="instrucciones" />
+                                <field name="maintenance_type_id" />
+                                <field name="deteccion" widget="char"/>
+                                <field name="sintoma" widget="char"/>
+                                <field name="efecto" widget="char"/>
+                            </group>
+                        </group>
+                        <div class="oe_clear"/>
+                        <field name="note" class="oe_inline" placeholder="Notes"/>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
 
 
-		<record id="action_intervention_request_tree" model="ir.actions.act_window">
-			<field name="name">Intervention request</field>
-			<field name="type">ir.actions.act_window</field>
-			<field name="res_model">intervention.request</field>
-			<field name="view_type">form</field>
-			<field name="view_mode">tree,form,calendar</field>
-			<field name="view_id" ref="intervention_request_tree_view" />
-			<field name="search_view_id" ref="view_intervention_request_filter" />
-			<field name="help" type="html">
-				<p class="oe_view_nocontent_create">
-					Click to add a intervention request.
-				</p>
-			</field>
-		</record>
 
-		<menuitem action="action_intervention_request_tree" id="menu_intervention_request_tree"
-			parent="menu_maintenance" sequence="30" />
+        <record id="view_intervention_request_filter" model="ir.ui.view">
+            <field name="name">intervention.request.filter</field>
+            <field name="model">intervention.request</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" />
+                    <field name="maintenance_type_id" />
+                    <group expand="0" string="Group By...">
+                        <filter string="State" domain="[]" context="{'group_by':'state'}" />
+                        <filter string="Maintenance type" domain="[]"
+                            context="{'group_by':'maintenance_type_id'}" />
+                        <filter string="Department" domain="[]"
+                            context="{'group_by':'department_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
 
-	</data>
+
+        <record id="action_intervention_request_tree" model="ir.actions.act_window">
+            <field name="name">Intervention request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">intervention.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="view_id" ref="intervention_request_tree_view" />
+            <field name="search_view_id" ref="view_intervention_request_filter" />
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add a intervention request.
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="action_intervention_request_tree" id="menu_intervention_request_tree"
+            parent="menu_maintenance" sequence="30" />
+
+    </data>
 </openerp>

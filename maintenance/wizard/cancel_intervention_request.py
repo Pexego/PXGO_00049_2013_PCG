@@ -23,9 +23,8 @@ class cancel_intervention_request_wizard(osv.osv_memory):
     _name = "cancel.intervention.request.wizard"
     _columns = {
             'motivo': fields.text('reason for cancellation', required=True),
-            'intervention_request_id':fields.many2one('intervention.request', 'request', required=True),
                     }
-    
+
     def close_confirm(self, cr, uid, ids, context=None):
         if not context:
             context = {}
@@ -33,6 +32,6 @@ class cancel_intervention_request_wizard(osv.osv_memory):
             return
         wizards = self.pool.get('cancel.intervention.request.wizard').browse(cr, uid, ids, context)
         for wizard in wizards:
-            self.pool.get('intervention.request').write(cr, uid, wizard.intervention_request_id.id, {'state':'cancelled','motivo_cancelacion':wizard.motivo }, context)
+            self.pool.get('intervention.request').write(cr, uid, context['active_id'], {'state':'cancelled','motivo_cancelacion':wizard.motivo }, context)
         return {'type':'ir.actions.act_window_close'}
 cancel_intervention_request_wizard()

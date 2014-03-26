@@ -34,7 +34,7 @@ class work_order_other_services(osv.osv):
             'employee_id': fields.many2one('hr.employee', 'Employee'
                                            , required=True, select="1"),
                     }
-    
+
 class work_order_time_report(osv.osv):
 
     def _get_total(self, cr , uid, ids, field_name, args=None, context=None):
@@ -208,7 +208,7 @@ class work_order(osv.osv):
             'planta':fields.function(_get_planta, method=True, type='char'
                                      , string='Floor', store={
                                                'work.order':
-                                                (_get_planta, ['element_ids'], 10),
+                                                (lambda self, cr, uid, ids, c={}: ids, ['element_ids'], 10),
                                                }),
             'contrata':fields.function(_get_contrata, method=True, type='char'
                                        , string='Contractual', store=False),
@@ -235,7 +235,7 @@ class work_order(osv.osv):
         'fecha': date.today().strftime('%Y-%m-%d'),
         'company_id': lambda self, cr, uid, c: self.pool.get('res.company')._company_default_get(cr, uid, 'work.order', context=c),
         }
-    
+
     def copy(self, cr, uid, id, default=None, context=None):
         if not default:
             default = {}

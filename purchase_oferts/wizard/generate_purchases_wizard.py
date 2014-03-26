@@ -22,7 +22,7 @@ from osv import fields, osv
 from openerp import netsvc
 class generate_purchases_wizard(osv.osv_memory):
     _name = 'generate.purchases.wizard'
-    
+
     def generar(self, cr, uid, ids, context=None):
         wf_service = netsvc.LocalService("workflow")
         purchase_line_obj = self.pool.get('purchase.order.line')
@@ -32,7 +32,7 @@ class generate_purchases_wizard(osv.osv_memory):
             context = {}
         if not ids:
             return False
-        wiz = self.pool.get('generate.purchases.wizard').browse(cr, uid, ids, context)
+        wiz = self.browse(cr, uid, ids, context)
         solicitud = None
         proveedores = []
         lineas_compra_ids = []
@@ -46,9 +46,9 @@ class generate_purchases_wizard(osv.osv_memory):
                     raise osv.except_osv('Error', 'solo se puede seleccionar lineas de diferentes solicitudes')
             proveedores.append(linea.partner_id)
             lineas_compra_ids.append(linea.id)
-                
-                
-            
+
+
+
         for proveedor in proveedores:
             lineas_proveedor_id = purchase_line_obj.search(cr, uid, [('id', 'in', lineas_compra_ids), ('partner_id', '=', proveedor.id)], offset=0, limit=None, order=None, context=context, count=False)
             lineas_proveedor = purchase_line_obj.browse(cr, uid, lineas_proveedor_id, context)
@@ -69,16 +69,16 @@ class generate_purchases_wizard(osv.osv_memory):
         for compra in compras_a_cancelar:
             wf_service.trg_validate(uid, 'purchase.order', compra, 'purchase_cancel', cr)
         return True
-    
+
     def _get_lineas(self, cr , uid , context=None):
         if not context or not context['active_ids']:
             return []
         return context['active_ids']
-    
+
     _columns = {
             'lineas_ids':fields.many2many('purchase.order.line', 'purchase_order_generate_purchases_rel', 'line_id', 'wizard_id', 'Lines'),
                     }
-    
+
     _defaults = {
         'lineas_ids': _get_lineas,
     }
