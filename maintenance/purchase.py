@@ -20,7 +20,7 @@
 from osv import osv, fields
 
 class purchase(osv.osv):
-    
+
     def _work_done(self, cr, uid, ids, name, arg=None, context=None):
         res = {}
         for purchase_order_id in ids:
@@ -31,12 +31,12 @@ class purchase(osv.osv):
                 if work_order_state == 'done':
                     res[purchase_order_id] = True
         return res
-    _inherit = 'purchase.order' 
+    _inherit = 'purchase.order'
     _columns = {
             'work_order_id':fields.many2one('work.order', 'Work order', required=False),
             'work_done': fields.function(_work_done, method=True, type='boolean', string='order completed', store=False),
                     }
-        
+
 purchase()
 
 class purchase_order_line(osv.osv):

@@ -25,24 +25,24 @@ class intervention_request(osv.osv):
     _inherit = ['mail.thread']
     _columns = {
             'company_id': fields.many2one('res.company','Company',required=True,select=1, states={'confirmed':[('readonly',True)], 'approved':[('readonly',True)]}),
-            'maintenance_type_id':fields.many2one('maintenance.type', 'maintenance type', required=False),
-            'name':fields.char('Nombre', size=64, required=True, readonly=False),
-            'solicitante_id':fields.many2one('res.users', 'Applicant ', required=True),
-            'element_ids':fields.many2many('maintenance.element', 'maintenanceelement_interventionrequest_rel', 'intervention_id', 'element_id', 'Maintenance elements'),
-            'department_id':fields.many2one('hr.department', 'Department', required=False),
-            'fecha_estimada': fields.date('Estimated date'),
-            'motivo_cancelacion' : fields.text('Reason for cancellation'),
-            'fecha_solicitud': fields.date('Request date', required=True),
-            'instrucciones': fields.text('Instructions'),
+            'maintenance_type_id':fields.many2one('maintenance.type', 'maintenance type', required=False, states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'name':fields.char('Nombre', size=64, required=True, readonly=False, states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'solicitante_id':fields.many2one('res.users', 'Applicant ', required=True, states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'element_ids':fields.many2many('maintenance.element', 'maintenanceelement_interventionrequest_rel', 'intervention_id', 'element_id', 'Maintenance elements', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'department_id':fields.many2one('hr.department', 'Department', required=False, states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'fecha_estimada': fields.date('Estimated date', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'motivo_cancelacion' : fields.text('Reason for cancellation', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'fecha_solicitud': fields.date('Request date', required=True, states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'instrucciones': fields.text('Instructions', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'state':fields.selection([
                 ('draft', 'Draft'),
                 ('confirmed', 'Confirmed'),
                 ('cancelled', 'Cancelled'),
                  ], 'State', select=True, readonly=False),
-            'note': fields.text('Notes'),
-            'deteccion':fields.text('Detection'),
-            'sintoma':fields.text('Sign'),
-            'efecto':fields.text('effect')
+            'note': fields.text('Notes', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'deteccion':fields.text('Detection', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'sintoma':fields.text('Sign', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'efecto':fields.text('effect', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]})
                     }
     _defaults = {
         'state': 'draft',
@@ -52,7 +52,7 @@ class intervention_request(osv.osv):
         'solicitante_id': lambda obj, cr, uid, context: uid,
         }
     _order = "fecha_solicitud asc"
-    
+
     def copy(self, cr, uid, id, default=None, context=None):
         if not default:
             default = {}
@@ -60,7 +60,7 @@ class intervention_request(osv.osv):
             'name': self.pool.get('ir.sequence').get(cr, uid, 'intervention.request'),
         })
         return super(intervention_request, self).copy(cr, uid, id, default, context)
-    
+
     def cancel(self, cr, uid, ids, context=None):
         if not context:
             context = {}
@@ -84,19 +84,19 @@ class intervention_request(osv.osv):
             context = {}
         self.write(cr, uid, ids, {'state': 'confirmed'})
         return True
-    
-    
+
+
     def open_work_order(self, cr, uid, order_id, context=None):
         data_pool = self.pool.get('ir.model.data')
         if not context:
-            context = {} 
+            context = {}
         if order_id:
             action_model,action_id = data_pool.get_object_reference(cr, uid, 'maintenance', "action_work_order_tree")
         action_pool = self.pool.get(action_model)
         action = action_pool.read(cr, uid, action_id, context=context)
         action['domain'] = "[('id','=', "+str(order_id)+")]"
         return action
-    
+
     def create_work_order(self, cr, uid, ids, context=None):
         if not context:
             context = {}
@@ -124,16 +124,16 @@ class intervention_request(osv.osv):
                           }
             order_id = self.pool.get('work.order').create(cr, uid, vals_order, context)
             self.pool.get('intervention.request').write(cr, uid, ids, {'state':'confirmed'}, context)
-            return self.open_work_order(cr, uid, order_id, context)    
-    
-    
+            return self.open_work_order(cr, uid, order_id, context)
+
+
     def send_email(self, cr, uid, ids, context=None):
         ir_model_data = self.pool.get('ir.model.data')
         template_id = False
         try:
             compose_form_id = ir_model_data.get_object_reference(cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
         except ValueError:
-            compose_form_id = False 
+            compose_form_id = False
         ctx = dict(context)
         ctx.update({
             'default_model': 'intervention.request',
@@ -153,4 +153,4 @@ class intervention_request(osv.osv):
             'context': ctx,
         }
 intervention_request()
-        
+

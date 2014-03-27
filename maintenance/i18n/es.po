@@ -1,13 +1,13 @@
 # Translation of OpenERP Server.
 # This file contains the translation of the following modules:
-#	* maintenance
+#   * maintenance
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-13 15:57+0000\n"
-"PO-Revision-Date: 2014-03-13 15:57+0000\n"
+"POT-Creation-Date: 2014-03-27 15:36+0000\n"
+"PO-Revision-Date: 2014-03-27 15:36+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -34,6 +34,12 @@ msgstr "/data/record/Reporte_de_horas-horas_ids/Empleado-employee_id/Etiquetas-c
 #: report:work.order:0
 msgid "CANTIDAD"
 msgstr "CANTIDAD"
+
+#. module: maintenance
+#: model:ir.model.fields,field_description:maintenance.field_maintenance_type_planificado
+#: field:maintenance.type,planificado:0
+msgid "Planned"
+msgstr "Planificado"
 
 #. module: maintenance
 #: selection:maintenance.type,intervalo:0
@@ -204,9 +210,10 @@ msgid "Timesheet"
 msgstr "Reporte de horas"
 
 #. module: maintenance
-#: model:ir.actions.act_window,name:maintenance.action_maintenance_element_tree
+#: model:ir.actions.act_window,name:maintenance.action_maintenance_element
 #: model:ir.model.fields,field_description:maintenance.field_maintenance_type_element_ids
-#: model:ir.ui.menu,name:maintenance.menu_maintenance_element_tree
+#: model:ir.ui.menu,name:maintenance.menu_maintenance_element
+#: model:ir.ui.menu,name:maintenance.menu_maintenance_element_view
 #: view:maintenance.element:0
 #: field:maintenance.type,element_ids:0
 msgid "Maintenance element"
@@ -371,13 +378,13 @@ msgstr "Cancelar orden"
 #. module: maintenance
 #: model:ir.actions.act_window,help:maintenance.action_maintenance_type_tree
 msgid "<p class=\"oe_view_nocontent_create\">\n"
-"					Click to add a maintenance type.\n"
-"				</p>\n"
-"			"
+"                   Click to add a maintenance type.\n"
+"               </p>\n"
+"           "
 msgstr "<p class=\"oe_view_nocontent_create\">\n"
-"					Click to add a maintenance type.\n"
-"				</p>\n"
-"			"
+"                   Pulsar para añadir un tipo de mantenimento.\n"
+"               </p>\n"
+"           "
 
 #. module: maintenance
 #: selection:maintenance.type,intervalo:0
@@ -613,11 +620,6 @@ msgstr "CATEGORIA"
 #: report:work.order:0
 msgid "FECHA Y HORA:"
 msgstr "FECHA Y HORA:"
-
-#. module: maintenance
-#: view:cancel.intervention.request.wizard:0
-msgid "solicitud a cancelar "
-msgstr "solicitud a cancelar "
 
 #. module: maintenance
 #: model:ir.model.fields,field_description:maintenance.field_maintenance_type_inicio
@@ -890,17 +892,6 @@ msgid "Request date"
 msgstr "Fecha de solicitud"
 
 #. module: maintenance
-#: model:ir.actions.act_window,help:maintenance.action_maintenance_element_tree
-msgid "<p class=\"oe_view_nocontent_create\">\n"
-"					Click to add a maintenance element.\n"
-"				</p>\n"
-"			"
-msgstr "<p class=\"oe_view_nocontent_create\">\n"
-"					Pulse para crear un elemento de mantenimiento.\n"
-"				</p>\n"
-"			"
-
-#. module: maintenance
 #: report:work.order:0
 msgid "INSTRUCCIONES:"
 msgstr "INSTRUCCIONES:"
@@ -1024,16 +1015,23 @@ msgstr "Mantenimiento"
 #. module: maintenance
 #: model:email.template,report_name:maintenance.email_template_work_order
 msgid "${(object.name or\n"
-"				'').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}\n"
-"			"
+"               '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}\n"
+"           "
 msgstr "${(object.name or\n"
-"				'').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}\n"
-"			"
+"               '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}\n"
+"           "
 
 #. module: maintenance
 #: report:work.order:0
 msgid "$F{Deteccion-deteccion}"
 msgstr "$F{Deteccion-deteccion}"
+
+#. module: maintenance
+#: model:ir.actions.act_window,name:maintenance.action_maintenance_element_tree
+#: model:ir.ui.menu,name:maintenance.menu_maintenance_element_tree
+#: view:maintenance.element:0
+msgid "Maintenance element tree"
+msgstr "Arbol de elementos de mantenimiento"
 
 #. module: maintenance
 #: report:work.order:0
@@ -1316,7 +1314,7 @@ msgstr "Nº O.T."
 #. module: maintenance
 #: selection:work.order,state:0
 msgid "Open"
-msgstr "Abirto"
+msgstr "Abierto"
 
 #. module: maintenance
 #: view:intervention.request:0
@@ -1342,10 +1340,15 @@ msgid "$V{Total}"
 msgstr "$V{Total}"
 
 #. module: maintenance
-#: model:ir.model.fields,field_description:maintenance.field_maintenance_type_planificado
-#: field:maintenance.type,planificado:0
-msgid "Planned"
-msgstr "Planificado"
+#: model:ir.actions.act_window,help:maintenance.action_intervention_request_tree
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"                    Click to add a intervention request.\n"
+"                </p>\n"
+"            "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"                    Pulsar para añadir una solicitud de intervención.\n"
+"                </p>\n"
+"            "
 
 #. module: maintenance
 #: model:ir.model.fields,field_description:maintenance.field_maintenance_element_planta
@@ -1363,13 +1366,13 @@ msgstr "$F{total_servicios_internos-total_servicios_internos}"
 #. module: maintenance
 #: model:ir.actions.act_window,help:maintenance.action_work_order_tree
 msgid "<p class=\"oe_view_nocontent_create\">\n"
-"					Click to add a work order.\n"
-"				</p>\n"
-"			"
+"                   Click to add a work order.\n"
+"               </p>\n"
+"           "
 msgstr "<p class=\"oe_view_nocontent_create\">\n"
-"					Pulse para añadir una orden de trabajo.\n"
-"				</p>\n"
-"			"
+"                   Pulse para añadir una orden de trabajo.\n"
+"               </p>\n"
+"           "
 
 #. module: maintenance
 #: view:work.order:0
@@ -1412,12 +1415,6 @@ msgstr "Elementos de mantenimiento"
 #: report:work.order:0
 msgid "/data/record/string_de_equipos-elements_list"
 msgstr "/data/record/string_de_equipos-elements_list"
-
-#. module: maintenance
-#: field:cancel.intervention.request.wizard,intervention_request_id:0
-#: model:ir.model.fields,field_description:maintenance.field_cancel_intervention_request_wizard_intervention_request_id
-msgid "request"
-msgstr "request"
 
 #. module: maintenance
 #: field:hr.employee,producto_hora_festiva_id:0
@@ -1506,7 +1503,7 @@ msgstr "Producto asociado"
 #: field:intervention.request,motivo_cancelacion:0
 #: model:ir.model.fields,field_description:maintenance.field_intervention_request_motivo_cancelacion
 msgid "Reason for cancellation"
-msgstr "Motivo de cancelación"
+msgstr "Reason for cancellation"
 
 #. module: maintenance
 #: report:work.order:0
@@ -1590,6 +1587,18 @@ msgid "dias excluidos"
 msgstr "dias excluidos"
 
 #. module: maintenance
+#: model:ir.actions.act_window,help:maintenance.action_maintenance_element
+#: model:ir.actions.act_window,help:maintenance.action_maintenance_element_tree
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"                    Click to add a maintenance element.\n"
+"                </p>\n"
+"            "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"                    Pulsar para añadir un elemento de mantenimiento.\n"
+"                </p>\n"
+"            "
+
+#. module: maintenance
 #: model:ir.model.fields,field_description:maintenance.field_purchase_order_line_element_id
 #: model:ir.model.fields,field_description:maintenance.field_stock_move_element_id
 #: field:purchase.order.line,element_id:0
@@ -1608,6 +1617,11 @@ msgstr "Solicitud de intervención"
 #: report:work.order:0
 msgid "INFORME:"
 msgstr "INFORME:"
+
+#. module: maintenance
+#: model:ir.actions.act_window,name:maintenance.cancel_intervetion_request_type_tree
+msgid "Cancel intervetion"
+msgstr "Cancel intervetion"
 
 #. module: maintenance
 #: model:ir.model.fields,field_description:maintenance.field_work_order_total_servicios_internos
@@ -1667,17 +1681,6 @@ msgstr "$F{sintoma-sintoma}"
 #: report:work.order:0
 msgid "CONDICIÓN OPERACIÓN:"
 msgstr "CONDICIÓN OPERACIÓN:"
-
-#. module: maintenance
-#: model:ir.actions.act_window,help:maintenance.action_intervention_request_tree
-msgid "<p class=\"oe_view_nocontent_create\">\n"
-"					Click to add a intervention request.\n"
-"				</p>\n"
-"			"
-msgstr "<p class=\"oe_view_nocontent_create\">\n"
-"					Click to add a intervention request.\n"
-"				</p>\n"
-"			"
 
 #. module: maintenance
 #: report:work.order:0

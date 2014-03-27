@@ -46,9 +46,10 @@ class work_order_time_report(osv.osv):
         for work_order_time in work_order_times:
             total = 0.0
             precio_por_defecto = work_order_time.employee_id.product_id.standard_price
-            total += work_order_time.horas_normal * precio_por_defecto
-            total += work_order_time.horas_nocturnas * (work_order_time.employee_id.producto_hora_nocturna_id.standard_price or precio_por_defecto)
-            total += work_order_time.horas_festivas * (work_order_time.employee_id.producto_hora_festiva_id.standard_price or precio_por_defecto)
+            if precio_por_defecto:
+                total += work_order_time.horas_normal * precio_por_defecto
+                total += work_order_time.horas_nocturnas * (work_order_time.employee_id.producto_hora_nocturna_id.standard_price or precio_por_defecto)
+                total += work_order_time.horas_festivas * (work_order_time.employee_id.producto_hora_festiva_id.standard_price or precio_por_defecto)
             result[work_order_time.id] = total
         return result
 
@@ -142,37 +143,37 @@ class work_order(osv.osv):
                                           required=True, select=1,
                                           states={'confirmed':[('readonly', True)],
                                             'approved':[('readonly', True)]}),
-            'name':fields.char('Name', size=64, required=True),
+            'name':fields.char('Name', size=64, required=True, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'request_id':fields.many2one('intervention.request'
-                                         , 'Origin request', required=False),
+                                         , 'Origin request', required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'element_ids':fields.many2many('maintenance.element'
                                            , 'maintenanceelement_workorder_rel'
                                            , 'order_id', 'element_id', 'Maintenance elements'
-                                           , required=True),
-            'descripcion': fields.text('Description'),
-            'fecha': fields.date('Request date'),
-            'fecha_inicio': fields.datetime('Initial date'),
+                                           , required=True, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'descripcion': fields.text('Description', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'fecha': fields.date('Request date', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'fecha_inicio': fields.datetime('Initial date', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'assigned_department_id':fields.many2one('hr.department',
                                                      'Assigned department'
-                                                     , required=False),
+                                                     , required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'origin_department_id':fields.many2one('hr.department',
                                                    'Origin department'
-                                                   , required=False),
+                                                   , required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'stock_moves_ids':fields.one2many('stock.move', 'work_order_id'
                                               , 'Associated movement'
-                                              , required=False),
+                                              , required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'horas_ids':fields.one2many('work.order.time.report'
                                         , 'work_order_id', 'Timesheet'
-                                        , required=False),
+                                        , required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'other_service_ids':fields.one2many('work.order.other.services'
                                                 , 'work_order_id', 'Other concepts'
-                                                , required=False),
+                                                , required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'purchase_ids':fields.one2many('purchase.order', 'work_order_id'
-                                           , 'Asociated purchases', required=False),
+                                           , 'Asociated purchases', required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'tipo_parada':fields.selection([
                 ('marcha', 'Up'),
                 ('parada', 'Stop'),
-                 ], 'Operation condition', select=True),
+                 ], 'Operation condition', select=True, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'state':fields.selection([
                 ('draft', 'Draft'),
                 ('open', 'Open'),
@@ -180,31 +181,31 @@ class work_order(osv.osv):
                 ('done', 'Done'),
                 ('cancelled', 'Cancelled'),
                  ], 'State', readonly=True),
-            'instrucciones': fields.text('Instructions'),
+            'instrucciones': fields.text('Instructions' , states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'maintenance_type_id':fields.many2one('maintenance.type'
                                                   , 'Maintenance type'
-                                                  , required=False),
+                                                  , required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'survey_id':fields.many2one('survey', 'Associated survey'
-                                        , required=False),
+                                        , required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'descargo':fields.selection([
                 ('bloqueo', 'block'),
                 ('no_descargo', 'not discharge'),
                 ('aviso', 'Warning'),
-                 ], 'Discharge', readonly=False),
-            'initial_date': fields.date('Initial date'),
-            'final_date': fields.date('Final date'),
+                 ], 'Discharge', readonly=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'initial_date': fields.date('Initial date', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'final_date': fields.date('Final date', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
 
             'responsable_id':fields.many2one('res.users', 'Responsible'
-                                             , required=False),
-            'note': fields.text('Report'),
-            'padre_id':fields.many2one('work.order', 'Father order', required=False),
+                                             , required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'note': fields.text('Report', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'padre_id':fields.many2one('work.order', 'Father order', required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'hijas_ids':fields.one2many('work.order', 'padre_id', 'Ordenes hijas'
-                                        , required=False),
+                                        , required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'grupo': fields.function(_get_grupo, method=True, type='boolean'
-                                     , string='Group', store=False),
-            'deteccion':fields.text('Detection'),
-            'sintoma':fields.text('Sign'),
-            'efecto':fields.text('effect'),
+                                     , string='Group', store=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'deteccion':fields.text('Detection', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'sintoma':fields.text('Sign', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'efecto':fields.text('effect', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'planta':fields.function(_get_planta, method=True, type='char'
                                      , string='Floor', store={
                                                'work.order':

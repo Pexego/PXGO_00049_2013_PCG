@@ -63,6 +63,9 @@ class maintenance_element(osv.osv):
         return res
 
     _name = 'maintenance.element'
+    _parent_store = True
+    _parent_name = "padre_id"
+    _order = 'parent_left'
     _columns = {
             'name':fields.char('Name', size=60, required=True, readonly=False),
             'description': fields.text('Description'),
@@ -75,6 +78,8 @@ class maintenance_element(osv.osv):
                  ], 'Type', select=True),
             'padre_id':fields.many2one('maintenance.element', 'Father', required=False),
             'hijo_ids':fields.one2many('maintenance.element', 'padre_id', 'Hijos', required=False),
+            'parent_left': fields.integer('Left Parent', select=True),
+            'parent_right': fields.integer('Right Parent', select=True),
             'complete_name': fields.function(_complete_name, type='char', size=256, string="Complete name",
                             store={'maintenance.element': (lambda self, cr, uid, ids, c={}: ids, ['name', 'padre_id'], 10)}),
             'product_id':fields.many2one('product.product', 'product associated', required=False),
@@ -90,4 +95,3 @@ class maintenance_element(osv.osv):
             'order_ids':fields.many2many('maintenance.element', 'maintenanceelement_workorder_rel', 'element_id', 'order_id', 'Work order', required=False),
 
                     }
-maintenance_element()
