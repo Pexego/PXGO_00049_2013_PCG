@@ -2,6 +2,7 @@
 ##############################################################################
 #
 #    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
+#    $Marta Vázquez Rodríguez$ <marta@pexego.es>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -17,5 +18,24 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import stock_warehouse_orderpoint, procurement_order
-import product_stock_unsafety
+
+from openerp.osv import osv, fields
+import time
+from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+
+
+class product_stock_unsafety(osv.Model):
+    _inherit = 'product.stock.unsafety'
+
+    def create_or_write(self, cr, uid, vals, context=None):
+        if context is None:
+            context = {}
+
+        ids = self.search(cr, uid, [('state', '=', vals['state']),
+                                    ('product_id', '=', vals['product_id']),
+                                    ('supplier_id', '=', vals['supplier_id'])],
+                          context=context)
+        if ids:
+            self.write(cr, uid, ids, vals, context=context)
+        else:
+            self.create(cr, uid, vals, context=context)

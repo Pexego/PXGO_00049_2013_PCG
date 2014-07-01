@@ -38,6 +38,7 @@ class generate_purchases_wizard(osv.osv_memory):
         lineas_compra_ids = []
         compras_a_borrar = []
         requisition_ids = []
+
         for linea in wiz[0].lineas_ids:
             if not solicitud:
                 solicitud = linea.order_id.requisition_id
@@ -48,7 +49,7 @@ class generate_purchases_wizard(osv.osv_memory):
             lineas_compra_ids.append(linea.id)
 
 
-
+        proveedores = list(set(proveedores))
         for proveedor in proveedores:
             lineas_proveedor_id = purchase_line_obj.search(cr, uid, [('id', 'in', lineas_compra_ids), ('partner_id', '=', proveedor.id)], offset=0, limit=None, order=None, context=context, count=False)
             lineas_proveedor = purchase_line_obj.browse(cr, uid, lineas_proveedor_id, context)

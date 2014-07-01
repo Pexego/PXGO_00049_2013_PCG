@@ -78,10 +78,8 @@ class procurement_order(osv.osv):
                             vals['name'] = 'Dias de venta'
                         if virtual_stock < orderpoint.product_min_qty:
                             vals['name'] = 'stock minimo'
-                        stock_unsafety.create(cr,
-                                              uid,
-                                              vals,
-                                              context=context)
+                        stock_unsafety.create_or_write(cr, uid, vals,
+                                                       context=context)
                 offset += len(ids)
                 if use_new_cursor:
                     cr.commit()
