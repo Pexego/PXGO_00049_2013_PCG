@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+    <data>
+         <record id="stock_available_multicompany_wzd_view" model="ir.ui.view">
+            <field name="name">Stock available multicompany</field>
+            <field name="model">stock.available.multicompany</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            <form string="Stock available multicompany">
+                <separator string="Lines" colspan="4" />
+                <field name="stock_available_lines" colspan="4" nolabel="1">
+                    <tree string="Lines">
+                        <field name="warehouse_name"/>
+                        <field name="qty"/>
+                    </tree>
+                    <form string="Lines">
+                        <field name="warehouse_name"/>
+                        <field name="qty"/>
+                    </form>
+                </field>
+            </form>
+            </field>
+         </record>
+
+        <act_window name="Stock Available Multicompany"
+		    res_model="stock.available.multicompany"
+		    src_model="sale.order.line"
+		    view_mode="form"
+		    target="new"
+            key2="client_action_multi"
+            multi="True"
+		    id="action_view_stock_available_multicompany"/>
+
+    </data>
+</openerp>

@@ -1,0 +1,60 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* stock_available_multicompany
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 6.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-04-23 09:30+0000\n"
+"PO-Revision-Date: 2013-04-23 11:31+0100\n"
+"Last-Translator: Marta <marta@pexego.es>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+
+#. module: stock_available_multicompany
+#: field:stock.available.multicompany.lines,wizard_id:0
+msgid "Stock available parent"
+msgstr "Stock available parent"
+
+#. module: stock_available_multicompany
+#: model:ir.model,name:stock_available_multicompany.model_stock_available_multicompany_lines
+msgid "stock.available.multicompany.lines"
+msgstr "stock.available.multicompany.lines"
+
+#. module: stock_available_multicompany
+#: model:ir.model,name:stock_available_multicompany.model_stock_available_multicompany
+msgid "stock.available.multicompany"
+msgstr "stock.available.multicompany"
+
+#. module: stock_available_multicompany
+#: view:stock.available.multicompany:0
+#: field:stock.available.multicompany,stock_available_lines:0
+msgid "Lines"
+msgstr "Líneas"
+
+#. module: stock_available_multicompany
+#: model:ir.actions.act_window,name:stock_available_multicompany.action_view_stock_available_multicompany
+#: view:sale.order:0
+msgid "Stock Available Multicompany"
+msgstr "Ver Stock Intercompañías"
+
+#. module: stock_available_multicompany
+#: view:stock.available.multicompany:0
+msgid "Stock available multicompany"
+msgstr "Ver Stock Intercompañías"
+
+#. module: stock_available_multicompany
+#: field:stock.available.multicompany.lines,warehouse_id:0
+#: field:stock.available.multicompany.lines,warehouse_name:0
+msgid "Warehouse"
+msgstr "Almacén"
+
+#. module: stock_available_multicompany
+#: field:stock.available.multicompany.lines,qty:0
+msgid "Qty available"
+msgstr "Cant. Disponible"
+

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="stock_multicomp_form_view">
+            <field name="name">stock_multicomp.form</field>
+            <field name="model">product.product</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="product_stock_unsafety.view_product_form_virtual_conservative" />
+            <field name="arch" type="xml">
+                <field name="virtual_stock_conservative" position="after">
+                    <button name="%(action_view_stock_available_multicompany)d"
+                                        string="Stock Available Multicompany"
+                                        type="action" icon="terp-stock_effects-object-colorize"/>
+                </field>
+            </field>
+        </record>
+
+
+    </data>
+</openerp>
