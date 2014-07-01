@@ -109,6 +109,7 @@ class intervention_request(osv.osv):
                 survey = intervention.maintenance_type_id.survey_id.id
             else:
                 survey = None
+
             vals_order = {
                           'request_id':intervention.id,
                           'element_ids' : [(6, 0, element_ids)],

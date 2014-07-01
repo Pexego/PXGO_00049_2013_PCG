@@ -147,8 +147,8 @@
                         <h1>
                             <field name="name" />
                         </h1>
-                        <label for="element_ids" />
-                        <field name="element_ids" widget="many2many_tags" />
+                        <label for="element_ids"/>
+                        <field name="element_ids" widget="many2many_tags" required="1"/>
                         <label for="descripcion" />
                         <field name="descripcion" />
                         <group>

@@ -92,6 +92,6 @@ class maintenance_element(osv.osv):
                                                   store = {
                                                'maintenance.element': (lambda self, cr, uid, ids, c={}: ids, ['name','padre_id'], 10),
                                                }),
-            'order_ids':fields.many2many('maintenance.element', 'maintenanceelement_workorder_rel', 'element_id', 'order_id', 'Work order', required=False),
+            'order_ids':fields.many2many('work.order', 'maintenanceelement_work_order_rel', 'element_id', 'order_id', 'Work order', required=False),
 
                     }

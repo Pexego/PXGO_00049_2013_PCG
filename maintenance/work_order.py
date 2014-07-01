@@ -147,9 +147,9 @@ class work_order(osv.osv):
             'request_id':fields.many2one('intervention.request'
                                          , 'Origin request', required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'element_ids':fields.many2many('maintenance.element'
-                                           , 'maintenanceelement_workorder_rel'
+                                           , 'maintenanceelement_work_order_rel'
                                            , 'order_id', 'element_id', 'Maintenance elements'
-                                           , required=True, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+                                           , required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'descripcion': fields.text('Description', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'fecha': fields.date('Request date', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'fecha_inicio': fields.datetime('Initial date', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
