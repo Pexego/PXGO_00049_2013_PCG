@@ -55,6 +55,7 @@
                     <field name="horas_nocturnas" widget="float_time" />
                     <field name="horas_festivas" widget="float_time" />
                     <field name="employee_id" />
+                    <field name="element_id"/>
                 </tree>
             </field>
         </record>
@@ -69,6 +70,7 @@
                         <group>
                             <field name="date" />
                             <field name="employee_id" />
+                            <field name="element_id"/>
                         </group>
 
                         <group>
@@ -243,6 +245,7 @@
             <field name="view_mode">tree,form,calendar</field>
             <field name="view_id" ref="work_order_tree_view" />
             <field name="search_view_id" ref="view_work_order_filter" />
+            <field name="context">{'search_default_responsable_id': uid}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                     Click to add a work order.

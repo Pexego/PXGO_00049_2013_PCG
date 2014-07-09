@@ -66,6 +66,7 @@ class work_order_time_report(osv.osv):
                                             , required=False),
             'total': fields.function(_get_total, method=True, type='float'
                                      , string='Total', store=False),
+            'element_id': fields.many2one('maintenance.element', 'Element')
                     }
 
     _defaults = {
@@ -97,7 +98,7 @@ class work_order(osv.osv):
         for work_order in work_orders:
             result[work_order.id] = ""
             for element in work_order.element_ids:
-                result[work_order.id]+=element.nombre_sin_planta + u"\n"
+                result[work_order.id]+=element.codigo + u"\n"
         return result
 
     def _get_total_other_service(self, cr, uid, ids, field_name, args=None, context=None):
@@ -291,15 +292,21 @@ class work_order(osv.osv):
         journals = [hours_journal_id, services_journal_id, materials_journal_id]
 
         for orden in ordenes:
-
-
             # calculo de total de costes para horas, servicios y materiales
-            coste_total = [0, 0, 0]
+            res = {'total': [0, 0, 0]}
             for hora in orden.horas_ids:
-                coste_total[0] += hora.total
+                if hora.element_id:
+                    if hora.element_id not in orden.element_ids:
+                        raise osv.except_osv(u'Error imputación horas', u'El elemento %s está asociado a un reporte de horas de la OT, pero ese equipo no está entre los equipos de la OT' % hora.element_id.name)
+                    if not res.get(hora.element_id.id, False):
+                        res[hora.element_id.id] = [hora.total, 0, 0]
+                    else:
+                        res[hora.element_id.id][0] += hora.total
+                else:
+                    res['total'][0] += hora.total
 
 
-            coste_total[1]+= orden.total_other_service
+            res['total'][1]+= orden.total_other_service
 
             for compra in orden.purchase_ids:
                 if compra.state not in ['done', 'approved', 'cancel']:
@@ -307,36 +314,52 @@ class work_order(osv.osv):
                                          finalizar asociadas a la orden')
                 for line in compra.order_line:
                     if line.product_id and line.product_id.type == 'service':
-                        coste_total[1] += line.price_subtotal
+                        if line.element_id:
+                            if line.element_id not in orden.element_ids:
+                                raise osv.except_osv(u'Error imputación compras', u'El elemento %s está asociado a una linea de compra de la OT, pero ese equipo no está entre los equipos de la OT' % line.element_id.name)
+                            if not res.get(line.element_id.id, False):
+                                res[line.element_id.id] = [0, line.price_subtotal, 0]
+                            else:
+                                res[line.element_id.id][1] += line.price_subtotal
+                        else:
+                            res['total'][1] += line.price_subtotal
 
             for movimiento in orden.stock_moves_ids:
-                    if movimiento.state not in ['done', 'cancel']:
-                        raise osv.except_osv('movimientos sin finalizar',
-                                             'Hay movimientos sin finalizar\
-                                             asociados a la orden')
-                    coste_total[2] += movimiento.product_qty * movimiento.product_id.standard_price
-
-
+                if movimiento.state not in ['done', 'cancel']:
+                    raise osv.except_osv('movimientos sin finalizar',
+                                         'Hay movimientos sin finalizar\
+                                         asociados a la orden')
+                if movimiento.element_id:
+                    if movimiento.element_id not in orden.element_ids:
+                        raise osv.except_osv(u'Error imputación compras', u'El elemento %s está asociado a un consumo de la OT, pero ese equipo no está entre los equipos de la OT' % movimiento.element_id.name)
+                    if not res.get(movimiento.element_id.id, False):
+                        res[movimiento.element_id.id] = [0, 0, movimiento.product_qty * movimiento.product_id.standard_price]
+                    else:
+                        res[movimiento.element_id.id][2] += movimiento.product_qty * movimiento.product_id.standard_price
+                else:
+                    res['total'][2] += movimiento.product_qty * movimiento.product_id.standard_price
 
             # calculo de coste proporcional por equipo
             coste_por_equipo = []
-            for coste in coste_total:
+            for coste in res['total']:
                 coste_por_equipo.append(coste / len(orden.element_ids))
-            aux = 0
 
             # creacion de apuntes analiticos para cada equipo
             for equipo in orden.element_ids:
+                aux = 0
                 for journal in journals:
-                    args_analytic_line = {
-                                          'account_id':equipo.analytic_account_id.id,
-                                          'journal_id':journal,
-                                          'amount':coste_por_equipo[aux],
-                                          'product_id':equipo.product_id.id,
-                                          'department_id':orden.origin_department_id.id,
-                                          'name':equipo.name,
-                                          'date':date.today().strftime('%Y-%m-%d'),
-                                          }
-                    analytic_line_obj.create(cr, uid, args_analytic_line, context)
+                    amount = coste_por_equipo[aux] + (res.get(equipo.id, False) and res[equipo.id][aux] or 0.0)
+                    if amount:
+                        args_analytic_line = {
+                                              'account_id':equipo.analytic_account_id.id,
+                                              'journal_id':journal,
+                                              'amount': -(amount),
+                                              'product_id':equipo.product_id.id,
+                                              'department_id':orden.origin_department_id.id,
+                                              'name':equipo.name,
+                                              'date':date.today().strftime('%Y-%m-%d'),
+                                              }
+                        analytic_line_obj.create(cr, uid, args_analytic_line, context)
                     aux += 1
 
             # creacion del albaran para los movimientos

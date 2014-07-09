@@ -94,7 +94,7 @@ class maintenance_element(osv.osv):
             'product_id':fields.many2one('product.product', 'product associated', required=False),
             'asset_id':fields.many2one('account.asset.asset', 'Active', required=False),
             'analytic_account_id':fields.many2one('account.analytic.account', 'Analytic account', required=True),
-            'codigo':fields.char('Code', size=64, required=False, readonly=False),
+            'codigo':fields.char('Code', size=64, required=True),
             'maintenance_type_ids':fields.many2many('maintenance.type', 'maintenanceelement_maintenancetype_rel', 'element_id', 'type_id', 'Maintenance type'),
             'planta':fields.function(_get_planta, method=True, type='char', string='Floor', store=False),
             'nombre_sin_planta':fields.function(_nombre_sin_planta, method=True, type='char', string='Name without floor',
