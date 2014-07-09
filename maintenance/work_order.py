@@ -167,7 +167,6 @@ class work_order(osv.osv):
                 ('draft', 'Draft'),
                 ('open', 'Open'),
                 ('pending', 'Pending approval'),
-                ('finalized', 'Finalized'),
                 ('done', 'Done'),
                 ('cancelled', 'Cancelled'),
                  ], 'State', readonly=True),
