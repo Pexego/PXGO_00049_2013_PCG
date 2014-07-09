@@ -41,6 +41,9 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Maintenance element" version="7.0">
+                    <header>
+                        <button name="create_intervention_request" type="object" string="Create intervention request" icon="gtk-execute"/>
+                    </header>
                     <sheet>
                         <label for="name" class="oe_edit_only" />
                         <h1>
@@ -64,7 +67,9 @@
                                 <field name="maintenance_type_ids" />
                             </group>
                         </group>
-
+                        <group colspan="4" string="Associated products">
+                            <field name="product_ids" nolabel="1" colspan="4"/>
+                        </group>
                     </sheet>
                 </form>
             </field>

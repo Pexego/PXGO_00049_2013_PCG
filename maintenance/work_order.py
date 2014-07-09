@@ -17,6 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
+
 from osv import osv, fields
 import time
 from datetime import datetime, date
@@ -88,18 +89,6 @@ class work_order(osv.osv):
             for purchase in work_order.purchase_ids:
                 result[work_order.id] += purchase.partner_id.display_name + u", "
             result[work_order.id]=result[work_order.id][:-2]
-        return result
-
-    def _get_grupo(self, cr, uid, ids, field_name, args=None, context=None):
-        result = {}
-        usuario = self.pool.get('res.users').browse(cr, uid, uid, context)
-        data_obj = self.pool.get('ir.model.data')
-        group_id = data_obj.get_object_reference(cr, uid, 'maintenance', "group_maintenance_manager")[1]
-        group = self.pool.get('res.groups').browse(cr, uid, group_id, context)
-        for work_id in ids:
-            result[work_id] = False
-            if usuario in group.users:
-                result[work_id] = True
         return result
 
     def _get_element_list(self, cr, uid, ids, field_name, args=None, context=None):
@@ -178,6 +167,7 @@ class work_order(osv.osv):
                 ('draft', 'Draft'),
                 ('open', 'Open'),
                 ('pending', 'Pending approval'),
+                ('finalized', 'Finalized'),
                 ('done', 'Done'),
                 ('cancelled', 'Cancelled'),
                  ], 'State', readonly=True),
@@ -188,8 +178,8 @@ class work_order(osv.osv):
             'survey_id':fields.many2one('survey', 'Associated survey'
                                         , required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'descargo':fields.selection([
-                ('bloqueo', 'block'),
-                ('no_descargo', 'not discharge'),
+                ('bloqueo', 'Block'),
+                ('no_descargo', 'Not discharge'),
                 ('aviso', 'Warning'),
                  ], 'Discharge', readonly=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'initial_date': fields.date('Initial date', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
@@ -201,8 +191,6 @@ class work_order(osv.osv):
             'padre_id':fields.many2one('work.order', 'Father order', required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'hijas_ids':fields.one2many('work.order', 'padre_id', 'Ordenes hijas'
                                         , required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
-            'grupo': fields.function(_get_grupo, method=True, type='boolean'
-                                     , string='Group', store=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'deteccion':fields.text('Detection', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'sintoma':fields.text('Sign', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'efecto':fields.text('effect', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
@@ -229,6 +217,7 @@ class work_order(osv.osv):
                                                        , string='Total external\
                                                                 services'
                                                        , store=False),
+            'action_taken': fields.text('Action taken', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]})
                     }
     _defaults = {
         'state':'draft',
@@ -274,6 +263,19 @@ class work_order(osv.osv):
                                                  ,'initial_date':initial_date}, context)
         return True
 
+    def onchange_element_ids(self, cr, uid, ids, element_ids, context=None):
+        res = {}
+        if element_ids and element_ids[0][2]:
+            res['value'] = {
+                'descripcion': u", ".join([x.complete_name for x in self.pool.get('maintenance.element').browse(cr, uid, element_ids[0][2])])
+            }
+        else:
+            res['value'] = {
+                'descripcion': ""
+            }
+
+        return res
+
     def work_order_done(self, cr, uid, ids, context=None):
         data_obj = self.pool.get('ir.model.data')
         analytic_line_obj = self.pool.get('account.analytic.line')
@@ -304,14 +306,16 @@ class work_order(osv.osv):
                 if compra.state not in ['done', 'approved', 'cancel']:
                     raise osv.except_osv('Compras sin finalizar', 'Compras sin \
                                          finalizar asociadas a la orden')
-                coste_total[1] += compra.amount_total
+                for line in compra.order_line:
+                    if line.product_id and line.product_id.type == 'service':
+                        coste_total[1] += line.price_subtotal
 
             for movimiento in orden.stock_moves_ids:
                     if movimiento.state not in ['done', 'cancel']:
                         raise osv.except_osv('movimientos sin finalizar',
                                              'Hay movimientos sin finalizar\
                                              asociados a la orden')
-                    coste_total[2] += movimiento.product_qty * movimiento.product_id.list_price
+                    coste_total[2] += movimiento.product_qty * movimiento.product_id.standard_price
 
 
 

@@ -22,24 +22,27 @@ from datetime import *
 from dateutil.relativedelta import relativedelta
 from dateutil.rrule import *
 
+
 class maintenance_type(osv.osv):
     _name = 'maintenance.type'
+
     _columns = {
                 'name':fields.char('Name', size=64, required=False, readonly=False),
                 'descripcion': fields.text('Description'),
                 'type':fields.selection([
-                    ('gama', 'gamma'),
-                    ('correctivo', 'corrective'),
-                    ('legal', 'legal'),
-                    ('preventivo', 'preventivo'),
+                    ('reform', 'Reforms'),
+                    ('corrective', 'Corrective'),
+                    ('predictive', 'Predictive'),
+                    ('preventive', 'Preventive'),
                      ], 'Type', select=True, required=True,readonly=False),
                 'survey_id':fields.many2one('survey', 'Associated survey', required=False),
                 'planificado':fields.boolean('Planned', required=False),
                 'intervalo':fields.selection([
                     ('3', 'Daily'),
                     ('1', 'Monthly'),
-                    ('0', 'Yearly'),
+                    ('2', 'Weekly')
                      ], 'Interval', select=True, readonly=False),
+                'interval_count': fields.integer('Repeat with interval', help="Repeat with interval (Days/Week/Month)", required=True),
                 'inicio': fields.date('Initial date'),
                 'ultima_ejecucion': fields.date('last execution'),
                 'lunes':fields.boolean('Monday', required=False),
@@ -49,8 +52,13 @@ class maintenance_type(osv.osv):
                 'viernes':fields.boolean('Friday', required=False),
                 'sabado':fields.boolean('Saturday', required=False),
                 'domingo':fields.boolean('Sunday', required=False),
-                'element_ids':fields.many2many('maintenance.element', 'maintenanceelement_maintenancetype_rel', 'type_id', 'element_id', 'Maintenance element'),
+                'element_ids':fields.many2many('maintenance.element', 'maintenanceelement_maintenancetype_rel', 'type_id', 'element_id', 'Maintenance elements'),
                 }
+
+    _defaults = {
+        'interval_count': 1
+    }
+
     def run_scheduler(self, cr, uid, automatic=False, use_new_cursor=False, context=None):
         if not context:
             context = {}
@@ -66,27 +74,28 @@ class maintenance_type(osv.osv):
                     'sabado':SA,
                     'domingo':SU,
                     }
+
         for type_obj in type_objs:
             if type_obj.planificado:
-                ultima_ej = datetime.strptime(type_obj.ultima_ejecucion or type_obj.inicio, "%Y-%m-%d") 
+                ultima_ej = datetime.strptime(type_obj.ultima_ejecucion or type_obj.inicio, "%Y-%m-%d")
                 fin = (datetime.now() + relativedelta(months=+1)) - relativedelta(days=-1)
                 fechas_excluidas = []
                 for dia in dias.keys():
                     if type_obj[dia] :
                         fechas_excluidas += rrule(int(type_obj.intervalo), byweekday=dias[dia], dtstart=ultima_ej).between(ultima_ej, fin, inc=True)
-                
-                fechas = rrule(int(type_obj.intervalo), dtstart=ultima_ej).between(ultima_ej, fin, inc=True)
+
+                fechas = rrule(int(type_obj.intervalo), dtstart=ultima_ej, interval=type_obj.interval_count).between(ultima_ej, fin, inc=True)
                 if fechas:
                     ultima_creacion = ultima_ej
                     for fecha in fechas:
                         crear_solicitud = True
                         if fecha in fechas_excluidas:
                             fecha_cambiada = False
-                            
+
                             nueva_fecha = fecha
                             while not fecha_cambiada:
                                 nueva_fecha = nueva_fecha + relativedelta(days=+1)
-                                # si el intervalo es diario 
+                                # si el intervalo es diario
                                 if nueva_fecha in fechas or nueva_fecha > fin:
                                     crear_solicitud = False
                                     break
@@ -104,7 +113,8 @@ class maintenance_type(osv.osv):
                                             'fecha_solicitud':fecha,
                                             }
                             self.pool.get('intervention.request').create(cr, uid, args_request, context)
-                    
+
                     maintenance_type_obj.write(cr, uid, type_obj.id, {'ultima_ejecucion': ultima_creacion}, context)
         return True
+
 maintenance_type()

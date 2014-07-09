@@ -210,14 +210,18 @@ msgid "Timesheet"
 msgstr "Reporte de horas"
 
 #. module: maintenance
-#: model:ir.actions.act_window,name:maintenance.action_maintenance_element
-#: model:ir.model.fields,field_description:maintenance.field_maintenance_type_element_ids
 #: model:ir.ui.menu,name:maintenance.menu_maintenance_element
 #: model:ir.ui.menu,name:maintenance.menu_maintenance_element_view
 #: view:maintenance.element:0
-#: field:maintenance.type,element_ids:0
 msgid "Maintenance element"
 msgstr "Elemento de mantenimiento"
+
+#. module: maintenance
+#: model:ir.actions.act_window,name:maintenance.action_maintenance_element
+#: model:ir.model.fields,field_description:maintenance.field_maintenance_type_element_ids
+#: field:maintenance.type,element_ids:0
+msgid "Maintenance elements"
+msgstr "Elementos de mantenimiento"
 
 #. module: maintenance
 #: model:ir.model.fields,field_description:maintenance.field_maintenance_element_nombre_sin_planta
@@ -715,8 +719,8 @@ msgstr "Tipo de mantenimiento"
 
 #. module: maintenance
 #: selection:maintenance.element,type:0
-msgid "Station"
-msgstr "Estación"
+msgid "Plant"
+msgstr "Planta"
 
 #. module: maintenance
 #: view:work.order:0
@@ -831,8 +835,8 @@ msgstr "$F{efecto-efecto}"
 
 #. module: maintenance
 #: selection:maintenance.type,type:0
-msgid "gamma"
-msgstr "Gama"
+msgid "Reforms"
+msgstr "Reformas"
 
 #. module: maintenance
 #: help:intervention.request,message_summary:0
@@ -1056,7 +1060,7 @@ msgstr "/data/record/Departamento_asignado-assigned_department_id/Director-manag
 
 #. module: maintenance
 #: selection:maintenance.type,type:0
-msgid "corrective"
+msgid "Corrective"
 msgstr "Correctivo"
 
 #. module: maintenance
@@ -1137,8 +1141,8 @@ msgstr "J. SERVICIO EJECUTOR"
 
 #. module: maintenance
 #: selection:maintenance.element,type:0
-msgid "Substation"
-msgstr "Subestación"
+msgid "Subsystem"
+msgstr "Subsistema"
 
 #. module: maintenance
 #: report:work.order:0
@@ -1148,7 +1152,7 @@ msgstr "TOTAL SERVICIOS:"
 #. module: maintenance
 #: view:work.order:0
 msgid "Search"
-msgstr "Busqueda"
+msgstr "Búsqueda"
 
 #. module: maintenance
 #: report:work.order:0
@@ -1280,8 +1284,8 @@ msgstr "work.order.other.services"
 
 #. module: maintenance
 #: selection:maintenance.element,type:0
-msgid "equipos"
-msgstr "equipos"
+msgid "Equipment"
+msgstr "Equipo"
 
 #. module: maintenance
 #: selection:work.order,state:0
@@ -1304,7 +1308,7 @@ msgstr "Cancelado"
 #: model:ir.model.fields,field_description:maintenance.field_work_order_message_follower_ids
 #: field:work.order,message_follower_ids:0
 msgid "Followers"
-msgstr "Followers"
+msgstr "Seguidores"
 
 #. module: maintenance
 #: report:work.order:0
@@ -1319,7 +1323,7 @@ msgstr "Abierto"
 #. module: maintenance
 #: view:intervention.request:0
 msgid "Create work order"
-msgstr "Create work order"
+msgstr "Crear OT"
 
 #. module: maintenance
 #: model:ir.model.fields,field_description:maintenance.field_maintenance_type_survey_id
@@ -1428,7 +1432,7 @@ msgstr "producto hora festiva"
 #: model:ir.model.fields,field_description:maintenance.field_work_order_sintoma
 #: field:work.order,sintoma:0
 msgid "Sign"
-msgstr "Sintoma"
+msgstr "Síntoma"
 
 #. module: maintenance
 #: model:ir.model.fields,field_description:maintenance.field_work_order_origin_department_id
@@ -1584,7 +1588,7 @@ msgstr "TRABAJO SOLICITADO:"
 #. module: maintenance
 #: view:maintenance.type:0
 msgid "dias excluidos"
-msgstr "dias excluidos"
+msgstr "días excluídos"
 
 #. module: maintenance
 #: model:ir.actions.act_window,help:maintenance.action_maintenance_element
@@ -1621,7 +1625,7 @@ msgstr "INFORME:"
 #. module: maintenance
 #: model:ir.actions.act_window,name:maintenance.cancel_intervetion_request_type_tree
 msgid "Cancel intervetion"
-msgstr "Cancel intervetion"
+msgstr "Cancelar intervención"
 
 #. module: maintenance
 #: model:ir.model.fields,field_description:maintenance.field_work_order_total_servicios_internos
@@ -1643,7 +1647,7 @@ msgstr "discharge"
 #: model:ir.model.fields,field_description:maintenance.field_work_order_other_services_code
 #: field:work.order.other.services,code:0
 msgid "Codigo"
-msgstr "Codigo"
+msgstr "Código"
 
 #. module: maintenance
 #: help:intervention.request,message_ids:0
@@ -1658,8 +1662,8 @@ msgstr "Pendiente de aprobación"
 
 #. module: maintenance
 #: selection:maintenance.type,type:0
-msgid "legal"
-msgstr "legal"
+msgid "Predictive"
+msgstr "Predictivo"
 
 #. module: maintenance
 #: model:ir.model.fields,field_description:maintenance.field_work_order_time_report_total
@@ -1669,8 +1673,8 @@ msgstr "Total"
 
 #. module: maintenance
 #: view:maintenance.type:0
-msgid "tipo"
-msgstr "tipo"
+msgid "Type"
+msgstr "Tipo"
 
 #. module: maintenance
 #: report:work.order:0
@@ -1695,8 +1699,8 @@ msgstr "Sábado"
 
 #. module: maintenance
 #: selection:maintenance.type,type:0
-msgid "preventivo"
-msgstr "preventivo"
+msgid "Preventive"
+msgstr "Preventivo"
 
 #. module: maintenance
 #: report:work.order:0
@@ -1716,8 +1720,8 @@ msgstr "Hilo de mensajes"
 
 #. module: maintenance
 #: selection:work.order,descargo:0
-msgid "block"
-msgstr "Bloque"
+msgid "Block"
+msgstr "Bloqueo"
 
 #. module: maintenance
 #: report:work.order:0

@@ -59,6 +59,7 @@
                                 <field name="solicitante_id" />
                                 <field name="element_ids" />
                                 <field name="department_id" />
+                                <field name="executor_department_id"/>
                             </group>
                             <group>
                                 <field name="fecha_estimada" />

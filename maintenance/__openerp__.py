@@ -34,7 +34,7 @@
                     "maintenance_type_view.xml", "work_order_sequence.xml", "wizard/cancel_intervention_request_view.xml",
                     "intervention_request_view.xml", "work_order_report.xml","work_order_view.xml",
                     "stock_view.xml","hr_view.xml", "purchase_view.xml", "maintenance_data.xml",
-                    "security/ir.model.access.csv"],
+                    "security/ir.model.access.csv", "product_view.xml"],
 
     'demo_xml': [],
     'installable': True,

@@ -19,6 +19,7 @@
 #############################################################################
 from osv import osv, fields
 from collections import deque
+from tools.translate import _
 
 class maintenance_element(osv.osv):
 
@@ -28,9 +29,17 @@ class maintenance_element(osv.osv):
         for element in elements:
             result[element.id]  = element.name
             elemento_aux = element
-            while elemento_aux.padre_id:
-                result[element.id] = elemento_aux.padre_id.name
+            if elemento_aux.type == 'plant':
+                plant = elemento_aux
+            else:
+                plant = False
+
+            while elemento_aux.padre_id and not plant:
                 elemento_aux = elemento_aux.padre_id
+                if elemento_aux.type == 'plant':
+                    plant = elemento_aux
+
+            result[element.id] = plant and plant.name or ""
         return result
 
     def _nombre_sin_planta(self, cr, uid, ids, name, args=None, context=None):
@@ -70,11 +79,11 @@ class maintenance_element(osv.osv):
             'name':fields.char('Name', size=60, required=True, readonly=False),
             'description': fields.text('Description'),
             'type':fields.selection([
-                ('estacion', 'Station'),
-                ('subestacion', 'Substation'),
-                ('bloque', 'Block'),
-                ('sistema', 'System'),
-                ('equipos', 'equipos'),
+                ('plant', 'Plant'),
+                ('block', 'Block'),
+                ('system', 'System'),
+                ('subsystem', 'Subsystem'),
+                ('equipment', 'Equipment'),
                  ], 'Type', select=True),
             'padre_id':fields.many2one('maintenance.element', 'Father', required=False),
             'hijo_ids':fields.one2many('maintenance.element', 'padre_id', 'Hijos', required=False),
@@ -93,5 +102,24 @@ class maintenance_element(osv.osv):
                                                'maintenance.element': (lambda self, cr, uid, ids, c={}: ids, ['name','padre_id'], 10),
                                                }),
             'order_ids':fields.many2many('work.order', 'maintenanceelement_work_order_rel', 'element_id', 'order_id', 'Work order', required=False),
-
+            'product_ids': fields.many2many('product.product', 'maitenance_element_product_rel', 'element_id', 'product_id', 'Associated products')
                     }
+
+    def create_intervention_request(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        dummy, view_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'maintenance', 'intervention_request_form_view')
+        request_id = self.pool.get('intervention.request').create(cr, uid, {'element_ids': [(6,0,ids)]})
+        return {
+            'name':_("Intervention request"),
+            'view_mode': 'form',
+            'view_id': view_id,
+            'view_type': 'form',
+            'res_model': 'intervention.request',
+            'type': 'ir.actions.act_window',
+            'nodestroy': True,
+            'target': 'current',
+            'res_id': request_id
+        }
+
+

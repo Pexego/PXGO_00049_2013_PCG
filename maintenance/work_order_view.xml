@@ -130,27 +130,25 @@
                         <button name="work_order_open" type="object"
                             string="Open work order" states="draft" class="oe_highlight" />
                         <button name="work_order_done" type="object" string="Validate job"
-                            attrs="{'invisible':['|',('grupo','=',False),('state','not in',['open','pending'])]}"
-                            class="oe_highlight" />
+                            states="pending"  groups="maintenance.group_maintenance_manager"
+                            class="oe_highlight"/>
                         <button name="request_validation" type="object" string="Done order"
-                            attrs="{'invisible':['|',('grupo','=',True),('state','!=','open')]}"
+                            states="open"
                             class="oe_highlight" />
                         <button name="work_order_cancel" type="object" string="Cancel order"
                             states="draft,open,pending" />
 
-                        <field name="state" widget="statusbar" statusbar_visible="draft,open,done" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,open,pending,done" />
                     </header>
                     <sheet>
-
-                        <field name="grupo" attrs="{'invisible':True}" />
                         <label for="name" class="oe_edit_only" />
                         <h1>
                             <field name="name" />
                         </h1>
                         <label for="element_ids"/>
-                        <field name="element_ids" widget="many2many_tags" required="1"/>
+                        <field name="element_ids" widget="many2many_tags" required="1" on_change="onchange_element_ids(element_ids)"/>
                         <label for="descripcion" />
-                        <field name="descripcion" />
+                        <field name="descripcion"/>
                         <group>
                             <group>
                                 <field name="request_id" />
@@ -180,9 +178,11 @@
                                         <field name="responsable_id" />
                                         <field name="tipo_parada" />
                                         <field name="padre_id" domain="[('id', '!=', id)]"/>
+                                        <field name="action_taken"/>
                                     </group>
                                 </group>
-                                <field name="note" />
+                                <separator string="Notes" colspan="4"/>
+                                <field name="note" colspan="4" nolabel="1"/>
                             </page>
                             <page string="Related movements">
                                 <group>

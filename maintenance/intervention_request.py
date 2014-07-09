@@ -26,10 +26,11 @@ class intervention_request(osv.osv):
     _columns = {
             'company_id': fields.many2one('res.company','Company',required=True,select=1, states={'confirmed':[('readonly',True)], 'approved':[('readonly',True)]}),
             'maintenance_type_id':fields.many2one('maintenance.type', 'maintenance type', required=False, states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
-            'name':fields.char('Nombre', size=64, required=True, readonly=False, states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'name':fields.char('Nombre', size=64, readonly=True, required=False),
             'solicitante_id':fields.many2one('res.users', 'Applicant ', required=True, states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'element_ids':fields.many2many('maintenance.element', 'maintenanceelement_interventionrequest_rel', 'intervention_id', 'element_id', 'Maintenance elements', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'department_id':fields.many2one('hr.department', 'Department', required=False, states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'executor_department_id': fields.many2one('hr.department', 'Executor department', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'fecha_estimada': fields.date('Estimated date', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'motivo_cancelacion' : fields.text('Reason for cancellation', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'fecha_solicitud': fields.date('Request date', required=True, states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
@@ -112,7 +113,7 @@ class intervention_request(osv.osv):
 
             vals_order = {
                           'request_id':intervention.id,
-                          'element_ids' : [(6, 0, element_ids)],
+                          'element_ids' : [(6, 0, [x.id for x in intervention.element_ids])],
                           'origin_department_id': intervention.department_id.id,
                           'instrucciones':intervention.instrucciones,
                           'maintenance_type_id':intervention.maintenance_type_id.id,
@@ -122,6 +123,8 @@ class intervention_request(osv.osv):
                           'efecto':intervention.efecto,
                           'company_id':intervention.company_id.id,
                           'fecha':intervention.fecha_solicitud,
+                          'assigned_department_id': intervention.executor_department_id.id,
+                          'descripcion': u", ".join([x.complete_name for x in intervention.element_ids])
                           }
             order_id = self.pool.get('work.order').create(cr, uid, vals_order, context)
             self.pool.get('intervention.request').write(cr, uid, ids, {'state':'confirmed'}, context)
