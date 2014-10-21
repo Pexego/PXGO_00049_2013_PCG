@@ -17,14 +17,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from osv import fields, osv
+from openerp.osv import fields, orm
 
-class Producto(osv.osv):
-    _inherit = 'product.product'
-    
+class Producto(orm.Model):
+    _inherit = 'product.template'
+
     def _save_equivalent_product(self, cr, uid, ids, field_name, field_value,
                                  args=None, context=None):
-        product_obj = self.pool.get('product.product')
+        product_obj = self.pool.get('product.template')
         if type(ids) is not list:
             ids = [ids]
         for id in ids:
@@ -62,11 +62,11 @@ class Producto(osv.osv):
             product_obj.write(cr, uid, id,{'equivalent_product_ids': [
                 write_values+(equivalent_product_id,)]}, context)
 
-    
+
     def _get_equivalent_products(self, cr, uid, ids, field_name, args=None, context=None):
         if context is None:
             context = {}
-        product_obj = self.pool.get('product.product')
+        product_obj = self.pool.get('product.template')
         result = {}
         for id in ids:
             #productos equivalentes
@@ -77,14 +77,13 @@ class Producto(osv.osv):
                             [('equivalent_product_ids','in',[id])], context=context)
             result[id]+=equivalent_ids
         return result
-    
+
     _columns = {
-            'equivalent_product_ids':fields.many2many('product.product', \
+            'equivalent_product_ids':fields.many2many('product.template', \
                                     'equivalent_products', 'product_id', \
                                     'equivalent_id', 'Equivalent products'),
             'equivalent_product_function': fields.function(_get_equivalent_products,\
-                                      type='many2many',relation='product.product'\
+                                      type='many2many',relation='product.template'\
                                       , string='Equivalent products',\
                                       fnct_inv=_save_equivalent_product),
-            }         
-Producto()
+            }

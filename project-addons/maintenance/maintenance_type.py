@@ -17,13 +17,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-from osv import osv, fields
+from openerp.osv import orm, fields
 from datetime import *
 from dateutil.relativedelta import relativedelta
 from dateutil.rrule import *
 
 
-class maintenance_type(osv.osv):
+class maintenance_type(orm.Model):
     _name = 'maintenance.type'
 
     _columns = {
@@ -35,7 +35,7 @@ class maintenance_type(osv.osv):
                     ('predictive', 'Predictive'),
                     ('preventive', 'Preventive'),
                      ], 'Type', select=True, required=True,readonly=False),
-                'survey_id':fields.many2one('survey', 'Associated survey', required=False),
+                'survey_id':fields.many2one('survey.survey', 'Associated survey', required=False),
                 'planificado':fields.boolean('Planned', required=False),
                 'intervalo':fields.selection([
                     ('3', 'Daily'),

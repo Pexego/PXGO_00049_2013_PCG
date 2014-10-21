@@ -21,9 +21,9 @@
 
 from openerp.osv import fields, orm
 
-class product_product(orm.Model):
+class ProductTemplate(orm.Model):
 
-    _inherit = "product.product"
+    _inherit = "product.template"
 
     _columns = {
         'element_ids': fields.many2many('maintenance.element', 'maitenance_element_product_rel', 'product_id', 'element_id', 'Associated products')

@@ -17,9 +17,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-from osv import osv, fields
+from openerp.osv import fields, orm
 
-class stock(osv.osv):
+class stock(orm.Model):
     def _work_done(self, cr, uid, ids, name, arg=None, context=None):
         res = {}
         for stock_move_id in ids:
@@ -29,18 +29,17 @@ class stock(osv.osv):
                 work_order_state = stock_move.work_order_id.state
                 if work_order_state == 'done':
                     res[stock_move_id] = True
-        return res    
-    
-    _inherit = 'stock.move' 
+        return res
+
+    _inherit = 'stock.move'
     _columns = {
             'element_id':fields.many2one('maintenance.element', 'Element', required=False),
             'work_order_id':fields.many2one('work.order', 'Work order', required=False),
             'work_done': fields.function(_work_done, method=True, type='boolean', string='Order completed', store=False),
                     }
-stock()
 
-class stock_picking(osv.osv):
-    
+class stock_picking(orm.Model):
+
     def _work_done(self, cr, uid, ids, name, arg=None, context=None):
         res = {}
         for stock_picking_id in ids:
@@ -50,32 +49,10 @@ class stock_picking(osv.osv):
                 work_order_state = stock_picking.work_order_id.state
                 if work_order_state == 'done':
                     res[stock_picking_id] = True
-        return res    
-    
+        return res
+
     _inherit = 'stock.picking'
     _columns = {
             'work_order_id':fields.many2one('work.order', 'Work order', required=False),
             'work_done': fields.function(_work_done, method=True, type='boolean', string='Order completed', store=False),
                     }
-stock_picking()
-
-class stock_picking_out(osv.osv):
-    
-    def _work_done(self, cr, uid, ids, name, arg=None, context=None):
-        res = {}
-        for stock_picking_out_id in ids:
-            stock_picking_out = self.pool.get('stock.picking.out').browse(cr, uid, stock_picking_out_id, context)
-            res[stock_picking_out_id] = False
-            if stock_picking_out.work_order_id:
-                work_order_state = stock_picking_out.work_order_id.state
-                if work_order_state == 'done':
-                    res[stock_picking_out_id] = True
-        return res   
-    
-    _inherit = 'stock.picking.out'
-    _columns = {
-            'work_order_id':fields.many2one('work.order', 'Work order', required=True),
-            'work_done': fields.function(_work_done, method=True, type='boolean', string='Order completed', store=False),
-                    }
-stock_picking_out()
-    

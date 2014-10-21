@@ -17,9 +17,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-from osv import osv, fields
+from openerp.osv import orm, fields
 
-class purchase(osv.osv):
+class purchase(orm.Model):
 
     def _work_done(self, cr, uid, ids, name, arg=None, context=None):
         res = {}
@@ -37,11 +37,9 @@ class purchase(osv.osv):
             'work_done': fields.function(_work_done, method=True, type='boolean', string='order completed', store=False),
                     }
 
-purchase()
-
-class purchase_order_line(osv.osv):
+class purchase_order_line(orm.Model):
     _inherit = 'purchase.order.line'
     _columns = {
             'element_id': fields.many2one('maintenance.element', 'Element', required=False),
                 }
-purchase_order_line()
+

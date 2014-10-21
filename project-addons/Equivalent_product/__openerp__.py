@@ -20,17 +20,13 @@
 {
     "name": "Productos equivalentes",
     "version": "1.0",
-    "depends": ["product"],
+    "depends": ["product", "stock"],
     "author": "Pexego",
     "category": "Product",
     "description": """
     This module provide :
     -productos equivalentes
     """,
-    "init_xml": [],
-    'update_xml': ["Equivalent_product_view.xml"],
-    'demo_xml': [],
+    'data': ["Equivalent_product_view.xml"],
     'installable': True,
-    'active': False,
-#    'certificate': 'certificate',
 }

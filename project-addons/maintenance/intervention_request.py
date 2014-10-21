@@ -17,10 +17,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-from osv import osv, fields
+from openerp.osv import orm, fields
 
 
-class intervention_request(osv.osv):
+class intervention_request(orm.Model):
     _name = "intervention.request"
     _inherit = ['mail.thread']
     _columns = {

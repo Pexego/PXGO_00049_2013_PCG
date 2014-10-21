@@ -18,10 +18,12 @@
 #
 ##############################################################################
 
-from osv import fields, osv
-class generate_requisitions_wizard(osv.osv_memory):
+from openerp.osv import fields, orm
+
+
+class generate_requisitions_wizard(orm.TransientModel):
     _name = 'generate.requisitions.wizard'
-    
+
     def generar(self, cr, uid, ids, context=None):
         if not context:
             context = {}
@@ -53,12 +55,12 @@ class generate_requisitions_wizard(osv.osv_memory):
         if not context or not context['active_ids']:
             return []
         return context['active_ids']
-    
+
     _columns = {
             'unsafety_ids':fields.many2many('product.stock.unsafety', 'purchase_order_generate_requisitions_rel', 'unsafety_id', 'wizard_id', 'unsafety'),
                     }
-    
+
     _defaults = {
         'unsafety_ids': _get_unsafety,
     }
-generate_requisitions_wizard()
+

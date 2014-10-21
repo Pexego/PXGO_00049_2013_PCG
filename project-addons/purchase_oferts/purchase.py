@@ -18,11 +18,11 @@
 #
 ##############################################################################
 
-from osv import fields, osv
+from openerp.osv import fields, orm
 import datetime
 import openerp.addons.decimal_precision as dp
 
-class purchase_order_line(osv.osv):
+class purchase_order_line(orm.Model):
 
 
     def _amount_line(self, cr, uid, ids, prop, arg=None, context=None):

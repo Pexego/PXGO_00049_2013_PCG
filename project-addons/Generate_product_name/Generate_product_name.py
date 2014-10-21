@@ -17,17 +17,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from osv import fields, osv
-import tools
+from openerp.osv import fields, orm
+from openerp import tools
 
-class Generate_product_name(osv.osv):
-    _inherit = 'product.product'
+
+class Generate_product_name(orm.Model):
+    _inherit = 'product.template'
 
     def generate_name(self, cr, uid, ids, context=None):
         nombre = u""
         if not context:
             context = {}
-        products = self.pool.get('product.product').browse(cr, uid, ids, context)
+        products = self.pool.get('product.template').browse(cr, uid, ids, context)
         for product in products:
             nombres_atributos = []
             categorias=[product.categ_id]
@@ -42,5 +43,5 @@ class Generate_product_name(osv.osv):
                     nombre += (isinstance(product[atributo],type(product)) and product[atributo].name or tools.ustr(product[atributo])) + u" "
             if not nombre:
                 nombre = product.name
-            self.pool.get('product.product').write(cr, uid, ids, {'name':nombre},context)
+            self.pool.get('product.template').write(cr, uid, ids, {'name':nombre},context)
         return

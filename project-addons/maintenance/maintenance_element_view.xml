@@ -64,7 +64,8 @@
                                 <field name="padre_id" string="Equipo padre" domain="[('id', '!=', id)]"/>
                             </group>
                             <group>
-                                <field name="maintenance_type_ids" />
+                                <separator string="Maintenance type" colspan="4"/>
+                                <field name="maintenance_type_ids" colspan="4"/>
                             </group>
                         </group>
                         <group colspan="4" string="Associated products">

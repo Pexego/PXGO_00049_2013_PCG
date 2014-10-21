@@ -18,12 +18,12 @@
 #
 #############################################################################
 
-from osv import osv, fields
+from openerp.osv import fields, orm
 import time
 from datetime import datetime, date
 
 
-class work_order_other_services(osv.osv):
+class work_order_other_services(orm.Model):
     _name = 'work.order.other.services'
     _columns = {
             'code':fields.char('Codigo', size=64, required=False, readonly=False),
@@ -36,7 +36,7 @@ class work_order_other_services(osv.osv):
                                            , required=True, select="1"),
                     }
 
-class work_order_time_report(osv.osv):
+class work_order_time_report(orm.Model):
 
     def _get_total(self, cr , uid, ids, field_name, args=None, context=None):
         result = {}
@@ -73,7 +73,7 @@ class work_order_time_report(osv.osv):
         'date': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S')
     }
 
-class work_order(osv.osv):
+class work_order(orm.Model):
 
     def _get_planta(self, cr , uid, ids, field_name, args=None, context=None):
         result = {}
@@ -175,7 +175,7 @@ class work_order(osv.osv):
             'maintenance_type_id':fields.many2one('maintenance.type'
                                                   , 'Maintenance type'
                                                   , required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
-            'survey_id':fields.many2one('survey', 'Associated survey'
+            'survey_id':fields.many2one('survey.survey', 'Associated survey'
                                         , required=False, states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'descargo':fields.selection([
                 ('bloqueo', 'Block'),

@@ -20,7 +20,7 @@
 {
     "name": "Department",
     "version": "1.0",
-    "depends": ["sale_department", "invoice_department"],
+    "depends": ["sale_department", "invoice_department", "purchase"],
     "author": "Pexego",
     "category": "Sales & Purchases",
     "description": """

@@ -20,12 +20,12 @@
 {
     "name": "generar nombre de productoS",
     "version": "1.0",
-    "depends": ["product"],
+    "depends": ["product", "product_categ_attributes"],
     "author": "Pexego",
     "category": "Product",
     "description": """
     This module provide :
-    
+
     """,
     "init_xml": [],
     'update_xml': ["Generate_product_name_view.xml"],

@@ -18,9 +18,9 @@
 #
 ##############################################################################
 
-from osv import fields, osv
+from openerp.osv import fields, orm
 from openerp import netsvc
-class generate_purchases_wizard(osv.osv_memory):
+class generate_purchases_wizard(orm.TransientModel):
     _name = 'generate.purchases.wizard'
 
     def generar(self, cr, uid, ids, context=None):
