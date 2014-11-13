@@ -85,7 +85,7 @@
             <field name="search_view_id" ref="view_product_stock_unsafety_filter"/>
             <field name="context">{'search_default_exceptions':1,'search_default_in_progress':1}</field>
             <field name="help" type="html">
-                
+
               <p class="oe_view_nocontent_create">
                 Click to start a new Product Stock Unsafety.
               </p>
@@ -95,7 +95,7 @@
         <menuitem
             action="action_product_stock_unsafety_form"
             id="menu_action_product_stock_unsafety"
-            parent="procurement.menu_stock_sched"
+            parent="stock.menu_stock_sched"
             sequence="60"
         />
 

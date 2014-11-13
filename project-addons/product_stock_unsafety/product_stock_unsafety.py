@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import osv, fields
+from openerp.osv import orm, fields
 import time
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 STATES = [('in_progress', 'In Progress'),
@@ -27,7 +27,7 @@ STATES = [('in_progress', 'In Progress'),
           ('cancelled', 'Cancelled')]
 
 
-class product_stock_unsafety(osv.Model):
+class product_stock_unsafety(orm.Model):
     _name = 'product.stock.unsafety'
     _description = 'Products that have stock under minimum'
     _columns = {
@@ -37,12 +37,6 @@ class product_stock_unsafety(osv.Model):
         'supplier_id': fields.many2one('res.partner',
                                        'Supplier'),
         'min_fixed': fields.float('Min. Fixed', required=True),
-        'remaining_days_sale': fields.related('product_id',
-                                              'remaining_days_sale',
-                                              type='float',
-                                              string='Remaining \
-                                                      Days of Sale',
-                                              readonly=True),
         'real_stock': fields.float('Real Stock', required=True),
         'virtual_stock': fields.float('Virtual Stock', required=True),
         'purchase_id': fields.many2one('purchase.order.line',
@@ -98,3 +92,16 @@ class product_stock_unsafety(osv.Model):
                                {'purchase_id': purchase_line_id,
                                 'product_qty': purline.product_qty})
         return {}
+
+    def create_or_write(self, cr, uid, vals, context=None):
+        if context is None:
+            context = {}
+
+        ids = self.search(cr, uid, [('state', '=', vals['state']),
+                                    ('product_id', '=', vals['product_id']),
+                                    ('supplier_id', '=', vals['supplier_id'])],
+                          context=context)
+        if ids:
+            self.write(cr, uid, ids, vals, context=context)
+        else:
+            self.create(cr, uid, vals, context=context)

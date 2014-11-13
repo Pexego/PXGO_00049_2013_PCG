@@ -1,6 +1,6 @@
 # Translation of OpenERP Server.
 # This file contains the translation of the following modules:
-#	* product_stock_unsafety
+#   * product_stock_unsafety
 #
 msgid ""
 msgstr ""
@@ -71,11 +71,6 @@ msgstr "Días Mínimos"
 #: view:product.stock.unsafety:0
 msgid "Search Product Stock Unsafety"
 msgstr "Buscar Bajo Mínimos"
-
-#. module: product_stock_unsafety
-#: field:product.product,remaining_days_sale:0
-msgid "Remaining                                                        Days of Sale"
-msgstr "Días de venta restantes"
 
 #. module: product_stock_unsafety
 #: model:ir.actions.act_window,help:product_stock_unsafety.action_product_stock_unsafety_form
@@ -309,11 +304,6 @@ msgstr "Día Mínimo"
 #: view:product.stock.unsafety:0
 msgid "Cancel"
 msgstr "Cancelar"
-
-#. module: product_stock_unsafety
-#: field:product.stock.unsafety,remaining_days_sale:0
-msgid "Remaining                                                       Days of Sale"
-msgstr "Días de venta restantes"
 
 #. module: product_stock_unsafety
 #: view:product.stock.unsafety:0

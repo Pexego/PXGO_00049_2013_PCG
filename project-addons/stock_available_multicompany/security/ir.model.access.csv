@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_stock_available_multicompany,stock.available.multicompany,model_stock_available_multicompany,base.group_sale_salesman,1,1,1,1
-access_stock_available_multicompany_accountant,stock.available.multicompany accountant,model_stock_available_multicompany,account.group_account_user,1,1,0,0
-access_stock_available_multicompany_lines,stock.available.multicompany,model_stock_available_multicompany_lines,base.group_sale_salesman,1,1,1,1
-access_stock_available_multicompany_lines_accountant,stock.available.multicompany.lines accountant,model_stock_available_multicompany_lines,account.group_account_user,1,1,0,0

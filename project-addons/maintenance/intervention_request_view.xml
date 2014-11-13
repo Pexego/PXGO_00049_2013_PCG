@@ -57,22 +57,29 @@
                         <group>
                             <group>
                                 <field name="solicitante_id" />
-                                <field name="element_ids" />
-                                <field name="department_id" />
-                                <field name="executor_department_id"/>
+                                <field name="fecha_solicitud" />
                             </group>
                             <group>
                                 <field name="fecha_estimada" />
-                                <field name="fecha_solicitud" />
-                                <field name="instrucciones" />
+                            </group>
+                            <field name="element_ids" colspan="4"/>
+                            <group>
                                 <field name="maintenance_type_id" />
                                 <field name="deteccion" widget="char"/>
-                                <field name="sintoma" widget="char"/>
                                 <field name="efecto" widget="char"/>
                             </group>
+                            <group>
+                                <field name="instrucciones" />
+                                <field name="sintoma" widget="char"/>
+                            </group>
+                            <group>
+                                <field name="department_id" />
+                            </group>
+                            <group>
+                                <field name="executor_department_id"/>
+                            </group>
                         </group>
-                        <div class="oe_clear"/>
-                        <field name="note" class="oe_inline" placeholder="Notes"/>
+                        <field name="note" placeholder="Notes" colspan="4"/>
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers" />

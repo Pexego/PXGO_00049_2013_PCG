@@ -30,10 +30,8 @@
     "depends" : ["base", "product","sale", "stock", "product_stock_unsafety"],
     "category" : "Crm",
     "init_xml" : [],
-    "update_xml" : ["wizard/stock_available_multicompany_wzd_view.xml",
-                    "product_view.xml",
-                    "security/ir.model.access.csv"
-                    ],
+    "data" : ["wizard/stock_available_multicompany_wzd_view.xml",
+              "product_view.xml"],
     'demo_xml': [],
     'installable': True,
     'active': False,

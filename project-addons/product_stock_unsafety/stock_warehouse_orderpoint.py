@@ -24,7 +24,6 @@ from openerp.osv import osv, fields
 class stock_warehouse_orderpoint(osv.Model):
     _inherit = 'stock.warehouse.orderpoint'
     _columns = {
-        'min_days_id': fields.many2one('minimum.day',
-                                       'Stock Mínimum Days',
-                                       required=True)
+        'from_date': fields.date('From'),
+        'to_date': fields.date('To'),
     }

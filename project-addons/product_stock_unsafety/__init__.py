@@ -18,8 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import minimum_days
-import product
+
 import product_stock_unsafety
 import stock_warehouse_orderpoint
 import schedulers

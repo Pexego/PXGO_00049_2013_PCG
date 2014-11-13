@@ -18,15 +18,15 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from osv import osv, fields
-import decimal_precision as dp
+from openerp.osv import osv, fields
+import openerp.addons.decimal_precision as dp
 
 class stock_available_multicompany(osv.osv_memory):
     _name = 'stock.available.multicompany'
     _columns = {
         'stock_available_lines': fields.one2many('stock.available.multicompany.lines',
                                                  'wizard_id',
-                                                 'Lines')
+                                                 'Lines', readonly=True)
     }
     def default_get(self, cr, uid, fields, context=None):
         """ init the form's fields """
@@ -35,21 +35,19 @@ class stock_available_multicompany(osv.osv_memory):
 
         res = {}
         line_ids = []
+        warehouse_obj = self.pool.get('stock.warehouse')
         if uid:
             user_obj = self.pool.get('res.users').browse(cr, uid, uid)
-            cr.execute("select cid from res_company_users_rel where user_id = '" + str(user_obj.id) + "'")
-            company_ids = cr.fetchall()
-            if company_ids:
-                for company in company_ids:
+            if user_obj.company_ids:
+                for company in user_obj.company_ids:
                     if context.get('active_ids', False):
-                        product = self.pool.get('product.product').browse(cr, uid, context['active_ids'][0])
-                        cr.execute("select id, name from stock_warehouse")
-                        warehouse = cr.fetchall()
-                        if warehouse:
-                            for war in warehouse:
+                        product = self.pool.get(context['active_model']).browse(cr, uid, context['active_ids'][0])
+                        warehouse_ids = warehouse_obj.search(cr, uid, [('company_id', '=', company.id)])
+                        if warehouse_ids:
+                            for war in warehouse_obj.browse(cr, uid, warehouse_ids):
                                 line_ids.append({
-                                                'qty': self.pool.get('product.product').browse(cr, 1, product.id, context={'warehouse': war[0]}).qty_available,
-                                                'warehouse_name': war[1]
+                                                'qty': self.pool.get(context['active_model']).browse(cr, 1, product.id, context={'warehouse': war.id, 'force_company': company.id}).qty_available,
+                                                'warehouse_name': war.name,
                                              })
 
         res.update({'stock_available_lines': line_ids})
@@ -62,8 +60,6 @@ class stock_available_multicompany_lines(osv.osv_memory):
     _columns = {
         'wizard_id': fields.many2one('stock.available.multicompany',
                                                     'Stock available parent'),
-        'warehouse_id': fields.many2one('stock.warehouse',
-                                        'Warehouse'),
         'qty': fields.float('Qty available',
                             digits_compute=dp.get_precision('Product UoM')),
         'warehouse_name': fields.char('Warehouse', size=255)

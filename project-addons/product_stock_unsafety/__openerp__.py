@@ -39,9 +39,7 @@ Module that adds the management to the products under minimal.
                 "stock",
                 "procurement"
                 ],
-    "data": ["minimum_days_view.xml",
-             "product_view.xml",
-             "product_stock_unsafety_view.xml",
+    "data": ["product_stock_unsafety_view.xml",
              "stock_warehouse_orderpoint_view.xml",
              "security/ir.model.access.csv"],
     "demo": [],

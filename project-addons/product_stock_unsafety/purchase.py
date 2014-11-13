@@ -18,10 +18,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import osv
+from openerp.osv import orm
 
 
-class purchase_order_line(osv.Model):
+class purchase_order_line(orm.Model):
     _inherit = 'purchase.order.line'
 
     def create(self, cr, uid, vals, context=None):
@@ -79,7 +79,7 @@ class purchase_order_line(osv.Model):
         return res
 
 
-class purchase_order(osv.Model):
+class purchase_order(orm.Model):
     _inherit = 'purchase.order'
 
     def write(self, cr, uid, ids, vals, context=None):

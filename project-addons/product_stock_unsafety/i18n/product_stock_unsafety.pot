@@ -1,6 +1,6 @@
 # Translation of OpenERP Server.
 # This file contains the translation of the following modules:
-#	* product_stock_unsafety
+#   * product_stock_unsafety
 #
 msgid ""
 msgstr ""
@@ -64,11 +64,6 @@ msgstr ""
 #. module: product_stock_unsafety
 #: view:product.stock.unsafety:0
 msgid "Search Product Stock Unsafety"
-msgstr ""
-
-#. module: product_stock_unsafety
-#: field:product.product,remaining_days_sale:0
-msgid "Remaining                                                        Days of Sale"
 msgstr ""
 
 #. module: product_stock_unsafety
@@ -251,11 +246,6 @@ msgstr ""
 #. module: product_stock_unsafety
 #: selection:product.product,state2:0
 msgid "Validated"
-msgstr ""
-
-#. module: product_stock_unsafety
-#: field:product.stock.unsafety,remaining_days_sale:0
-msgid "Remaining                                                       Days of Sale"
 msgstr ""
 
 #. module: product_stock_unsafety
