@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="view_warehouse_noreadonly" model="ir.ui.view">
+            <field name="name">stock.warehouse</field>
+            <field name="model">stock.warehouse</field>
+            <field name="inherit_id" ref="stock.view_warehouse"/>
+            <field name="arch" type="xml">
+                <page string="Technical Information" position="replace">
+                    <page string="Technical Information" groups='base.group_no_one'>
+                    <group>
+                        <group string="Locations">
+                            <field name="lot_stock_id"/>
+                            <field name="view_location_id"/>
+                            <field name="wh_input_stock_loc_id"/>
+                            <field name="wh_qc_stock_loc_id"/>
+                            <field name="wh_pack_stock_loc_id"/>
+                            <field name="wh_output_stock_loc_id"/>
+                        </group>
+                        <group string="Picking Types">
+                            <field name="in_type_id" readonly="1"/>
+                            <field name="int_type_id" readonly="1"/>
+                            <field name="pick_type_id" readonly="1"/>
+                            <field name="pack_type_id" readonly="1"/>
+                            <field name="out_type_id" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+                </page>
+            </field>
+        </record>
+
+        <record id="view_move_picking_form_add_company_buttons" model="ir.ui.view">
+            <field name="name">stock.move.form.add_company_buttons</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_picking_form"/>
+            <field name="arch" type="xml">
+                <field name="create_date" position="before">
+                    <button name="check_availability_multicompany" type="object" string="Stock Available Multicompany"/>
+                </field>
+                <field name="procure_method" position="after">
+                    <field name="resupply_company_id" attrs="{'readonly': [('state', '!=', 'draft')]}" groups="stock.group_adv_location"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

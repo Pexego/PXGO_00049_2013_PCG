@@ -17,17 +17,27 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ###############################################################################
-{
-    "name": "Cambios stock",
-    "version": "1.0",
-    "depends": ["product", "stock", "product_stock_unsafety",
-                "stock_available_multicompany"],
-    "author": "Pexego",
-    "category": "Stock",
-    "description": """
-    This module provide :
-    """,
-    'data': ["product_view.xml", "product_data.xml", "stock_view.xml"],
-    'installable': True,
-    'active': False,
-}
+
+from openerp.osv import osv, fields
+
+class stock_picking(osv.osv):
+
+    _inherit = "stock.picking"
+
+    def _get_company_id(self, cr, uid, context=None):
+        if context.get('default_picking_type_id', False):
+            warehouse = self.pool.get('stock.picking.type').browse(cr, 1, context['default_picking_type_id']).warehouse_id
+            return warehouse.company_id.id
+        return self.pool.get('res.company')._company_default_get(cr, uid, 'stock.picking', context=context)
+
+    _defaults = {
+        'company_id': _get_company_id
+    }
+
+    def action_assign(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        for pick in self.browse(cr, uid, ids, context=context):
+            context['force_company'] = pick.company_id.id
+            super(stock_picking, self).action_assign(cr, uid, [pick.id], context=context)
+        return True
