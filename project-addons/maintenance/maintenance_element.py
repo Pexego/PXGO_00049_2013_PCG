@@ -110,8 +110,13 @@ class maintenance_element(orm.Model):
                                                'maintenance.element': (lambda self, cr, uid, ids, c={}: ids, ['name','padre_id'], 10),
                                                }),
             'order_ids':fields.many2many('work.order', 'maintenanceelement_work_order_rel', 'element_id', 'order_id', 'Work order', required=False),
-            'product_ids': fields.many2many('product.product', 'maitenance_element_product_rel', 'element_id', 'product_id', 'Associated products')
+            'product_ids': fields.many2many('product.product', 'maitenance_element_product_rel', 'element_id', 'product_id', 'Associated products'),
+            'active': fields.boolean('Active')
                     }
+
+    _defaults = {
+        'active': True
+    }
 
     def create_intervention_request(self, cr, uid, ids, context=None):
         if context is None:

@@ -62,6 +62,7 @@
                                 <field name="product_id" />
                                 <field name="asset_id" />
                                 <field name="padre_id" string="Equipo padre" domain="[('id', '!=', id)]"/>
+                                <field name="active"/>
                             </group>
                             <group>
                                 <separator string="Maintenance type" colspan="4"/>
