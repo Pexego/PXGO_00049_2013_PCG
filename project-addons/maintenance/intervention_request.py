@@ -96,6 +96,7 @@ class intervention_request(orm.Model):
         action_pool = self.pool.get(action_model)
         action = action_pool.read(cr, uid, action_id, context=context)
         action['domain'] = "[('id','=', "+str(order_id)+")]"
+        action['context'] = "{}"
         return action
 
     def create_work_order(self, cr, uid, ids, context=None):
