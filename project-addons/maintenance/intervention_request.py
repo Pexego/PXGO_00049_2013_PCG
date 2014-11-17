@@ -44,7 +44,7 @@ class intervention_request(orm.Model):
             'deteccion':fields.text('Detection', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'sintoma':fields.text('Sign', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'efecto':fields.text('effect', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]})
-                    }
+    }
     _defaults = {
         'state': 'draft',
         'name': lambda obj, cr, uid, context: obj.pool.get('ir.sequence').get(cr, uid, 'intervention.request'),

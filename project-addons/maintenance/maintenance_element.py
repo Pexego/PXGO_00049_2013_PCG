@@ -139,4 +139,16 @@ class maintenance_element(orm.Model):
             'res_id': request_id
         }
 
+    def unlink(self, cr, uid, ids, context=None):
+        if context is None: Context = {}
+        for element in self.browse(cr, uid, ids, context=context):
+            if element.hijo_ids:
+                raise orm.except_orm(_('Error !'),_("Cannot delete an element that contains another elements"))
+            request_ids = self.pool.get('intervention.request').search(cr, uid, [('element_ids', 'in', [element.id])])
+            if request_ids:
+                raise orm.except_orm(_('Error !'),_("Cannot delete an element associated to intervention requests"))
+            work_order_ids = self.pool.get('work.order').search(cr, uid, [('element_ids', 'in', [element.id])])
+            if work_order_ids:
+                raise orm.except_orm(_('Error !'),_("Cannot delete an element associated to work orders"))
 
+        return super(maintenance_element, self).unlink(cr, uid, ids, context=context)
