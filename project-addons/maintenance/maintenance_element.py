@@ -31,6 +31,23 @@ class maintenance_element(orm.Model):
             res.append((element.id, name))
         return res
 
+    def name_search(self, cr, user, name='', args=None, operator='ilike', context=None, limit=80):
+        """allows search by code too"""
+        if args is None: args=[]
+        if context is None: context={}
+
+        if name:
+            ids = self.search(cr, user, [('codigo', '=', name)]+ args, limit=limit, context=context)
+            if not len(ids):
+                ids = self.search(cr, user, [('codigo', operator, name)]+ args, limit=limit, context=context)
+                ids += self.search(cr, user, [('name', operator, name)]+ args, limit=limit, context=context)
+                ids = list(set(ids))
+        else:
+            ids = self.search(cr, user, args, limit=limit, context=context)
+
+        result = self.name_get(cr, user, ids, context)
+        return result
+
     def _get_planta(self,cr ,uid, ids, field_name, args=None, context=None):
         result = {}
         elements = self.pool.get('maintenance.element').browse(cr, uid, ids, context)
