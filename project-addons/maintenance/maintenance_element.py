@@ -99,7 +99,7 @@ class maintenance_element(orm.Model):
             'parent_right': fields.integer('Right Parent', select=True),
             'complete_name': fields.function(_complete_name, type='char', size=256, string="Complete name",
                             store={'maintenance.element': (lambda self, cr, uid, ids, c={}: ids, ['name', 'padre_id'], 10)}),
-            'product_id':fields.many2one('product.product', 'product associated', required=False),
+            'product_id':fields.many2one('product.template', 'product associated', required=False),
             'asset_id':fields.many2one('account.asset.asset', 'Active', required=False),
             'analytic_account_id':fields.many2one('account.analytic.account', 'Analytic account', required=True),
             'codigo':fields.char('Code', size=64, required=True),
@@ -110,7 +110,7 @@ class maintenance_element(orm.Model):
                                                'maintenance.element': (lambda self, cr, uid, ids, c={}: ids, ['name','padre_id'], 10),
                                                }),
             'order_ids':fields.many2many('work.order', 'maintenanceelement_work_order_rel', 'element_id', 'order_id', 'Work order', required=False),
-            'product_ids': fields.many2many('product.product', 'maitenance_element_product_rel', 'element_id', 'product_id', 'Associated products'),
+            'product_ids': fields.many2many('product.template', 'maitenance_element_product_tmpl_rel', 'element_id', 'product_id', 'Associated products'),
             'active': fields.boolean('Active')
                     }
 

@@ -9,6 +9,9 @@
             <field name="arch" type="xml">
                 <notebook position="inside">
                     <page string="Maintenance elements">
+                        <separator string="Associated elements" colspan="4"/>
+                        <field name="real_element_ids" nolabel="1" colspan="4"/>
+                        <separator string="Replacement for elements" colspan="4"/>
                         <field name="element_ids" nolabel="1" colspan="4"/>
                     </page>
                 </notebook>

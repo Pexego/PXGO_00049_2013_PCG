@@ -26,5 +26,6 @@ class ProductTemplate(orm.Model):
     _inherit = "product.template"
 
     _columns = {
-        'element_ids': fields.many2many('maintenance.element', 'maitenance_element_product_rel', 'product_id', 'element_id', 'Associated products')
+        'element_ids': fields.many2many('maintenance.element', 'maitenance_element_product_tmpl_rel', 'product_id', 'element_id', 'Replacement for elements'),
+        'real_element_ids': fields.one2many('maintenance.element', 'product_id', 'Associated elements', readonly=True)
     }
