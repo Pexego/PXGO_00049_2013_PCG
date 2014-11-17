@@ -20,8 +20,8 @@
 
 from openerp.osv import fields, osv
 
-class product_product(osv.osv):
-    _inherit = 'product.product'
+class product_template(osv.osv):
+    _inherit = 'product.template'
     _columns = {
         'manufacturer' : fields.many2one('res.partner', 'Manufacturer'),
         'manufacturer_pname' : fields.char('Manufacturer Product Name', size=64),
@@ -35,5 +35,5 @@ class product_attribute(osv.osv):
     _columns = {
         'name' : fields.char('Attribute', size=64, required=True),
         'value' : fields.char('Value', size=64),
-        'product_id': fields.many2one('product.product', 'Product', ondelete='cascade'),
+        'product_id': fields.many2one('product.template', 'Product', ondelete='cascade'),
     }
