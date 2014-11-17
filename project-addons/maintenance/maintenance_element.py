@@ -23,6 +23,14 @@ from openerp.tools.translate import _
 
 class maintenance_element(orm.Model):
 
+    def name_get(self, cr, uid, ids, context=None):
+        if context is None: context = {}
+        res = []
+        for element in self.browse(cr, uid, ids, context):
+            name = element.codigo + u" " + element.name
+            res.append((element.id, name))
+        return res
+
     def _get_planta(self,cr ,uid, ids, field_name, args=None, context=None):
         result = {}
         elements = self.pool.get('maintenance.element').browse(cr, uid, ids, context)

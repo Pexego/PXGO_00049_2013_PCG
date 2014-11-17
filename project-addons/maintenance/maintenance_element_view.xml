@@ -58,7 +58,7 @@
                                 <field name="codigo" />
                                 <field name="description" />
                                 <field name="type" />
-                                <field name="analytic_account_id" />
+                                <field name="analytic_account_id" context="{'default_name': name}"/>
                                 <field name="product_id" />
                                 <field name="asset_id" />
                                 <field name="padre_id" string="Equipo padre" domain="[('id', '!=', id)]"/>
