@@ -123,6 +123,24 @@
             </field>
         </record>
 
+        <record id="action_open_active_element" model="ir.actions.act_window">
+            <field name="name">Active Element</field>
+            <field name="res_model">maintenance.element</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="maintenance_element_tree_view"/>
+            <field name="search_view_id" ref="view_maintenance_element_filter" />
+            <field name="domain">[('id', 'in', [active_id])]</field>
+        </record>
+
+        <record id="ir_open_element" model="ir.values">
+            <field eval="'tree_but_open'" name="key2"/>
+            <field eval="'maintenance.element'" name="model"/>
+            <field name="name">Open active element</field>
+            <field eval="'ir.actions.act_window,%d'%action_open_active_element" name="value"/>
+            <field eval="True" name="object"/>
+        </record>
+
         <menuitem action="action_maintenance_element" id="menu_maintenance_element"
             parent="menu_maintenance" sequence="10" />
 
