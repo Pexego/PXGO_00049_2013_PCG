@@ -1240,7 +1240,7 @@ msgstr "cancel.intervention.request.wizard"
 #: field:maintenance.element,product_ids:0
 #: field:product.product,element_ids:0
 msgid "Associated products"
-msgstr "Productos asociados"
+msgstr "Repuestos asociados"
 
 #. module: maintenance
 #: report:work.order:0
@@ -1539,7 +1539,7 @@ msgstr "H.N."
 #: model:ir.model.fields,field_description:maintenance.field_maintenance_element_product_id
 #: field:maintenance.element,product_id:0
 msgid "product associated"
-msgstr "Producto asociado"
+msgstr "Código de almacén"
 
 #. module: maintenance
 #: field:intervention.request,motivo_cancelacion:0

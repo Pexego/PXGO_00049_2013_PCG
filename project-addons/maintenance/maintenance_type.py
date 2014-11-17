@@ -34,6 +34,7 @@ class maintenance_type(orm.Model):
                     ('corrective', 'Corrective'),
                     ('predictive', 'Predictive'),
                     ('preventive', 'Preventive'),
+                    ('legal', 'Legal')
                      ], 'Type', select=True, required=True,readonly=False),
                 'survey_id':fields.many2one('survey.survey', 'Associated survey', required=False),
                 'planificado':fields.boolean('Planned', required=False),
