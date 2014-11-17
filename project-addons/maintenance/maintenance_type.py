@@ -27,7 +27,7 @@ class maintenance_type(orm.Model):
     _name = 'maintenance.type'
 
     _columns = {
-                'name':fields.char('Name', size=64, required=False, readonly=False),
+                'name':fields.char('Name', size=64, required=True),
                 'descripcion': fields.text('Description'),
                 'type':fields.selection([
                     ('reform', 'Reforms'),
@@ -35,24 +35,24 @@ class maintenance_type(orm.Model):
                     ('predictive', 'Predictive'),
                     ('preventive', 'Preventive'),
                     ('legal', 'Legal')
-                     ], 'Type', select=True, required=True,readonly=False),
-                'survey_id':fields.many2one('survey.survey', 'Associated survey', required=False),
-                'planificado':fields.boolean('Planned', required=False),
+                     ], 'Type', select=True, required=True),
+                'survey_id':fields.many2one('survey.survey', 'Associated survey'),
+                'planificado':fields.boolean('Planned'),
                 'intervalo':fields.selection([
                     ('3', 'Daily'),
                     ('1', 'Monthly'),
                     ('2', 'Weekly')
-                     ], 'Interval', select=True, readonly=False),
+                     ], 'Interval', select=True),
                 'interval_count': fields.integer('Repeat with interval', help="Repeat with interval (Days/Week/Month)", required=True),
                 'inicio': fields.date('Initial date'),
                 'ultima_ejecucion': fields.date('last execution'),
-                'lunes':fields.boolean('Monday', required=False),
-                'martes':fields.boolean('Tuesday', required=False),
-                'miercoles':fields.boolean('Wednesday', required=False),
-                'jueves':fields.boolean('Thursday', required=False),
-                'viernes':fields.boolean('Friday', required=False),
-                'sabado':fields.boolean('Saturday', required=False),
-                'domingo':fields.boolean('Sunday', required=False),
+                'lunes':fields.boolean('Monday'),
+                'martes':fields.boolean('Tuesday'),
+                'miercoles':fields.boolean('Wednesday'),
+                'jueves':fields.boolean('Thursday'),
+                'viernes':fields.boolean('Friday'),
+                'sabado':fields.boolean('Saturday'),
+                'domingo':fields.boolean('Sunday'),
                 'element_ids':fields.many2many('maintenance.element', 'maintenanceelement_maintenancetype_rel', 'type_id', 'element_id', 'Maintenance elements'),
                 }
 
