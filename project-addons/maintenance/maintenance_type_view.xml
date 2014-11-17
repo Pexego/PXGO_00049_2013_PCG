@@ -30,6 +30,7 @@
                                 <field name="descripcion" />
                                 <field name="type" />
                                 <field name="survey_id" />
+                                <field name="department_id"/>
                                 <field name="planificado" />
                             </group>
                             <group>

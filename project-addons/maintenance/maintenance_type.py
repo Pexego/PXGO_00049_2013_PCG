@@ -54,6 +54,7 @@ class maintenance_type(orm.Model):
                 'sabado':fields.boolean('Saturday'),
                 'domingo':fields.boolean('Sunday'),
                 'element_ids':fields.many2many('maintenance.element', 'maintenanceelement_maintenancetype_rel', 'type_id', 'element_id', 'Maintenance elements'),
+                'department_id': fields.many2one('hr.department', 'Department')
                 }
 
     _defaults = {
@@ -112,6 +113,8 @@ class maintenance_type(orm.Model):
                                             'maintenance_type_id':type_obj.id,
                                             'element_ids':[(6, 0, element_ids)],
                                             'fecha_solicitud':fecha,
+                                            'department_id': type_obj.department_id and type_obj.department_id.id or False,
+                                            'executor_department_id': type_obj.department_id and type_obj.department_id.id or False,
                                             }
                             self.pool.get('intervention.request').create(cr, uid, args_request, context)
 
