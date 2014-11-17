@@ -118,6 +118,10 @@ class maintenance_element(orm.Model):
         'active': True
     }
 
+    _sql_constraints = [
+        ('codigo_uniq', 'unique (codigo)', 'The code of the Maintenance Element must be unique!')
+    ]
+
     def create_intervention_request(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
