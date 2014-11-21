@@ -17,10 +17,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from osv import fields, osv
+from openerp.osv import fields, orm
 import openerp.addons.decimal_precision as dp
 
-class Last_purchase_price(osv.osv):
+class Last_purchase_price(orm.Model):
 
     def _ultimo_precio(self, cr, uid, ids, name, arg, context=None):
         if not context:
@@ -53,5 +53,13 @@ class Last_purchase_price(osv.osv):
 
     _inherit = 'product.product'
     _columns = {
-            'last_purchase_price': fields.function(_ultimo_precio, method=True, type='float',digits_compute= dp.get_precision('Product Price'), string='Last purchase price', store=False),
+            'last_purchase_price': fields.function(_ultimo_precio, method=True, type='float',digits_compute= dp.get_precision('Product Price'), string='Last purchase price', readonly=True),
                     }
+
+class ProductTemplate(orm.Model):
+
+    _inherit = "product.template"
+
+    _columns = {
+        'last_purchase_price': fields.related('product_variant_ids', 'last_purchase_price', type='float', string='Last purchase price', readonly=True, digits_compute= dp.get_precision('Product Price')),
+    }

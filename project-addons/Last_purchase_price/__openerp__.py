@@ -27,9 +27,7 @@
     This module provide :
     -muestra el precio de la ultima compra en producto
     """,
-    "init_xml": [],
-    'update_xml': ["Last_purchase_price.xml"],
-    'demo_xml': [],
+    'data': ["Last_purchase_price.xml"],
     'installable': True,
     'active': False,
 #    'certificate': 'certificate',

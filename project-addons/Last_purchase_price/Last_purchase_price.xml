@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-	<data>
-		<record model="ir.ui.view" id="last_purchase_price_form_view">
-			<field name="name">last_purchase_price.form</field>
-			<field name="model">product.product</field>
-			<field name="type">form</field>
-			<field name="inherit_id" ref="product.product_normal_form_view" />
-			<field name="arch" type="xml">
-				<field name="list_price" position="before">
-					<field name="last_purchase_price" />
-				</field>
-			</field>
-		</record>
-	</data>
+    <data>
+
+        <record model="ir.ui.view" id="product_last_purchase_price_form_view">
+            <field name="name">last_purchase_price.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view" />
+            <field name="arch" type="xml">
+                <field name="standard_price" position="after">
+                    <field name="last_purchase_price" />
+                </field>
+            </field>
+        </record>
+
+    </data>
 </openerp>
