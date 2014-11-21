@@ -9,9 +9,8 @@
             <field name="subject">Work order</field>
             <field name="model_id" ref="maintenance.model_work_order" />
             <field name="auto_delete" eval="True" />
-            <field name="report_template" ref="report_work_order" />
-            <field name="report_name">${(object.name or
-                '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}
+            <field name="report_template" ref="report_maintenance_work_order" />
+            <field name="report_name">${(object.name or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}
             </field>
         </record>
 

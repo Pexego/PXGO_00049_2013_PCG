@@ -40,7 +40,8 @@ class generate_requisitions_wizard(orm.TransientModel):
                             }
                     args_requisition = {
                                         'origin':unsafety.name,
-                                        'date_start':unsafety.date,
+                                        'schedule_date': unsafety.date,
+                                        'ordering_date': unsafety.date,
                                         'purchase_ids': None,
                                         'line_ids':[(0, 0, args_line)],
                                         }

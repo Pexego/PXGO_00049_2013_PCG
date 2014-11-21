@@ -40,13 +40,13 @@ class purchase_order_line(orm.Model):
         return res
 
     _columns = {
-            'requisition_id': fields.related('order_id', 'requisition_id', type='many2one', relation='purchase.requisition', string='solicitud de presupuesto', store=True),
-            'date_requisition': fields.related('requisition_id', 'date_start', type='date', string='fecha de solicitud'),
-            'department_id': fields.related('order_id', 'department_id', type='many2one', relation='hr.department', string='departamento'),
-            'date_order': fields.related('order_id', 'date_order', type='date', string='fecha de presupuesto'),
+            'requisition_id': fields.related('order_id', 'requisition_id', type='many2one', relation='purchase.requisition', string='Solicitud de presupuesto', store=True),
+            'date_requisition': fields.related('requisition_id', 'ordering_date', type='date', string='Fecha de solicitud'),
+            'department_id': fields.related('order_id', 'department_id', type='many2one', relation='hr.department', string='Departamento'),
+            'date_order': fields.related('order_id', 'date_order', type='date', string='Fecha de presupuesto'),
             'notes': fields.related('order_id', 'notes', type='text', string='Observaciones'),
             'fabricante_id': fields.related('product_id', 'manufacturer', type='many2one', relation='res.partner', string='Fabricante'),
-            'fab_ref': fields.related('product_id', 'manufacturer_pref', type='char', size=64, string='ref. de fabricante'),
+            'fab_ref': fields.related('product_id', 'manufacturer_pref', type='char', size=64, string='Ref. de fabricante'),
             'price_subtotal': fields.function(_amount_line, string='Subtotal', digits_compute=dp.get_precision('Account'), group_operator="sum", type="float",
                                             store={
                 'purchase.order.line': (lambda self, cr, uid, ids, c={}: ids, ['product_qty','price_unit','taxes_id'], 10),

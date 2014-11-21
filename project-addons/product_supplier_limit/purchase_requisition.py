@@ -17,28 +17,22 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from osv import osv, fields
-class purchase_requisition(osv.osv):
+
+from openerp.osv import fields, orm
+
+class purchase_requisition(orm.Model):
     _inherit = 'purchase.requisition'
-    
+
     def create(self, cr , uid, vals, context=None):
         id_created = super(purchase_requisition, self).create(cr, uid, vals, context)
         if not context:
             context = {}
-        requisition = self.pool.get('purchase.requisition').browse(cr, uid, id_created, context)
+        requisition = self.browse(cr, uid, id_created, context)
         for line in requisition.line_ids:
-            principal_supplierinfo_ids = self.pool.get('product.supplierinfo').search(cr, uid, [('product_id', '=', line.product_id.id), ('principal_supplier', '=', True)], offset=0, limit=None, order=None, context=context, count=False)
+            principal_supplierinfo_ids = self.pool.get('product.supplierinfo').search(cr, uid, [('product_tmpl_id', '=', line.product_id.product_tmpl_id.id), ('principal_supplier', '=', True)], offset=0, limit=None, order=None, context=context, count=False)
             principal_supplierinfos = self.pool.get('product.supplierinfo').browse(cr, uid, principal_supplierinfo_ids, context)
             count_purchases_maked = 0
             for supplierinfo in principal_supplierinfos:
-                    self.pool.get('purchase.requisition').make_purchase_order(cr, uid, [requisition.id], supplierinfo.name.id, context=context)
-                    count_purchases_maked += 1
-            if count_purchases_maked < 3:
-                supplierinfo_ids = self.pool.get('product.supplierinfo').search(cr, uid, [('product_id', '=', line.product_id.id), ('principal_supplier', '=', False)], offset=0, limit=None, order=None, context=context, count=False)
-                supplierinfos = self.pool.get('product.supplierinfo').browse(cr, uid, supplierinfo_ids, context)
-                cursor_supplierinfos = 0
-                while(count_purchases_maked < 3 and cursor_supplierinfos < len(supplierinfos)):
-                    self.pool.get('purchase.requisition').make_purchase_order(cr, uid, [requisition.id], supplierinfos[cursor_supplierinfos].name.id, context=context)
-                    count_purchases_maked += 1
-                    cursor_supplierinfos += 1
+                self.make_purchase_order(cr, uid, [requisition.id], supplierinfo.name.id, context=context)
+                count_purchases_maked += 1
         return id_created

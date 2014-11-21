@@ -27,7 +27,7 @@
     This module provide :
     """,
     "init_xml": [],
-    'update_xml': ["product_supplierinfo_view.xml"],
+    'data': ["product_supplierinfo_view.xml"],
     'demo_xml': [],
     'installable': True,
     'active': False,
