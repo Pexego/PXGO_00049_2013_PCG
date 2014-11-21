@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="history_product_code_tree_view">
+            <field name="name">history_product.code.tree</field>
+            <field name="model">historial.product.code</field>
+            <field name="arch" type="xml">
+                <tree string="Code history">
+                    <field name="code" />
+                    <field name="product_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="history_product_code_form_view">
+            <field name="name">history_product.code.form</field>
+            <field name="model">historial.product.code</field>
+            <field name="arch" type="xml">
+                <form string="Code history">
+                    <field name="product_id" />
+                    <field name="code" />
+                </form>
+            </field>
+        </record>
+
+    </data>
+</openerp>

@@ -17,23 +17,22 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from osv import fields, osv
-class history_product_code(osv.osv):
+
+from openerp.osv import orm, fields
+
+class history_product_code(orm.Model):
     _inherit = 'product.product'
-    _columns = {
-        'history_code_ids': fields.one2many('historial.product.code','product_id','Code history')
-    }
-    
+
     def write(self, cr, uid, ids, vals, context=None):
         if context is None:
             context = {}
-        if 'default_code' in vals:
+        if vals.get('default_code', False):
             for id in ids:
-                product = self.pool.get("product.product").browse(cr, uid, id, context)
+                product = self.browse(cr, uid, id, context)
                 if product.default_code:
                     self.pool.get("historial.product.code").create(cr, uid, {'product_id':product.id, 'code':product.default_code}, context)
         return super(history_product_code,self).write(cr, uid, ids, vals, context)
-    
+
     def name_search(self, cr, user, name='', args=None, operator='ilike', context=None, limit=100):
         if not args:
             args = []
@@ -55,13 +54,26 @@ class history_product_code(osv.osv):
             if not result in vals:
                 vals.append(result)
         return vals
-history_product_code()
-    
 
-class historial_product_code(osv.osv):
+class historial_product_code(orm.Model):
     _name = 'historial.product.code'
     _columns = {
             'code':fields.char('Codigo', size=64, required=True, readonly=True),
             'product_id':fields.many2one('product.product', 'Product', required=False),
-                    }
-historial_product_code()
+    }
+
+class product_template(orm.Model):
+
+    _inherit = "product.template"
+
+    def action_view_history_code(self, cr, uid, ids, context=None):
+        products = self._get_products(cr, uid, ids, context=context)
+        result = self._get_act_window_dict(cr, uid, 'history_product_code.act_product_code_history_open', context=context)
+        if len(ids) == 1 and len(products) == 1:
+            ctx = "{'default_product_id': %s, 'search_default_product_id': %s}" \
+                  % (products[0], products[0])
+            result['context'] = ctx
+        else:
+            result['domain'] = "[('product_id','in',[" + ','.join(map(str, products)) + "])]"
+        return result
+

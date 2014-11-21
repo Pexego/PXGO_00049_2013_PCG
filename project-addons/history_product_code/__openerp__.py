@@ -27,10 +27,9 @@
     This module provide :
     -histórico de códigos de producto
     """,
-    "init_xml": [],
-    'update_xml': ['product_view.xml','security/ir.model.access.csv', ],
-    'demo_xml': [],
+    'data': ['history_product_code_view.xml',
+             'product_view.xml',
+             'security/ir.model.access.csv'],
     'installable': True,
     'active': False,
-#    'certificate': 'certificate',
 }
