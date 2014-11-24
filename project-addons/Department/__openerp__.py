@@ -20,13 +20,13 @@
 {
     "name": "Department",
     "version": "1.0",
-    "depends": ["sale_department", "invoice_department", "purchase"],
+    "depends": ["sale_department", "invoice_department", "purchase", "product"],
     "author": "Pexego",
     "category": "Sales & Purchases",
     "description": """
     """,
     "init_xml": [],
-    'update_xml': ["purchase_view.xml"],
+    'update_xml': ["purchase_view.xml", "product_view.xml"],
     'demo_xml': [],
     'installable': True,
     'active': False,

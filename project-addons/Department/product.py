@@ -17,6 +17,31 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import purchase
-import stock
-import product
+
+from openerp.osv import orm, fields
+
+
+class ProductTemplate(orm.Model):
+
+    _inherit = "product.template"
+
+    _columns = {
+        'department_id': fields.many2one('hr.department', 'Responsible department')
+    }
+
+    def _get_department(self, cr, uid, ids, context=None):
+        employee_obj = self.pool.get('hr.employee')
+        department_id = False
+        employee_ids = employee_obj.search(
+                cr, uid,
+                [('user_id', '=', uid)],
+                context=context)
+        if employee_ids:
+            department_id = employee_obj.browse(
+                    cr, uid, employee_ids[0],
+                    context=context).department_id.id
+        return department_id
+
+    _defaults = {
+        'department_id': _get_department,
+    }
