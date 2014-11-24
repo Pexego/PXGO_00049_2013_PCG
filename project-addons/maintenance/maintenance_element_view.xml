@@ -15,8 +15,6 @@
             <field name="arch" type="xml">
                 <tree string="Maintenance element">
                     <field name="name" />
-                    <field name="complete_name" />
-                    <field name="type" />
                     <field name="codigo" />
                 </tree>
             </field>
@@ -30,6 +28,7 @@
             <field name="arch" type="xml">
                 <tree string="Maintenance element tree">
                     <field name="name"/>
+                    <field name="codigo" />
                 </tree>
             </field>
         </record>
