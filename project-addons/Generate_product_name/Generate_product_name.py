@@ -25,11 +25,11 @@ class Generate_product_name(orm.Model):
     _inherit = 'product.template'
 
     def generate_name(self, cr, uid, ids, context=None):
-        nombre = u""
         if not context:
             context = {}
         products = self.pool.get('product.template').browse(cr, uid, ids, context)
         for product in products:
+            nombre = product.name
             nombres_atributos = []
             categorias=[product.categ_id]
             for cat in product.categ_ids:
@@ -38,10 +38,14 @@ class Generate_product_name(orm.Model):
                 for att_group in categoria.attribute_group_ids:
                     for atributo in att_group.attribute_ids:
                         nombres_atributos.append(atributo.name)
+
             for atributo in nombres_atributos:
                 if product[atributo]:
-                    nombre += (isinstance(product[atributo],type(product)) and product[atributo].name or tools.ustr(product[atributo])) + u" "
-            if not nombre:
-                nombre = product.name
-            self.pool.get('product.template').write(cr, uid, ids, {'name':nombre},context)
+                    nombre += u" " + (isinstance(product[atributo],type(product)) and product[atributo].name or tools.ustr(product[atributo]))
+
+            if not nombres_atributos and product.attribute_ids:
+                for attribute in product.attribute_ids:
+                    nombre += (u" " + attribute.value)
+
+            self.pool.get('product.template').write(cr, uid, ids, {'name':nombre.strip()},context)
         return
