@@ -54,7 +54,8 @@ class maintenance_type(orm.Model):
                 'sabado':fields.boolean('Saturday'),
                 'domingo':fields.boolean('Sunday'),
                 'element_ids':fields.many2many('maintenance.element', 'maintenanceelement_maintenancetype_rel', 'type_id', 'element_id', 'Maintenance elements'),
-                'department_id': fields.many2one('hr.department', 'Department')
+                'department_id': fields.many2one('hr.department', 'Department'),
+                'on_stop': fields.boolean('On stop')
                 }
 
     _defaults = {
@@ -65,7 +66,7 @@ class maintenance_type(orm.Model):
         if not context:
             context = {}
         maintenance_type_obj = self.pool.get('maintenance.type')
-        type_ids = maintenance_type_obj.search(cr, uid, [('planificado', '=', True)], offset=0, limit=None, order=None, context=context, count=False)
+        type_ids = maintenance_type_obj.search(cr, uid, [('planificado', '=', True),('on_stop', '=', False)])
         type_objs = maintenance_type_obj.browse(cr, uid, type_ids, context)
         dias = {
                     'lunes':MO,

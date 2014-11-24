@@ -10,6 +10,7 @@
                     <field name="name" />
                     <field name="type" />
                     <field name="planificado" />
+                    <field name="on_stop"/>
                     <field name="intervalo" />
                     <field name="interval_count"/>
                     <field name="inicio" widget="date" />
@@ -31,14 +32,15 @@
                                 <field name="type" />
                                 <field name="survey_id" />
                                 <field name="department_id"/>
-                                <field name="planificado" />
+                                <field name="planificado"/>
+                                <field name="on_stop"/>
                             </group>
                             <group>
                                 <separator string="Elements" colspan="2"/>
                                 <field name="element_ids" nolabel="1" colspan="2"/>
                             </group>
                         </group>
-                        <group attrs="{'invisible':[('planificado','!=',True)]}">
+                        <group attrs="{'invisible':['|',('planificado','!=',True),('on_stop', '=', True)]}">
                             <field name="intervalo" attrs="{'required':[('planificado','!=',False)]}" />
                             <field name="interval_count"/>
                             <field name="inicio" attrs="{'required':[('planificado','!=',False)]}" />

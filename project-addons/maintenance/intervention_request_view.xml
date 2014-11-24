@@ -26,6 +26,7 @@
                     <field name="fecha_estimada" />
                     <field name="fecha_solicitud" />
                     <field name="maintenance_type_id" />
+                    <field name="stop_id"/>
                     <field name="state" />
                 </tree>
             </field>
@@ -65,6 +66,7 @@
                             <field name="element_ids" colspan="4"/>
                             <group>
                                 <field name="maintenance_type_id" />
+                                <field name="stop_id"/>
                                 <field name="deteccion" widget="char"/>
                                 <field name="efecto" widget="char"/>
                             </group>
@@ -98,12 +100,15 @@
                 <search>
                     <field name="name" />
                     <field name="maintenance_type_id" />
+                    <field name="stop_id"/>
                     <group expand="0" string="Group By...">
                         <filter string="State" domain="[]" context="{'group_by':'state'}" />
                         <filter string="Maintenance type" domain="[]"
                             context="{'group_by':'maintenance_type_id'}" />
                         <filter string="Department" domain="[]"
                             context="{'group_by':'department_id'}" />
+                        <filter string="Stop" domain="[]"
+                            context="{'group_by':'stop_id'}" />
                     </group>
                 </search>
             </field>

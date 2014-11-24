@@ -43,7 +43,8 @@ class intervention_request(orm.Model):
             'note': fields.text('Notes', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'deteccion':fields.text('Detection', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
             'sintoma':fields.text('Sign', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
-            'efecto':fields.text('effect', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]})
+            'efecto':fields.text('effect', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'stop_id': fields.many2one('maintenance.stop', 'Stop', states={'confirmed': [('readonly', True)], 'cancelled': [('readonly', True)]})
     }
     _defaults = {
         'state': 'draft',
@@ -80,12 +81,32 @@ class intervention_request(orm.Model):
             'domain': '[]',
             'context': context
         }
+
+    def act_cancel(self, cr, uid, ids, context=None):
+        for request in self.browse(cr, uid, ids, context=context):
+            if request.maintenance_type_id:
+                future_request_ids = self.search(cr, uid, [('state', 'in', ['confirmed','draft']),('fecha_solicitud', '>=', request.fecha_solicitud),('id', '!=', request.id),('maintenance_type_id', '=', request.maintenance_type_id.id)])
+                if not future_request_ids:
+                    last_request_id = self.search(cr, uid, [('state', 'in', ['confirmed','draft']),('fecha_solicitud', '<=', request.fecha_solicitud),('id', '!=', request.id),('maintenance_type_id', '=', request.maintenance_type_id.id)], order="fecha_solicitud desc", limit=1)
+                    if last_request_id:
+                        last_request_obj = self.browse(cr, uid, last_request_id[0])
+                        request.maintenance_type_id.write({'ultima_ejecucion': last_request_obj.fecha_solicitud})
+                    else:
+                        request.maintenance_type_id.write({'ultima_ejecucion': False})
+
+        return True
+
     def confirm(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
         self.write(cr, uid, ids, {'state': 'confirmed'})
-        return True
+        for request in self.browse(cr, uid, ids):
+            if request.maintenance_type_id:
+                future_request_ids = self.search(cr, uid, [('state', 'in', ['confirmed','draft']),('fecha_solicitud', '>=', request.fecha_solicitud),('id', '!=', request.id),('maintenance_type_id', '=', request.maintenance_type_id.id)])
+                if not future_request_ids and request.maintenance_type_id.ultima_ejecucion != request.fecha_solicitud:
+                    request.maintenance_type_id.write({'ultima_ejecucion': request.fecha_solicitud})
 
+        return True
 
     def open_work_order(self, cr, uid, order_id, context=None):
         data_pool = self.pool.get('ir.model.data')
@@ -128,7 +149,7 @@ class intervention_request(orm.Model):
                           'descripcion': u", ".join([x.complete_name for x in intervention.element_ids])
                           }
             order_id = self.pool.get('work.order').create(cr, uid, vals_order, context)
-            self.pool.get('intervention.request').write(cr, uid, ids, {'state':'confirmed'}, context)
+            self.pool.get('intervention.request').confirm(cr, uid, ids, context)
             return self.open_work_order(cr, uid, order_id, context)
 
 
@@ -157,5 +178,7 @@ class intervention_request(orm.Model):
             'target': 'new',
             'context': ctx,
         }
+
+
 intervention_request()
 

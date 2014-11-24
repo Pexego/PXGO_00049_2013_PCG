@@ -18,6 +18,7 @@
 #
 ##############################################################################
 import maintenance_element
+import maintenance_stop
 import intervention_request
 import maintenance_type
 import work_order

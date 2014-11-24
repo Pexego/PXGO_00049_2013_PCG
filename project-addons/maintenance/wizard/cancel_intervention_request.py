@@ -32,6 +32,7 @@ class cancel_intervention_request_wizard(orm.TransientModel):
             return
         wizards = self.pool.get('cancel.intervention.request.wizard').browse(cr, uid, ids, context)
         for wizard in wizards:
-            self.pool.get('intervention.request').write(cr, uid, context['active_id'], {'state':'cancelled','motivo_cancelacion':wizard.motivo }, context)
+            self.pool.get('intervention.request').write(cr, uid, context['active_id'], {'state':'cancelled','motivo_cancelacion':wizard.motivo}, context)
+            self.pool.get('intervention.request').act_cancel(cr, uid, [context['active_id']])
         return {'type':'ir.actions.act_window_close'}
 
