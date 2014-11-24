@@ -21,7 +21,7 @@
     "name": "Cambios stock",
     "version": "1.0",
     "depends": ["product", "stock", "product_stock_unsafety",
-                "stock_available_multicompany"],
+                "stock_available_multicompany", "account"],
     "author": "Pexego",
     "category": "Stock",
     "description": """

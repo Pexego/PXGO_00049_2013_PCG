@@ -29,7 +29,8 @@ class product_template(orm.Model):
     }
 
     _defaults = {
-        'fixed_location_id': lambda self, cr, uid, context: self.pool.get('stock.warehouse').browse(cr, uid, self.pool.get('stock.warehouse').search(cr, uid, [])[0]).lot_stock_id.id
+        'fixed_location_id': lambda self, cr, uid, context: self.pool.get('stock.warehouse').browse(cr, uid, self.pool.get('stock.warehouse').search(cr, uid, [])[0]).lot_stock_id.id,
+        'type': 'product'
     }
 
 
