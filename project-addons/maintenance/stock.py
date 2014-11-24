@@ -38,6 +38,40 @@ class stock(orm.Model):
             'work_done': fields.function(_work_done, method=True, type='boolean', string='Order completed', store=False),
                     }
 
+    def create(self, cr, uid, vals, context=None):
+        res = super(stock, self).create(cr, uid, vals, context=context)
+        if vals.get('work_order_id', False) and not vals.get('picking_id', False):
+            self._picking_assign(cr, uid, [res], False, vals['location_id'], vals['location_dest_id'], context={'work_order': vals['work_order_id']})
+
+        return res
+
+    def _picking_assign(self, cr, uid, move_ids, procurement_group, location_from, location_to, context=None):
+        if context is None:
+            context = {}
+        if context.get('work_order'):
+            pick_obj = self.pool.get("stock.picking")
+            picks = pick_obj.search(cr, uid, [
+                    ('work_order_id', '=', context['work_order']),
+                    ('location_id', '=', location_from),
+                    ('location_dest_id', '=', location_to),
+                    ('state', 'in', ['draft', 'confirmed', 'waiting'])], context=context)
+            if picks:
+                pick = picks[0]
+            else:
+                move = self.browse(cr, uid, move_ids, context=context)[0]
+                values = {
+                    'origin': move.origin,
+                    'company_id': move.company_id and move.company_id.id or False,
+                    'move_type': move.group_id and move.group_id.move_type or 'direct',
+                    'partner_id': move.partner_id.id or False,
+                    'picking_type_id': move.picking_type_id and move.picking_type_id.id or False,
+                    'work_order_id': context['work_order']
+                }
+                pick = pick_obj.create(cr, uid, values, context=context)
+            return self.write(cr, uid, move_ids, {'picking_id': pick}, context=context)
+        else:
+            return super(stock, self)._picking_assign(cr, uid, move_ids, procurement_group, location_from, location_to, context=context)
+
 class stock_picking(orm.Model):
 
     def _work_done(self, cr, uid, ids, name, arg=None, context=None):

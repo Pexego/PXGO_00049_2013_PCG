@@ -16,15 +16,14 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
-import maintenance_element
-import maintenance_stop
-import intervention_request
-import maintenance_type
-import work_order
-import purchase
-import stock
-import wizard
-import hr
-import product
-import account_analytic_line
+#############################################################################
+
+from openerp.osv import fields, orm
+
+class AccountAnalyticLine(orm.Model):
+
+    _inherit = "account.analytic.line"
+
+    _columns = {
+        'general_account_id': fields.many2one('account.account', 'General Account', required=False, ondelete='restrict'),
+    }

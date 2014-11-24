@@ -44,7 +44,7 @@ class generate_purchases_wizard(orm.TransientModel):
                 solicitud = linea.order_id.requisition_id
             else:
                 if solicitud == linea.order_id.requisition_id:
-                    raise osv.except_osv('Error', 'solo se puede seleccionar lineas de diferentes solicitudes')
+                    raise orm.except_orm('Error', 'solo se puede seleccionar lineas de diferentes solicitudes')
             proveedores.append(linea.partner_id)
             lineas_compra_ids.append(linea.id)
 

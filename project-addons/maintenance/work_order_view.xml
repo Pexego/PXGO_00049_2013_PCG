@@ -146,6 +146,7 @@
                         <h1>
                             <field name="name" />
                         </h1>
+                        <field name="picking_type_id" invisible="1"/>
                         <label for="element_ids"/>
                         <field name="element_ids" widget="many2many_tags" required="1" on_change="onchange_element_ids(element_ids)"/>
                         <label for="descripcion" />
@@ -188,7 +189,7 @@
                             <page string="Related movements">
                                 <group>
                                     <field name="purchase_ids" string="Compras" />
-                                    <field name="stock_moves_ids" string="movimientos de stock" />
+                                    <field name="stock_moves_ids" string="movimientos de stock" context="{'default_picking_type_id': picking_type_id}"/>
                                 </group>
                             </page>
                             <page string="Timesheet">

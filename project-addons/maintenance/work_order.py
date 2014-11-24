@@ -217,14 +217,16 @@ class work_order(orm.Model):
                                                        , string='Total external\
                                                                 services'
                                                        , store=False),
-            'action_taken': fields.text('Action taken', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]})
+            'action_taken': fields.text('Action taken', states={'done': [('readonly', True)], 'cancelled': [('readonly', True)]}),
+            'picking_type_id': fields.many2one('stock.picking.type', 'Picking type')
                     }
     _defaults = {
         'state':'draft',
         'name': lambda obj, cr, uid, context: obj.pool.get('ir.sequence').get(cr, uid, 'work.order'),
         'fecha': date.today().strftime('%Y-%m-%d'),
         'company_id': lambda self, cr, uid, c: self.pool.get('res.company')._company_default_get(cr, uid, 'work.order', context=c),
-        }
+        'picking_type_id': lambda obj, cr, uid, context: obj.pool.get('stock.picking.type').search(cr, uid, [('code', '=', 'outgoing')])[0]
+    }
 
     def copy(self, cr, uid, id, default=None, context=None):
         if not default:
@@ -280,7 +282,8 @@ class work_order(orm.Model):
         data_obj = self.pool.get('ir.model.data')
         analytic_line_obj = self.pool.get('account.analytic.line')
         order_obj = self.pool.get('work.order')
-        picking_out_obj = self.pool.get('stock.picking.out')
+        picking_out_obj = self.pool.get('stock.picking')
+        picking_type_obj = self.pool.get('stock.picking.type')
         ordenes = order_obj.browse(cr, uid, ids, context)
 
         hours_journal_id = data_obj.get_object_reference(cr, uid, 'hr_timesheet'
@@ -297,7 +300,7 @@ class work_order(orm.Model):
             for hora in orden.horas_ids:
                 if hora.element_id:
                     if hora.element_id not in orden.element_ids:
-                        raise osv.except_osv(u'Error imputación horas', u'El elemento %s está asociado a un reporte de horas de la OT, pero ese equipo no está entre los equipos de la OT' % hora.element_id.name)
+                        raise orm.except_orm(u'Error imputación horas', u'El elemento %s está asociado a un reporte de horas de la OT, pero ese equipo no está entre los equipos de la OT' % hora.element_id.name)
                     if not res.get(hora.element_id.id, False):
                         res[hora.element_id.id] = [hora.total, 0, 0]
                     else:
@@ -310,13 +313,13 @@ class work_order(orm.Model):
 
             for compra in orden.purchase_ids:
                 if compra.state not in ['done', 'approved', 'cancel']:
-                    raise osv.except_osv('Compras sin finalizar', 'Compras sin \
+                    raise orm.except_orm('Compras sin finalizar', 'Compras sin \
                                          finalizar asociadas a la orden')
                 for line in compra.order_line:
                     if line.product_id and line.product_id.type == 'service':
                         if line.element_id:
                             if line.element_id not in orden.element_ids:
-                                raise osv.except_osv(u'Error imputación compras', u'El elemento %s está asociado a una linea de compra de la OT, pero ese equipo no está entre los equipos de la OT' % line.element_id.name)
+                                raise orm.except_orm(u'Error imputación compras', u'El elemento %s está asociado a una linea de compra de la OT, pero ese equipo no está entre los equipos de la OT' % line.element_id.name)
                             if not res.get(line.element_id.id, False):
                                 res[line.element_id.id] = [0, line.price_subtotal, 0]
                             else:
@@ -326,12 +329,12 @@ class work_order(orm.Model):
 
             for movimiento in orden.stock_moves_ids:
                 if movimiento.state not in ['done', 'cancel']:
-                    raise osv.except_osv('movimientos sin finalizar',
+                    raise orm.except_orm('movimientos sin finalizar',
                                          'Hay movimientos sin finalizar\
                                          asociados a la orden')
                 if movimiento.element_id:
                     if movimiento.element_id not in orden.element_ids:
-                        raise osv.except_osv(u'Error imputación compras', u'El elemento %s está asociado a un consumo de la OT, pero ese equipo no está entre los equipos de la OT' % movimiento.element_id.name)
+                        raise orm.except_orm(u'Error imputación compras', u'El elemento %s está asociado a un consumo de la OT, pero ese equipo no está entre los equipos de la OT' % movimiento.element_id.name)
                     if not res.get(movimiento.element_id.id, False):
                         res[movimiento.element_id.id] = [0, 0, movimiento.product_qty * movimiento.product_id.standard_price]
                     else:
@@ -362,15 +365,6 @@ class work_order(orm.Model):
                         analytic_line_obj.create(cr, uid, args_analytic_line, context)
                     aux += 1
 
-            # creacion del albaran para los movimientos
-            args_picking_out = {
-                             'work_order_id':orden.id,
-                             'origin':orden.name,
-                             'date_done':  date.today().strftime('%Y-%m-%d'),
-                             'move_lines':[(6, 0, [i.id for i in orden.stock_moves_ids])],
-                             'state':'done',
-                                     }
-            picking_id = picking_out_obj.create(cr, uid, args_picking_out, context)
             if orden.final_date:
                 final_date = orden.final_date
             else:
