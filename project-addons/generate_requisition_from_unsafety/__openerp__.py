@@ -20,7 +20,7 @@
 {
     "name": "generar solicitudes desde bajo minimos",
     "version": "1.0",
-    "depends": ["product_stock_unsafety"],
+    "depends": ["product_stock_unsafety", "product_manufacturer", "Department"],
     "author": "Pexego",
     "category": "Purchases",
     "description": """

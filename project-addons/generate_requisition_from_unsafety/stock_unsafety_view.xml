@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-	<data>
-		<act_window id="generate_requisitions_action" name="Generate requisition"
-			src_model="product.stock.unsafety" res_model="generate.requisitions.wizard"
-			target="new" multi="True" view_id="generate_requisitions_wizard_view" />
-	</data>
+    <data>
+
+        <act_window id="generate_requisitions_action" name="Generate requisition"
+            src_model="product.stock.unsafety" res_model="generate.requisitions.wizard"
+            target="new" multi="True" view_id="generate_requisitions_wizard_view" />
+
+        <record id="view_product_stock_unsafety_tree_add_fields" model="ir.ui.view">
+            <field name="name">product.stock.unsafety.tree.add_fields</field>
+            <field name="model">product.stock.unsafety</field>
+            <field name="inherit_id" ref="product_stock_unsafety.view_product_stock_unsafety_tree"/>
+            <field name="arch" type="xml">
+                <field name="virtual_stock" position="after">
+                    <field name="manufacturer_pref"/>
+                    <field name="department_id"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
 </openerp>
