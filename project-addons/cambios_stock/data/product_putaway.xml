@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="product_location_putaway" model="product.putaway">
+            <field name="name">Product Location</field>
+            <field name="method">product_location</field>
+        </record>
+
+    </data>
+</openerp>

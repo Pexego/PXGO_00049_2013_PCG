@@ -27,7 +27,8 @@
     "description": """
     This module provide :
     """,
-    'data': ["product_view.xml", "product_data.xml", "stock_view.xml"],
+    'data': ["product_view.xml", "product_data.xml", "stock_view.xml",
+             "data/product_putaway.xml"],
     'installable': True,
     'active': False,
 }
