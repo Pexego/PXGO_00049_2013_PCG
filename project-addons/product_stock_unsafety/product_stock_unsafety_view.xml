@@ -30,9 +30,11 @@
                     <field name="product_id"/>
                     <field name="incoming_qty" />
                     <field name="min_fixed"/>
+                    <field name="max_fixed"/>
                     <field name="real_stock"/>
                     <field name="virtual_stock" string="Virtual Stock Conservative"/>
                     <button name="cancel" type="object" string="Cancel" states='exception,in_progress' icon="STOCK_CANCEL"/>
+                    <field name="company_id"/>
                     <field name="state"/>
                 </tree>
             </field>
@@ -55,6 +57,7 @@
                         </group>
                         <group string="Quantities">
                             <field name="min_fixed" readonly="1"/>
+                            <field name="max_fixed" readonly="1"/>
                             <field name="minimum_proposal" readonly="1"/>
                             <field name="real_stock" readonly="1"/>
                             <field name="virtual_stock" string="Virtual Stock Conservative" readonly="1"/>
@@ -70,6 +73,7 @@
                         <group string="Additional Information">
                             <field name="responsible" readonly="1"/>
                             <field name="state" readonly="1"/>
+                            <field name="company_id"/>
                         </group>
                     </group>
                 </sheet>

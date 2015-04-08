@@ -1,5 +1,15 @@
 syntax: glob
 *.pyc
 *~
+devel_*
+eggs
+bin
+odoo-*
+parts
+sandbox
+.installed.cfg
+develop-eggs
+etc
+upgrade.py
 \[LOCAL\]
 

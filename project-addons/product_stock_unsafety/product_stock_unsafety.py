@@ -36,9 +36,10 @@ class product_stock_unsafety(orm.Model):
                                       required=True),
         'supplier_id': fields.many2one('res.partner',
                                        'Supplier'),
-        'min_fixed': fields.float('Min. Fixed', required=True),
-        'real_stock': fields.float('Real Stock', required=True),
-        'virtual_stock': fields.float('Virtual Stock', required=True),
+        'min_fixed': fields.float('Min. Fixed', readonly=True),
+        'max_fixed': fields.float('Max. Fixed', readonly=True),
+        'real_stock': fields.float('Real Stock', readonly=True),
+        'virtual_stock': fields.float('Virtual Stock', readonly=True),
         'purchase_id': fields.many2one('purchase.order.line',
                                        'Purchase'),
         'product_qty': fields.float('Qty ordered'),
@@ -52,7 +53,8 @@ class product_stock_unsafety(orm.Model):
                                        'incoming_qty',
                                        type='float',
                                        string='Incoming qty.'),
-        'minimum_proposal': fields.float('Min. Proposal')
+        'minimum_proposal': fields.float('Min. Proposal'),
+        'company_id': fields.many2one('res.company', 'Company')
     }
     _defaults = {
         'date':  time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)

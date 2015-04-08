@@ -23,6 +23,7 @@ from openerp import pooler
 from openerp.tools.translate import _
 from datetime import date
 from psycopg2 import OperationalError
+import openerp
 
 
 class procurement_order(orm.Model):
@@ -70,11 +71,13 @@ class procurement_order(orm.Model):
                         vals = {'product_id': prod.id,
                                 'supplier_id': seller,
                                 'min_fixed': op.product_min_qty,
+                                'max_fixed': op.product_max_qty,
                                 'real_stock': prod.qty_available,
                                 'virtual_stock': prods,
                                 'responsible': uid,
                                 'state': state,
-                                'name': 'stock minimo'}
+                                'name': 'stock minimo',
+                                'company_id': op.company_id.id}
                         stock_unsafety.create_or_write(cr, uid, vals,
                                                        context=context)
                         if use_new_cursor:
